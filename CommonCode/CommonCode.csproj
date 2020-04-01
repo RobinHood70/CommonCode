@@ -11,7 +11,7 @@
 		<CodeAnalysisRuleSet>..\Common.ruleset</CodeAnalysisRuleSet>
 		<RootNamespace>RobinHood70.CommonCode</RootNamespace>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>Common.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0-beta3.final">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

@@ -7,9 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonCode", "CommonCode\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB990194-4DC1-490D-8348-6A869F9484D3}"
 	ProjectSection(SolutionItems) = preProject
+		Common.pfx = Common.pfx
 		Common.ruleset = Common.ruleset
 		stylecop.json = stylecop.json
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonCodeTester", "CommonCodeTester\CommonCodeTester.csproj", "{38FEDDA1-C78B-4A1A-BC08-B27C22598461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +24,10 @@ Global
 		{08979BAF-F200-4BED-905D-91CB2D5025EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08979BAF-F200-4BED-905D-91CB2D5025EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08979BAF-F200-4BED-905D-91CB2D5025EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38FEDDA1-C78B-4A1A-BC08-B27C22598461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38FEDDA1-C78B-4A1A-BC08-B27C22598461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38FEDDA1-C78B-4A1A-BC08-B27C22598461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38FEDDA1-C78B-4A1A-BC08-B27C22598461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
