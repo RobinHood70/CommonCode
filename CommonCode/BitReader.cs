@@ -29,6 +29,8 @@
 		#endregion
 
 		#region Public Methods
+		public byte[] GetRawData() => this.rawData;
+
 		public bool ReadBoolean()
 		{
 			var retval = BitConverter.ToBoolean(this.rawData, this.offset);
@@ -53,7 +55,7 @@
 		public char ReadChar()
 		{
 			var retval = BitConverter.ToChar(this.rawData, this.offset);
-			this.offset += 4;
+			this.offset += 1;
 			return retval;
 		}
 
@@ -84,7 +86,7 @@
 		public double ReadDouble()
 		{
 			var retval = BitConverter.ToDouble(this.rawData, this.offset);
-			this.offset += 4;
+			this.offset += 8;
 			return retval;
 		}
 
@@ -133,7 +135,7 @@
 		public ushort ReadUInt16()
 		{
 			var retval = BitConverter.ToUInt16(this.rawData, this.offset);
-			this.offset += 4;
+			this.offset += 2;
 			return retval;
 		}
 
@@ -147,7 +149,7 @@
 		public ulong ReadUInt64()
 		{
 			var retval = BitConverter.ToUInt64(this.rawData, this.offset);
-			this.offset += 4;
+			this.offset += 8;
 			return retval;
 		}
 		#endregion
