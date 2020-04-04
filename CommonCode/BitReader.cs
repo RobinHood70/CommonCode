@@ -152,6 +152,8 @@
 			this.offset += 8;
 			return retval;
 		}
+
+		public string ReadZString(int count) => this.ReadString(count).Split(TextArrays.Null, 2)[0];
 		#endregion
 	}
 }
