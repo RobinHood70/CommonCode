@@ -120,6 +120,9 @@
   <data name="NoKeyFunction" xml:space="preserve">
     <value>No key function was provided in the constructor and the base function GetKeyForItem() was not overridden.</value>
   </data>
+  <data name="NotAtEnd" xml:space="preserve">
+    <value>{0} is not at end of data.</value>
+  </data>
   <data name="PropertyNull" xml:space="preserve">
     <value>{0}.{1} was unexpectedly null.</value>
   </data>

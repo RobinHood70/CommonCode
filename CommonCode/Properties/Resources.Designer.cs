@@ -61,15 +61,6 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file you are attempting to upload is empty, and would be rejected by the MediaWiki software..
-        /// </summary>
-        internal static string EmptyFile {
-            get {
-                return ResourceManager.GetString("EmptyFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No key function was provided in the constructor and the base function GetKeyForItem() was not overridden..
         /// </summary>
         internal static string NoKeyFunction {
@@ -79,20 +70,11 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an attempt to add a piped parameter value, but an existing value with the same name ({0}) exists and is not a piped parameter..
+        ///   Looks up a localized string similar to {0} is not at end of data..
         /// </summary>
-        internal static string NotAPipedParameter {
+        internal static string NotAtEnd {
             get {
-                return ResourceManager.GetString("NotAPipedParameter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The {0} parameter passed to {1} could not be cast to {2}, as it&apos;s type was {3}..
-        /// </summary>
-        internal static string ParameterInvalidCast {
-            get {
-                return ResourceManager.GetString("ParameterInvalidCast", resourceCulture);
+                return ResourceManager.GetString("NotAtEnd", resourceCulture);
             }
         }
         
