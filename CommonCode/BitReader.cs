@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Text;
+	using RobinHood70.CommonCode.Properties;
 	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>A quick hack of a class to make BitConverter act a bit more like BinaryReader.</summary>
@@ -29,6 +30,14 @@
 		#endregion
 
 		#region Public Methods
+		public void CheckComplete()
+		{
+			if (this.offset < this.rawData.Length)
+			{
+				throw new InvalidOperationException(CurrentCulture(Resources.NotAtEnd, nameof(BitReader)));
+			}
+		}
+
 		public byte[] GetRawData() => this.rawData;
 
 		public bool ReadBoolean()
@@ -154,6 +163,8 @@
 		}
 
 		public string ReadZString(int count) => this.ReadString(count).Split(TextArrays.Null, 2)[0];
+
+		public void Skip(int numBytes) => this.offset += numBytes;
 		#endregion
 	}
 }
