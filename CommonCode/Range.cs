@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 
 	public class Range<T> : IEquatable<Range<T>>
-		where T : notnull
+		where T : IComparable<T>
 	{
 		#region Constructor
 		public Range(T min, T max)
@@ -28,6 +28,19 @@
 
 		#region Public Methods
 		public bool Equals(Range<T>? other) => other is null ? false : EqualityComparer<T>.Default.Equals(this.Max, other.Max) && EqualityComparer<T>.Default.Equals(this.Min, other.Min);
+
+		public void ExpandToInclude(T value)
+		{
+			if (value.CompareTo(this.Min) < 0)
+			{
+				this.Min = value;
+			}
+
+			if (value.CompareTo(this.Max) > 0)
+			{
+				this.Max = value;
+			}
+		}
 		#endregion
 
 		#region Public Override Methods
