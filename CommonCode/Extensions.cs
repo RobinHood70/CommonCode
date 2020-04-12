@@ -374,6 +374,7 @@
 		}
 		#endregion
 
+#pragma warning disable SA1027 // Use tabs correctly
 #if DEBUG
 		// Any calls to any of these methods should be replaced by native methods/properties.
 		#region Honeypot Methods
@@ -393,7 +394,9 @@
 		public static T First<T>(this IReadOnlyList<T> list, [AllowNull] T defaultValue) => list == null ? defaultValue : list[0];
 
 		public static bool IsEmpty(this ICollection? collection) => collection == null || collection.Count == 0;
+
 		#endregion
 #endif
+#pragma warning restore SA1027 // Use tabs correctly
 	}
 }
