@@ -10,19 +10,20 @@
 	public class BitReader
 	{
 		#region Fields
-		private readonly Encoding encoding;
 		private readonly byte[] rawData;
 		private int offset = 0;
 		#endregion
 
 		#region Constructors
-		public BitReader(byte[] rawData, Encoding encoding)
+		public BitReader(byte[] rawData)
 		{
-			ThrowNull(encoding, nameof(encoding));
 			ThrowNull(rawData, nameof(rawData));
-			this.encoding = encoding;
 			this.rawData = rawData;
 		}
+		#endregion
+
+		#region Public Static Properties
+		public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
 		#endregion
 
 		#region Public Properties
@@ -134,9 +135,11 @@
 			return retval;
 		}
 
-		public string ReadString(int count)
+		public string ReadString(int count) => this.ReadString(count, DefaultEncoding);
+
+		public string ReadString(int count, Encoding encoding)
 		{
-			var retval = this.encoding.GetString(this.rawData, this.offset, count);
+			var retval = (encoding ?? DefaultEncoding).GetString(this.rawData, this.offset, count);
 			this.offset += count;
 			return retval;
 		}
@@ -162,7 +165,9 @@
 			return retval;
 		}
 
-		public string ReadZString(int count) => this.ReadString(count).Split(TextArrays.Null, 2)[0];
+		public string ReadZString(int count) => this.ReadZString(count, DefaultEncoding);
+
+		public string ReadZString(int count, Encoding encoding) => this.ReadString(count, encoding).Split(TextArrays.Null, 2)[0];
 
 		public void Skip(int numBytes) => this.offset += numBytes;
 		#endregion
