@@ -25,7 +25,7 @@
 		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
 		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
-		public int Compare(string x, string y)
+		public int Compare(string? x, string? y)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
 			if (x == null)
