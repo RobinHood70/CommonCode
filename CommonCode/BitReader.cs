@@ -27,6 +27,8 @@
 		#endregion
 
 		#region Public Properties
+		public bool EOF => this.offset >= this.rawData.Length;
+
 		public int Length => this.rawData.Length;
 		#endregion
 
