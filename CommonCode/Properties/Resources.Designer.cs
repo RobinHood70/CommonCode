@@ -61,6 +61,24 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Array size is less than the dimensions specified..
+        /// </summary>
+        internal static string ArrayTooSmall {
+            get {
+                return ResourceManager.GetString("ArrayTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Array bounds must be greater than zero..
+        /// </summary>
+        internal static string InvalidArrayBounds {
+            get {
+                return ResourceManager.GetString("InvalidArrayBounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No key function was provided in the constructor and the base function GetKeyForItem() was not overridden..
         /// </summary>
         internal static string NoKeyFunction {
