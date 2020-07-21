@@ -201,7 +201,7 @@
 						}
 						else
 						{
-							if (character == '\n' && reader.Peek() == '\r')
+							if (character == '\r' && reader.Peek() == '\n')
 							{
 								reader.Read();
 							}
