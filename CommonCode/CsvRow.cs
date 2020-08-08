@@ -48,15 +48,7 @@
 		/// <exception cref="KeyNotFoundException">Thrown when there are no columns with the provided field name.</exception>
 		public string this[string fieldName]
 		{
-			get
-			{
-				if (this.nameMap.TryGetValue(fieldName, out var index))
-				{
-					return this.fields[index];
-				}
-
-				throw new KeyNotFoundException();
-			}
+			get => this.nameMap.TryGetValue(fieldName, out var index) ? this.fields[index] : throw new KeyNotFoundException();
 
 			set
 			{
