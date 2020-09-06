@@ -120,11 +120,11 @@
   <data name="ArrayTooSmall" xml:space="preserve">
     <value>Array size is less than the dimensions specified.</value>
   </data>
+  <data name="DuplicateKeyInItems" xml:space="preserve">
+    <value>Multiple items with the same key were found in the provided collection. Key: {0}</value>
+  </data>
   <data name="InvalidArrayBounds" xml:space="preserve">
     <value>Array bounds must be greater than zero.</value>
-  </data>
-  <data name="NoKeyFunction" xml:space="preserve">
-    <value>No key function was provided in the constructor and the base function GetKeyForItem() was not overridden.</value>
   </data>
   <data name="NotAtEnd" xml:space="preserve">
     <value>{0} is not at end of data.</value>

@@ -10,18 +10,11 @@
 	/// <summary>A read-only version of the KeyedCollection class.</summary>
 	/// <typeparam name="TKey">The type of the key.</typeparam>
 	/// <typeparam name="TItem">The type of the item.</typeparam>
-	/// <seealso cref="IEnumerable{TItem}" />
 	/// <seealso cref="IReadOnlyList{TItem}" />
-	/// <seealso cref="IReadOnlyCollection{TItem}" />
+	/// <seealso cref="IReadOnlyDictionary{TKey, TValue}"/>
 	public class ReadOnlyKeyedCollection<TKey, TItem> : IReadOnlyDictionary<TKey, TItem>, IReadOnlyList<TItem>
 		where TKey : notnull
 	{
-		#region Fields
-		private readonly List<TItem> items;
-		private readonly Func<TItem, TKey>? keyFunc;
-		private Dictionary<TKey, TItem>? dictionary;
-		#endregion
-
 		#region Constructors
 
 		/// <summary>Initializes a new instance of the <see cref="ReadOnlyKeyedCollection{TKey, TItem}" /> class that uses the default equality comparer.</summary>
@@ -37,26 +30,20 @@
 		/// <param name="items">The items.</param>
 		/// <param name="comparer">The implementation of the <see cref="IEqualityComparer{TKey}"/> generic interface to use when comparing keys, or null to use the default equality comparer for the type of the key, obtained from <see cref="EqualityComparer{TKey}.Default"/>.</param>
 		public ReadOnlyKeyedCollection(Func<TItem, TKey> keyFunc, IEnumerable<TItem> items, IEqualityComparer<TKey>? comparer)
-			: this(items, comparer)
 		{
-			ThrowNull(keyFunc, nameof(keyFunc));
-			this.keyFunc = keyFunc;
-		}
+			this.KeyFunction = keyFunc ?? throw ArgumentNull(nameof(keyFunc));
+			this.Items = new List<TItem>(items);
+			this.Comparer = comparer ?? throw ArgumentNull(nameof(comparer));
+			this.Dictionary = new Dictionary<TKey, TItem>();
 
-		/// <summary>Initializes a new instance of the <see cref="ReadOnlyKeyedCollection{TKey, TItem}" /> class that uses the default equality comparer.</summary>
-		/// <param name="items">The items.</param>
-		protected ReadOnlyKeyedCollection(IEnumerable<TItem> items)
-			: this(items, null)
-		{
-		}
-
-		/// <summary>Initializes a new instance of the <see cref="ReadOnlyKeyedCollection{TKey, TItem}"/> class that uses the specified equality comparer.</summary>
-		/// <param name="items">The items.</param>
-		/// <param name="comparer">The implementation of the <see cref="IEqualityComparer{TKey}"/> generic interface to use when comparing keys, or null to use the default equality comparer for the type of the key, obtained from <see cref="EqualityComparer{TKey}.Default"/>.</param>
-		protected ReadOnlyKeyedCollection(IEnumerable<TItem> items, IEqualityComparer<TKey>? comparer)
-		{
-			this.Comparer = comparer ?? EqualityComparer<TKey>.Default;
-			this.items = new List<TItem>(items ?? Array.Empty<TItem>());
+			// We iterate over our own list in case the original is slow or a one-shot.
+			foreach (var item in this.Items)
+			{
+				if (!this.Dictionary.TryAdd(keyFunc(item), item))
+				{
+					throw new ArgumentException(CurrentCulture(Resources.DuplicateKeyInItems, keyFunc(item)));
+				}
+			}
 		}
 		#endregion
 
@@ -64,7 +51,7 @@
 
 		/// <summary>Gets the number of elements in the collection.</summary>
 		/// <value>The number of elements in the collection.</value>
-		public int Count => this.items.Count;
+		public int Count => this.Items.Count;
 
 		/// <summary>Gets the generic equality comparer that is used to determine equality of keys in the collection.</summary>
 		/// <value>The implementation of the <see cref="IEqualityComparer{TItem}"/> generic interface that is used to determine equality of keys in the collection.</value>
@@ -79,30 +66,16 @@
 		public IEnumerable<TItem> Values => this.Dictionary.Values;
 		#endregion
 
-		#region Private Properties
-		private Dictionary<TKey, TItem> Dictionary
-		{
-			// A manual getter is required, since the call to GetKeyForItem would result in a virtual call from the constructor if it were placed there, which is bad.
-			get
-			{
-				if (this.dictionary == null)
-				{
-					this.dictionary = new Dictionary<TKey, TItem>(this.items.Count, this.Comparer);
-				}
+		#region Protected Properties
 
-				// This seems to happen during debugging, perhaps when the initial list is not yet fully initialized? Not quite sure.
-				if (this.dictionary.Count != this.items.Count)
-				{
-					this.dictionary.Clear();
-					foreach (var item in this.items)
-					{
-						this.dictionary.Add(this.GetKeyForItem(item), item);
-					}
-				}
+		/// <summary>Gets the dictionary of items.</summary>
+		protected Dictionary<TKey, TItem> Dictionary { get; }
 
-				return this.dictionary;
-			}
-		}
+		/// <summary>Gets a function which determines the key for an item.</summary>
+		protected Func<TItem, TKey>? KeyFunction { get; }
+
+		/// <summary>Gets the list of items.</summary>
+		protected List<TItem> Items { get; }
 		#endregion
 
 		#region Public Indexers
@@ -117,7 +90,7 @@
 		/// <summary>Gets the <typeparamref name="TItem"/> at the specified index.</summary>
 		/// <param name="index">The index.</param>
 		/// <returns>The <typeparamref name="TItem"/>.</returns>
-		public TItem this[int index] => this.items[index];
+		public TItem this[int index] => this.Items[index];
 		#endregion
 
 		#region Public Methods
@@ -135,13 +108,13 @@
 
 		/// <summary>Returns an enumerator that iterates through the collection.</summary>
 		/// <returns>An enumerator that can be used to iterate through the collection.</returns>
-		public IEnumerator<TItem> GetEnumerator() => this.items.GetEnumerator();
+		public IEnumerator<TItem> GetEnumerator() => this.Items.GetEnumerator();
 
 		IEnumerator<KeyValuePair<TKey, TItem>> IEnumerable<KeyValuePair<TKey, TItem>>.GetEnumerator() => this.Dictionary.GetEnumerator();
 
 		/// <summary>Returns an enumerator that iterates through a collection.</summary>
 		/// <returns>An <see cref="IEnumerator" /> object that can be used to iterate through the collection.</returns>
-		IEnumerator IEnumerable.GetEnumerator() => this.items.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => this.Items.GetEnumerator();
 
 		/// <summary>Comparable to <see cref="Dictionary{TKey, TValue}.TryGetValue(TKey, out TValue)" />, attempts to get the value associated with the specified key.</summary>
 		/// <param name="key">The key of the value to get.</param>
@@ -155,14 +128,6 @@
 		/// <returns>The value associated with the specified key, or <see langword="default"/> if not found.</returns>
 		[return: MaybeNull]
 		public TItem ValueOrDefault(TKey key) => key != null && this.Dictionary.TryGetValue(key, out var value) ? value : default;
-		#endregion
-
-		#region Protected Virtual Methods
-
-		/// <summary>When specified in the constructor or implemented in a derived class, extracts the key from the specified element.</summary>
-		/// <param name="item">The element from which to extract the key.</param>
-		/// <returns>The key for the specified element.</returns>
-		protected virtual TKey GetKeyForItem(TItem item) => this.keyFunc != null ? this.keyFunc(item) : throw new InvalidOperationException(Resources.NoKeyFunction);
 		#endregion
 	}
 }
