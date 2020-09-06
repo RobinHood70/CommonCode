@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using static System.Math;
 
@@ -13,7 +14,7 @@
 	public class NaturalSort : IComparer<string>
 	{
 		#region Fields
-		private static readonly Regex NumberRegex = new Regex(@"\d+([\.,]\d+)?");
+		private static readonly Regex NumberRegex = new Regex(@"\d+([\.,]\d+)?", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
 		#endregion
 
 		#region Public Methods
@@ -41,12 +42,14 @@
 			var splitX = NumberRegex.Split(x);
 			var splitY = NumberRegex.Split(y);
 			var len = Min(splitX.Length, splitY.Length);
-			int result;
 			for (var i = 0; i < len; i++)
 			{
-				result = (double.TryParse(splitX[i], out var numX) && double.TryParse(splitY[i], out var numY))
-					? numX.CompareTo(numY)
-					: string.Compare(splitX[i], splitY[i], StringComparison.CurrentCulture);
+				var culture = CultureInfo.CurrentCulture;
+				var result = (
+					double.TryParse(splitX[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numX) &&
+					double.TryParse(splitY[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numY))
+						? numX.CompareTo(numY)
+						: string.Compare(splitX[i], splitY[i], culture, CompareOptions.None);
 				if (result != 0)
 				{
 					return result;

@@ -21,7 +21,7 @@
 			ThrowNull(array, nameof(array));
 			if (array.Length < rows * columns + offset)
 			{
-				throw new ArgumentException(Resources.ArrayTooSmall);
+				throw new ArgumentException(Resources.ArrayTooSmall, nameof(array));
 			}
 
 			if (rows <= 0 || columns <= 0)

@@ -11,7 +11,7 @@
 	{
 		#region Fields
 		private readonly byte[] rawData;
-		private int offset = 0;
+		private int offset;
 		#endregion
 
 		#region Constructors

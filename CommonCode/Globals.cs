@@ -38,7 +38,7 @@
 	public static class Globals
 	{
 		#region Fields
-		private static bool registered = false;
+		private static bool registered;
 		#endregion
 
 		#region Public Methods

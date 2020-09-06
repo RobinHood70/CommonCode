@@ -41,7 +41,7 @@
 			{
 				if (!this.Dictionary.TryAdd(keyFunc(item), item))
 				{
-					throw new ArgumentException(CurrentCulture(Resources.DuplicateKeyInItems, keyFunc(item)));
+					throw new ArgumentException(CurrentCulture(Resources.DuplicateKeyInItems, keyFunc(item)), nameof(items));
 				}
 			}
 		}
@@ -69,13 +69,13 @@
 		#region Protected Properties
 
 		/// <summary>Gets the dictionary of items.</summary>
-		protected Dictionary<TKey, TItem> Dictionary { get; }
+		protected IDictionary<TKey, TItem> Dictionary { get; }
 
 		/// <summary>Gets a function which determines the key for an item.</summary>
 		protected Func<TItem, TKey>? KeyFunction { get; }
 
 		/// <summary>Gets the list of items.</summary>
-		protected List<TItem> Items { get; }
+		protected IList<TItem> Items { get; }
 		#endregion
 
 		#region Public Indexers

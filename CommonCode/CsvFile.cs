@@ -15,7 +15,7 @@
 	{
 		#region Fields
 		private readonly List<CsvRow> rows = new List<CsvRow>();
-		private readonly Dictionary<string, int> nameMap = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> nameMap = new Dictionary<string, int>(StringComparer.Ordinal);
 		private IEnumerable<string>? headerRow;
 		#endregion
 
@@ -40,7 +40,7 @@
 
 		/// <summary>Gets or sets the escape character.</summary>
 		/// <value>The escape character.</value>
-		public char? EscapeCharacter { get; set; } = null;
+		public char? EscapeCharacter { get; set; }
 
 		/// <summary>Gets or sets the field delimiter.</summary>
 		/// <value>The field delimiter. Defaults to a double-quote (<c>"</c>).</value>
@@ -322,7 +322,7 @@
 					var match = true;
 					for (var i = 0; i < valueList.Count; i++)
 					{
-						if (valueList[i] != row[i])
+						if (!string.Equals(valueList[i], row[i], StringComparison.Ordinal))
 						{
 							match = false;
 							break;
