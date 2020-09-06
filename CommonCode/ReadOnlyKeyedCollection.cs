@@ -32,7 +32,7 @@
 		public ReadOnlyKeyedCollection(Func<TItem, TKey> keyFunc, IEnumerable<TItem> items, IEqualityComparer<TKey>? comparer)
 		{
 			this.KeyFunction = keyFunc ?? throw ArgumentNull(nameof(keyFunc));
-			this.Items = new List<TItem>(items);
+			this.Items = new List<TItem>(items ?? throw ArgumentNull(nameof(items)));
 			this.Comparer = comparer ?? EqualityComparer<TKey>.Default;
 			this.Dictionary = new Dictionary<TKey, TItem>();
 
