@@ -33,7 +33,7 @@
 		{
 			this.KeyFunction = keyFunc ?? throw ArgumentNull(nameof(keyFunc));
 			this.Items = new List<TItem>(items);
-			this.Comparer = comparer ?? throw ArgumentNull(nameof(comparer));
+			this.Comparer = comparer ?? EqualityComparer<TKey>.Default;
 			this.Dictionary = new Dictionary<TKey, TItem>();
 
 			// We iterate over our own list in case the original is slow or a one-shot.
