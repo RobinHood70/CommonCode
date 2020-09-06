@@ -48,36 +48,30 @@
 
 		/// <summary>Gets each single-bit value of a flags enumeration.</summary>
 		/// <typeparam name="T">The enumeration type.</typeparam>
-		/// <param name="flagValue">The flags enumeration value to enumerate.</param>
+		/// <param name="value">The flags enumeration value to enumerate.</param>
 		/// <returns>An enumeration of every single-bit value in the specified flags enumeration.</returns>
-		public static IEnumerable<T> GetUniqueFlags<T>(this T flagValue)
+		public static IEnumerable<T> GetUniqueFlags<T>(this T value)
 			where T : Enum
 		{
-			ulong flag = 1;
-			foreach (var arrayValue in flagValue.GetType().GetEnumValues())
+			var valueLong = ((IConvertible)value).ToUInt64(CultureInfo.InvariantCulture);
+			foreach (var enumValue in (T[])value.GetType().GetEnumValues())
 			{
-				if (arrayValue is T value)
+				var bitValue = ((IConvertible)enumValue).ToUInt64(CultureInfo.InvariantCulture);
+				if ((valueLong & bitValue) != 0 && (bitValue & (bitValue - 1)) == 0)
 				{
-					var bits = Convert.ToUInt64(value, CultureInfo.InvariantCulture);
-					while (flag < bits)
-					{
-						flag <<= 1;
-					}
-
-					if (flag == bits && flagValue.HasFlag(value))
-					{
-						yield return value;
-					}
+					yield return enumValue;
 				}
 			}
 		}
 
 		/// <summary>Determines whether or not an enum represents a single-bit flag value.</summary>
+		/// <typeparam name="T">The enumeration type.</typeparam>
 		/// <param name="flagValue">The flags enumeration value to check.</param>
-		/// <returns>True if the flag value represents a single-bit value.</returns>
-		public static bool IsUniqueFlag(this Enum flagValue)
+		/// <returns><see langword="true"/> if the flag value represents a single-bit value.</returns>
+		public static bool IsUniqueFlag<T>(this T flagValue)
+			where T : Enum
 		{
-			var numericFlags = Convert.ToUInt64(flagValue, CultureInfo.InvariantCulture);
+			var numericFlags = ((IConvertible)flagValue).ToUInt64(CultureInfo.InvariantCulture);
 			return (numericFlags & (numericFlags - 1)) == 0 && numericFlags != 0;
 		}
 		#endregion
@@ -375,6 +369,7 @@
 		#endregion
 
 #pragma warning disable SA1027 // Use tabs correctly
+#pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
 #if DEBUG
 		// Any calls to any of these methods should be replaced by native methods/properties.
 		#region Honeypot Methods
@@ -397,6 +392,7 @@
 
 		#endregion
 #endif
+#pragma warning restore MA0016 // Prefer return collection abstraction instead of implementation
 #pragma warning restore SA1027 // Use tabs correctly
 	}
 }
