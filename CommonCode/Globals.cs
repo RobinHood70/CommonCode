@@ -41,6 +41,12 @@
 		private static bool registered;
 		#endregion
 
+		#region Public Properties
+
+		/// <summary>Gets a <see cref="TimeSpan"/> that is a good general time to abort Regex operations after.</summary>
+		public static TimeSpan DefaultRegexTimeout { get; } = TimeSpan.FromSeconds(5);
+		#endregion
+
 		#region Public Methods
 
 		/// <summary>Throws an exception if the input value is null.</summary>
@@ -48,24 +54,6 @@
 		/// <exception cref="ArgumentNullException">Always thrown.</exception>
 		/// <returns>An <see cref="ArgumentNullException"/> for the specified parameter name.</returns>
 		public static ArgumentNullException ArgumentNull(string name) => new ArgumentNullException(name);
-
-		/// <summary>Generates a generic hash code based on multiple input hash codes.</summary>
-		/// <param name="hashCodes">Hash codes from constitutent types.</param>
-		/// <returns>An integer that is likely to be a good hash code for the combined values.</returns>
-		public static int CompositeHashCode(params object?[] hashCodes)
-		{
-			ThrowNull(hashCodes, nameof(hashCodes));
-			unchecked
-			{
-				var hash = -2128831035;
-				foreach (var obj in hashCodes)
-				{
-					hash = (hash * 16777219) ^ (obj?.GetHashCode() ?? 0);
-				}
-
-				return hash;
-			}
-		}
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
