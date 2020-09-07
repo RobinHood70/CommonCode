@@ -3,6 +3,7 @@
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="Meziantou.Analyzer" RuleNamespace="Meziantou.Analyzer">
     <Rule Id="MA0003" Action="None" />
+    <Rule Id="MA0007" Action="None" />
     <Rule Id="MA0048" Action="None" />
     <Rule Id="MA0051" Action="None" />
   </Rules>
