@@ -12,7 +12,7 @@ namespace RobinHood70.CommonCode
 		/// <summary>Include all results; do not filter.</summary>
 		Any,
 
-		/// <summary>Include only these results. Note that in cases where </summary>
+		/// <summary>Include only these results. Note that in cases where.</summary>
 		Only,
 
 		/// <summary>Exclude these results.</summary>

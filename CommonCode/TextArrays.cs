@@ -5,6 +5,7 @@
 	/// <summary>A static class of split values used throughout all related projects. This avoids frequent re-allocations of small array values—particularly important inside loops and frequently-called methods.</summary>
 	public static class TextArrays
 	{
+		// These are all implemented as public fields due to the fact that arrays are strongly discouraged as public properties and the methods these are intended for, such as string.Split, do not allow spans currently.
 #pragma warning disable CS1591 // These should all be self-documenting.
 		public static readonly char[] At = { '@' };
 		public static readonly char[] CategorySeparators = { ' ', '-' };

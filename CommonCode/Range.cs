@@ -27,7 +27,10 @@
 		#endregion
 
 		#region Public Methods
-		public bool Equals(Range<T>? other) => !(other is null) && EqualityComparer<T>.Default.Equals(this.Max, other.Max) && EqualityComparer<T>.Default.Equals(this.Min, other.Min);
+		public bool Equals(Range<T>? other) =>
+			!(other is null) &&
+			EqualityComparer<T>.Default.Equals(this.Max, other.Max) &&
+			EqualityComparer<T>.Default.Equals(this.Min, other.Min);
 
 		public void ExpandToInclude(T value)
 		{
