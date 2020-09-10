@@ -1,7 +1,9 @@
 ﻿namespace RobinHood70.CommonCodeTester.Models
 {
 	using System;
-	using System.Diagnostics;
+	using System.IO;
+	using System.Text;
+	using System.Windows;
 	using RobinHood70.CommonCode;
 	using RobinHood70.CommonCodeTester.Views;
 
@@ -26,20 +28,11 @@
 
 		public static void RunTest()
 		{
-			var flags = TestAnimals.Mammals;
-			Debug.WriteLine(TestAnimals.None.IsUniqueFlag());
-
-			var sw = new Stopwatch();
-			sw.Start();
-			for (var i = 0; i < 5000000; i++)
-			{
-				foreach (var flag in flags.GetUniqueFlags())
-				{
-					// Debug.WriteLine(flag.ToString());
-				}
-			}
-
-			Debug.WriteLine(sw.ElapsedMilliseconds);
+			var testText = "[Hello]\r\nTest=value";
+			using var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(testText));
+			using var stream = new StreamReader(memoryStream);
+			var iniFile = new IniFile(stream);
+			MessageBox.Show(iniFile[0].Name);
 		}
 	}
 }
