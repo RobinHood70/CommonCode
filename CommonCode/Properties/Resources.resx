@@ -126,6 +126,9 @@
   <data name="InvalidArrayBounds" xml:space="preserve">
     <value>Array bounds must be greater than zero.</value>
   </data>
+  <data name="NoNodeList" xml:space="preserve">
+    <value>The LinkedListNode specified does not belong to a list.</value>
+  </data>
   <data name="NotAtEnd" xml:space="preserve">
     <value>{0} is not at end of data.</value>
   </data>

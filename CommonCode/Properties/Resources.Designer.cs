@@ -88,6 +88,15 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The LinkedListNode specified does not belong to a list..
+        /// </summary>
+        internal static string NoNodeList {
+            get {
+                return ResourceManager.GetString("NoNodeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is not at end of data..
         /// </summary>
         internal static string NotAtEnd {

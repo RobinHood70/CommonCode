@@ -8,12 +8,13 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Text;
+	using RobinHood70.CommonCode.Properties;
 	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>Extension methods for a variety of types.</summary>
 	public static class Extensions
 	{
-		#region Internal BinaryReader Extensions
+		#region BinaryReader Extensions
 
 		/// <summary>Reads a length-prefixed string. Both length and characters should be bytes.</summary>
 		/// <param name="reader">The <see cref="BinaryReader"/> to read from.</param>
@@ -261,6 +262,98 @@
 				list[i] = list[swapWith];
 				list[swapWith] = value;
 				i--;
+			}
+		}
+		#endregion
+
+		#region LinkedList<T> Extensions
+
+		/// <summary>Adds a collection of values to the list in the order provided.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="list">The list to add the value to.</param>
+		/// <param name="node">The node to add the value after.</param>
+		/// <param name="values">The values to add.</param>
+		public static void AddAfter<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
+		{
+			ThrowNull(list, nameof(list));
+			ThrowNull(node, nameof(node));
+			ThrowNull(values, nameof(values));
+			foreach (var newNode in values)
+			{
+				node = list.AddAfter(node, newNode);
+			}
+		}
+
+		/// <summary>Adds a collection of values to the list in the order provided.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="list">The list to add the value to.</param>
+		/// <param name="node">The node to add the value Before.</param>
+		/// <param name="values">The values to add.</param>
+		public static void AddBefore<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
+		{
+			ThrowNull(list, nameof(list));
+			ThrowNull(node, nameof(node));
+			ThrowNull(values, nameof(values));
+			foreach (var newNode in values)
+			{
+				list.AddBefore(node, newNode);
+			}
+		}
+		#endregion
+
+		#region LinkedListNode<T> Extensions
+
+		/// <summary>Adds a new value to the linked list.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="node">The node to add the values after.</param>
+		/// <param name="value">The value to add.</param>
+		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
+		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value) =>
+			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
+				? list.AddAfter(node, value)
+				: throw new InvalidOperationException(Resources.NoNodeList);
+
+		/// <summary>Adds a collection of values to the list in the order provided.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="node">The node to add the values after.</param>
+		/// <param name="values">The values to add.</param>
+		public static void AddAfter<T>(this LinkedListNode<T> node, IEnumerable<T> values)
+		{
+			ThrowNull(node, nameof(node));
+			ThrowNull(values, nameof(values));
+			if (node.List is LinkedList<T> list)
+			{
+				foreach (var newNode in values)
+				{
+					node = list.AddAfter(node, newNode);
+				}
+			}
+		}
+
+		/// <summary>Adds a new value to the linked list.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="node">The node to add the values before.</param>
+		/// <param name="value">The value to add.</param>
+		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
+		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value) =>
+			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
+				? list.AddBefore(node, value)
+				: throw new InvalidOperationException(Resources.NoNodeList);
+
+		/// <summary>Adds a collection of values to the list in the order provided.</summary>
+		/// <typeparam name="T">The element type of the linked list.</typeparam>
+		/// <param name="node">The node to add the values before.</param>
+		/// <param name="values">The values to add.</param>
+		public static void AddBefore<T>(this LinkedListNode<T> node, IEnumerable<T> values)
+		{
+			ThrowNull(node, nameof(node));
+			ThrowNull(values, nameof(values));
+			if (node.List is LinkedList<T> list)
+			{
+				foreach (var newNode in values)
+				{
+					list.AddBefore(node, newNode);
+				}
 			}
 		}
 		#endregion
