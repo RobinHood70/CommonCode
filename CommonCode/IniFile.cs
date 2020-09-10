@@ -27,8 +27,14 @@
 				iniFileName += ".ini";
 			}
 
-			this.FileName = Path.GetFullPath(iniFileName);
-			this.Reload();
+			using var stream = File.OpenText(Path.GetFullPath(iniFileName));
+			this.ReadStream(stream);
+		}
+
+		public IniFile(StreamReader stream)
+		{
+			ThrowNull(stream, nameof(stream));
+			this.ReadStream(stream);
 		}
 		#endregion
 
@@ -44,7 +50,7 @@
 		public int Count => this.sections.Count;
 
 		/// <summary>Gets the name of the ini file.</summary>
-		public string FileName { get; }
+		public string? FileName { get; private set; }
 		#endregion
 
 		#region Indexers
@@ -73,18 +79,21 @@
 		/// <returns>A list of sections.</returns>
 		private IList<IniSection> FindAll(string name) => this.sections.FindAll(s => s.Name.Equals(name, StringComparison.Ordinal));
 
-		/// <summary>Reloads and reprocesses the ini file.</summary>
-		private void Reload()
+		private void ReadStream(StreamReader stream)
 		{
-			var fullText = File.ReadAllLines(this.FileName);
 			var name = string.Empty;
 			var lines = new List<string>();
-			foreach (var line in fullText)
+			if (stream.BaseStream is FileStream fileStream)
+			{
+				this.FileName = fileStream.Name;
+			}
+
+			while (stream.ReadLine() is string line)
 			{
 				var trimmedLine = line.TrimEnd();
 				if (trimmedLine.Length > 0)
 				{
-					if (trimmedLine.StartsWith("[", StringComparison.Ordinal) && trimmedLine.EndsWith("]", StringComparison.Ordinal))
+					if (trimmedLine[0] == '[' && trimmedLine[^1] == ']')
 					{
 						if (name.Length > 0 || lines.Count > 0)
 						{
