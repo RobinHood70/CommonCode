@@ -158,7 +158,11 @@
 		/// <typeparam name="T">The type of the original enumerable.</typeparam>
 		/// <param name="enumerable">The enumerable to convert.</param>
 		/// <returns>The existing enumerable as an IReadOnlyList or a new list.</returns>
-		public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T>? enumerable) => enumerable == null || IsEmpty(enumerable) ? Array.Empty<T>() : enumerable as IReadOnlyList<T> ?? new List<T>(enumerable);
+		public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T>? enumerable) => enumerable == null || enumerable.IsEmpty()
+			? Array.Empty<T>()
+			: enumerable is IReadOnlyList<T> list
+				? list
+				: new List<T>(enumerable);
 
 		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
 		/// <typeparam name="T">The type of the original enumerable.</typeparam>
