@@ -5,6 +5,7 @@
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using static System.Math;
+	using static RobinHood70.CommonCode.Globals;
 
 	// Adapted from http://stackoverflow.com/questions/248603/natural-sort-order-in-c-sharp/11624488#11624488
 	// For some reason, the default Regex produces a 3-element split with strings like "a100" (a, 100, ""), but this does not affect sorting.
@@ -14,21 +15,40 @@
 	public class NaturalSort : IComparer<string>
 	{
 		#region Fields
-		private static readonly Regex NumberRegex = new Regex(@"\d+([\.,]\d+)?", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "MA0023:Add RegexOptions.ExplicitCapture", Justification = "Required for Split")]
+		private static readonly Regex NumberRegex = new Regex(@"(\d+([\.,]\d+)?)", RegexOptions.None, TimeSpan.FromSeconds(1));
 		#endregion
 
-		#region Public Methods
+		#region Constructors
+
+		private NaturalSort()
+		{
+		}
+		#endregion
+
+		#region Public Static Properties
+
+		/// <summary>Gets a singleton instance of the NaturalSort class.</summary>
+		/// <value>The instance.</value>
+		public static NaturalSort Instance { get; } = new NaturalSort();
+		#endregion
+
+		#region Public Static Methods
 
 		/// <summary>Compares two strings and returns a value indicating whether one is less than, equal to, or greater than the other.</summary>
 		/// <param name="x">The first string to compare.</param>
 		/// <param name="y">The second string to compare.</param>
+		/// <param name="culture">The culture to use for both numeric and string comparisons.</param>
+		/// <param name="options">The <see cref="CompareOptions"/> to use for string comparisons.</param>
 		/// <returns>A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.
 		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
 		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
-		public int Compare(string? x, string? y)
+		public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
+			ThrowNull(culture, nameof(culture));
 			if (x == null)
 			{
 				return y == null ? 0 : -1;
@@ -44,12 +64,11 @@
 			var len = Min(splitX.Length, splitY.Length);
 			for (var i = 0; i < len; i++)
 			{
-				var culture = CultureInfo.CurrentCulture;
 				var result = (
 					double.TryParse(splitX[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numX) &&
 					double.TryParse(splitY[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numY))
 						? numX.CompareTo(numY)
-						: string.Compare(splitX[i], splitY[i], culture, CompareOptions.None);
+						: string.Compare(splitX[i], splitY[i], culture, options);
 				if (result != 0)
 				{
 					return result;
@@ -58,6 +77,18 @@
 
 			return splitX.Length.CompareTo(splitY.Length);
 		}
+		#endregion
+
+		#region Public Methods
+
+		/// <summary>Compares two strings and returns a value indicating whether one is less than, equal to, or greater than the other.</summary>
+		/// <param name="x">The first string to compare.</param>
+		/// <param name="y">The second string to compare.</param>
+		/// <returns>A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.
+		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
+		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
+		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
+		public int Compare(string? x, string? y) => Compare(x, y, CultureInfo.CurrentCulture, CompareOptions.None);
 		#endregion
 	}
 }

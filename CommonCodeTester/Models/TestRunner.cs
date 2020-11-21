@@ -1,9 +1,7 @@
 ﻿namespace RobinHood70.CommonCodeTester.Models
 {
 	using System;
-	using System.IO;
-	using System.Text;
-	using System.Windows;
+	using System.Collections.Generic;
 	using RobinHood70.CommonCode;
 	using RobinHood70.CommonCodeTester.Views;
 
@@ -28,11 +26,23 @@
 
 		public static void RunTest()
 		{
-			var testText = "[Hello]\r\nTest=value";
-			using var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(testText));
-			using var stream = new StreamReader(memoryStream);
-			var iniFile = new IniFile(stream);
-			MessageBox.Show(iniFile[0].Name);
+			var names = new List<string>
+			{
+				"Lore:Crafting Motif 56, Apostle",
+				"Lore:Crafting Motif 48, Ashlander",
+				"Lore:Crafting Motif 54, Bloodforge",
+				"Lore:Crafting Motif 69, Dead-Water",
+				"Lore:Crafting Motif 55, Dreadhorn",
+				"Lore:Crafting Motif 57, Ebonshadow",
+				"Lore:Crafting Motif 70, Elder Argonian",
+				"Lore:Crafting Motif 58, Fang Lair",
+				"Lore:Crafting Motif 43, Harlequin Style",
+				"Lore:Crafting Motif 51, Hlaalu",
+				"Lore:Crafting Motif 65, Huntsman",
+				"Lore:Crafting Motif 45, Mazzatun",
+			};
+
+			names.Sort(NaturalSort.Instance);
 		}
 	}
 }
