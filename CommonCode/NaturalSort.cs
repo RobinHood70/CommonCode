@@ -45,6 +45,7 @@
 		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
 		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "False hit.")]
 		public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
