@@ -3,11 +3,11 @@
 	using System;
 	using System.Collections.Generic;
 
-	public class Range<T> : IEquatable<Range<T>>
+	public class ValueRange<T> : IEquatable<ValueRange<T>>
 		where T : IComparable<T>
 	{
 		#region Constructor
-		public Range(T min, T max)
+		public ValueRange(T min, T max)
 		{
 			this.Max = max;
 			this.Min = min;
@@ -21,13 +21,13 @@
 		#endregion
 
 		#region Public Operators
-		public static bool operator ==(Range<T> left, Range<T> right) => left?.Equals(right) ?? right is null;
+		public static bool operator ==(ValueRange<T> left, ValueRange<T> right) => left?.Equals(right) ?? right is null;
 
-		public static bool operator !=(Range<T> left, Range<T> right) => !(left == right);
+		public static bool operator !=(ValueRange<T> left, ValueRange<T> right) => !(left == right);
 		#endregion
 
 		#region Public Methods
-		public bool Equals(Range<T>? other) =>
+		public bool Equals(ValueRange<T>? other) =>
 			!(other is null) &&
 			EqualityComparer<T>.Default.Equals(this.Max, other.Max) &&
 			EqualityComparer<T>.Default.Equals(this.Min, other.Min);
@@ -47,7 +47,7 @@
 		#endregion
 
 		#region Public Override Methods
-		public override bool Equals(object? obj) => obj is Range<T> range && this.Equals(range);
+		public override bool Equals(object? obj) => obj is ValueRange<T> range && this.Equals(range);
 
 		public override int GetHashCode() => HashCode.Combine(this.Max, this.Min);
 
