@@ -3,6 +3,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
+	using System.Runtime.CompilerServices;
 	using System.Security.Cryptography;
 	using System.Text;
 	using RobinHood70.CommonCode.Properties;
@@ -35,10 +36,6 @@
 	/// <summary>Global helper methods that are useful in a variety of scenarios.</summary>
 	public static class Globals
 	{
-		#region Fields
-		private static bool registered;
-		#endregion
-
 		#region Public Properties
 
 		/// <summary>Gets a <see cref="TimeSpan"/> that is a good general time to abort Regex operations after.</summary>
@@ -148,14 +145,8 @@
 		public static string GetHash(this string data, HashType hashType) => GetHash(Encoding.UTF8.GetBytes(data ?? string.Empty), hashType);
 
 		/// <summary>Initializes .NET Core's encoding so that it can load code-page based encodings.</summary>
-		public static void InitializeEncoding()
-		{
-			if (!registered)
-			{
-				Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-				registered = true;
-			}
-		}
+		[ModuleInitializer]
+		public static void Initialize() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="formattable">A formattable string.</param>
