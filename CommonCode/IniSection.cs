@@ -3,12 +3,10 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>Represents an ini file's section as a collection of ini keys, along with the section name.</summary>
 	/// <remarks>While this acts similar to a keyed collection, it isn't one due to the fact that keys can be duplicated in a file.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "More logical name for the class, since most people probably think of it as a section, rather than a collection of values.")]
 	public class IniSection : IReadOnlyList<IniKey>
 	{
 		#region Fields

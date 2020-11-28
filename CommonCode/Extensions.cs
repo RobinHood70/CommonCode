@@ -393,7 +393,7 @@
 			}
 
 			var retval = text.Substring(0, 1).ToLower(culture);
-			return text.Length == 1 ? retval : retval + text.Substring(1);
+			return text.Length == 1 ? retval : retval + text[1..];
 		}
 
 		/// <summary>Takes a camel-case text and adds spaces before each block of one or more upper-case letters.</summary>
@@ -428,7 +428,7 @@
 				else if (!char.IsUpper(c) && lastWasCapital && !didWordBreak)
 				{
 					words.Add(word[0..^1]);
-					word = word.Substring(word.Length - 1) + c;
+					word = word[^1..] + c;
 					didWordBreak = true;
 				}
 				else
@@ -461,15 +461,15 @@
 			}
 
 			var retval = text.Substring(0, 1).ToUpper(culture);
-			return text.Length == 1 ? retval : retval + text.Substring(1);
+			return text.Length == 1 ? retval : retval + text[1..];
 		}
 		#endregion
 
-#pragma warning disable SA1027 // Use tabs correctly
-#pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
-#if DEBUG
-		// Any calls to any of these methods should be replaced by native methods/properties.
 		#region Honeypot Methods
+#if DEBUG
+#pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
+
+		// Any calls to any of these methods should be replaced by native methods/properties.
 		public static void AddRange<T>(this List<T> list, params T[] values)
 		{
 			ThrowNull(list, nameof(list));
@@ -487,9 +487,8 @@
 
 		public static bool IsEmpty(this ICollection? collection) => collection == null || collection.Count == 0;
 
-		#endregion
-#endif
 #pragma warning restore MA0016 // Prefer return collection abstraction instead of implementation
-#pragma warning restore SA1027 // Use tabs correctly
+#endif
+		#endregion
 	}
 }

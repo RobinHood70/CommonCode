@@ -3,12 +3,10 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using System.IO;
 	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>A class for basic ini file management.</summary>
-	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "More logical name for the class, since most people will think of it as a file, not a collection of ini sections.")]
 	public class IniFile : IReadOnlyList<IniSection>
 	{
 		#region Fields

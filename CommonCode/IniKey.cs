@@ -33,7 +33,7 @@
 				{
 					this.Name = string.Empty;
 					this.Value = string.Empty;
-					this.Comment = line.Substring(1);
+					this.Comment = line[1..];
 					return;
 				}
 
