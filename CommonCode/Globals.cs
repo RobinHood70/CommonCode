@@ -1,4 +1,6 @@
-﻿namespace RobinHood70.CommonCode
+﻿[assembly: System.CLSCompliant(true)]
+
+namespace RobinHood70.CommonCode
 {
 	using System;
 	using System.Diagnostics.CodeAnalysis;

@@ -123,6 +123,7 @@
 			return retval;
 		}
 
+		[CLSCompliant(false)]
 		public sbyte ReadSByte()
 		{
 			var retval = (sbyte)this.rawData[this.offset];
@@ -146,6 +147,7 @@
 			return retval;
 		}
 
+		[CLSCompliant(false)]
 		public ushort ReadUInt16()
 		{
 			var retval = BitConverter.ToUInt16(this.rawData, this.offset);
@@ -153,6 +155,7 @@
 			return retval;
 		}
 
+		[CLSCompliant(false)]
 		public uint ReadUInt32()
 		{
 			var retval = BitConverter.ToUInt32(this.rawData, this.offset);
@@ -160,6 +163,7 @@
 			return retval;
 		}
 
+		[CLSCompliant(false)]
 		public ulong ReadUInt64()
 		{
 			var retval = BitConverter.ToUInt64(this.rawData, this.offset);
