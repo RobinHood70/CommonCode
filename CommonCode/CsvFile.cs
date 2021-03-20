@@ -14,8 +14,8 @@
 	public sealed class CsvFile : IList<CsvRow>
 	{
 		#region Fields
-		private readonly List<CsvRow> rows = new List<CsvRow>();
-		private readonly Dictionary<string, int> nameMap = new Dictionary<string, int>(StringComparer.Ordinal);
+		private readonly List<CsvRow> rows = new();
+		private readonly Dictionary<string, int> nameMap = new(StringComparer.Ordinal);
 		private IEnumerable<string>? headerRow;
 		#endregion
 

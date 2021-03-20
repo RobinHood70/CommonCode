@@ -7,6 +7,7 @@
 	{
 		// These are all implemented as public fields due to the fact that arrays are strongly discouraged as public properties and the methods these are intended for, such as string.Split, do not allow spans currently.
 		public static readonly char[] At = { '@' };
+		public static readonly char[] Backslash = { '\\' };
 		public static readonly char[] CategorySeparators = { ' ', '-' };
 		public static readonly char[] Colon = { ':' };
 		public static readonly char[] Comma = { ',' };

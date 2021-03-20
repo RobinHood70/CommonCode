@@ -1,6 +1,4 @@
-﻿[assembly: System.CLSCompliant(true)]
-
-namespace RobinHood70.CommonCode
+﻿namespace RobinHood70.CommonCode
 {
 	using System;
 	using System.Diagnostics.CodeAnalysis;
@@ -50,7 +48,7 @@ namespace RobinHood70.CommonCode
 		/// <param name="name">The name of the parameter in the original method.</param>
 		/// <exception cref="ArgumentNullException">Always thrown.</exception>
 		/// <returns>An <see cref="ArgumentNullException"/> for the specified parameter name.</returns>
-		public static ArgumentNullException ArgumentNull(string name) => new ArgumentNullException(name);
+		public static ArgumentNullException ArgumentNull(string name) => new(name);
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
@@ -160,7 +158,7 @@ namespace RobinHood70.CommonCode
 		/// <param name="objectName">The name of the object in the original method.</param>
 		/// <param name="propertyName">The property of the object which was found to be null.</param>
 		/// <returns>An <see cref="InvalidOperationException"/> for the specified object and property.</returns>
-		public static InvalidOperationException PropertyNull(string objectName, string propertyName) => new InvalidOperationException(CurrentCulture(Resources.PropertyNull, objectName, propertyName));
+		public static InvalidOperationException PropertyNull(string objectName, string propertyName) => new(CurrentCulture(Resources.PropertyNull, objectName, propertyName));
 
 		/// <summary>Throws an exception if the input value is null.</summary>
 		/// <param name="nullable">The value that may be null.</param>

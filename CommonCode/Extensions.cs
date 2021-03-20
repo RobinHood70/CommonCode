@@ -134,7 +134,7 @@
 		/// <param name="dictionary">The dictionary to convert.</param>
 		/// <returns>A read-only dictionary based on the provided dictionary. If the input was null, an empty read-only dictionary is returned.</returns>
 		public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue>? dictionary)
-			where TKey : notnull => new ReadOnlyDictionary<TKey, TValue>(dictionary ?? new Dictionary<TKey, TValue>());
+			where TKey : notnull => new(dictionary ?? new Dictionary<TKey, TValue>());
 
 		/// <summary>Gets the value of the "first" item in a dictionary.</summary>
 		/// <typeparam name="TKey">The key type of the dictionary.</typeparam>

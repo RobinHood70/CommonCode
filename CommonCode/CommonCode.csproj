@@ -8,7 +8,6 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
-		<CodeAnalysisRuleSet>..\Common.ruleset</CodeAnalysisRuleSet>
 		<RootNamespace>RobinHood70.CommonCode</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>

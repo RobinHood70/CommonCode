@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using static System.Math;
@@ -16,8 +17,8 @@
 	{
 		#region Fields
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "MA0023:Add RegexOptions.ExplicitCapture", Justification = "Required for Split")]
-		private static readonly Regex NumberRegex = new Regex(@"(\d+([\.,]\d+)?)", RegexOptions.None, TimeSpan.FromSeconds(1));
+		[SuppressMessage("Security", "MA0023:Add RegexOptions.ExplicitCapture", Justification = "Required for Split")]
+		private static readonly Regex NumberRegex = new(@"(\d+([\.,]\d+)?)", RegexOptions.None, TimeSpan.FromSeconds(1));
 		#endregion
 
 		#region Constructors

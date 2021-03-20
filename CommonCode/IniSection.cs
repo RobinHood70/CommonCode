@@ -10,7 +10,7 @@
 	public class IniSection : IReadOnlyList<IniKey>
 	{
 		#region Fields
-		private readonly List<IniKey> keys = new List<IniKey>();
+		private readonly List<IniKey> keys = new();
 		#endregion
 
 		#region Constructors

@@ -9,7 +9,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-		<CodeAnalysisRuleSet>..\Common.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
 		<TargetFramework>net5.0-windows</TargetFramework>
