@@ -408,39 +408,26 @@
 			}
 
 			text = text.UpperFirst(CultureInfo.CurrentUICulture);
-			var words = new List<string>(5);
-			var word = string.Empty;
-			var lastWasCapital = false;
-			var didWordBreak = false;
-			foreach (var c in text)
+			var i = text.Length - 2;
+			while (i > 0)
 			{
-				if (char.IsUpper(c) && !lastWasCapital)
+				if (char.IsLower(text[i + 1]) && char.IsUpper(text[i]))
 				{
-					if (word.Length > 0)
+					if (char.IsLetter(text[i - 1]))
 					{
-						words.Add(word);
+						text = text.Insert(i, " ");
 					}
+				}
 
-					word = c.ToString(CultureInfo.InvariantCulture);
-					lastWasCapital = true;
-					didWordBreak = true;
-				}
-				else if (!char.IsUpper(c) && lastWasCapital && !didWordBreak)
+				if (char.IsLower(text[i - 1]) && char.IsUpper(text[i]))
 				{
-					words.Add(word[0..^1]);
-					word = word[^1..] + c;
-					didWordBreak = true;
+					text = text.Insert(i, " ");
 				}
-				else
-				{
-					word += c;
-					lastWasCapital = char.IsUpper(c);
-					didWordBreak = false;
-				}
+
+				i--;
 			}
 
-			words.Add(word);
-			return string.Join(" ", words);
+			return text;
 		}
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
