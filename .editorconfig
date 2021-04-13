@@ -11,9 +11,11 @@
 dotnet_analyzer_diagnostic.severity = warning
 
 dotnet_diagnostic.CA1710.severity = none
+dotnet_diagnostic.CA1814.severity = none
 dotnet_diagnostic.CA5350.severity = none
 dotnet_diagnostic.CA5351.severity = none
 dotnet_diagnostic.CA5358.severity = warning
+dotnet_diagnostic.CA5394.severity = none
 
 dotnet_diagnostic.IDE0005.severity = suggestion
 dotnet_diagnostic.IDE0009.severity = suggestion

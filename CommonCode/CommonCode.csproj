@@ -11,6 +11,9 @@
 		<RootNamespace>RobinHood70.CommonCode</RootNamespace>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 	</PropertyGroup>
 
 	<ItemGroup>
