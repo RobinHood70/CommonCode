@@ -26,7 +26,7 @@
 
 		public static void RunTest()
 		{
-			var testText = "MuMuLand Hello";
+			var testText = "ON-trailer-Gates of Oblivion-Eveli.jpg";
 			Debug.WriteLine(testText.UnCamelCase());
 		}
 	}
