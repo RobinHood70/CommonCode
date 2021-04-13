@@ -7,7 +7,6 @@
 
 	public class FixedArray2D<T>
 	{
-#pragma warning disable CA1814
 		#region Fields
 		private readonly T[,] array;
 		#endregion
@@ -88,6 +87,5 @@
 			return list;
 		}
 		#endregion
-#pragma warning restore CA1814
 	}
 }

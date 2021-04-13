@@ -69,7 +69,9 @@
 					double.TryParse(splitX[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numX) &&
 					double.TryParse(splitY[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numY))
 						? numX.CompareTo(numY)
+#pragma warning disable CA1309 // Use ordinal string comparison
 						: string.Compare(splitX[i], splitY[i], culture, options);
+#pragma warning restore CA1309 // Use ordinal string comparison
 				if (result != 0)
 				{
 					return result;
