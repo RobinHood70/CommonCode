@@ -3,6 +3,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
+	using System.IO;
 	using System.Runtime.CompilerServices;
 	using System.Security.Cryptography;
 	using System.Text;
@@ -161,6 +162,14 @@
 		/// <param name="propertyName">The property of the object which was found to be null.</param>
 		/// <returns>An <see cref="InvalidOperationException"/> for the specified object and property.</returns>
 		public static InvalidOperationException PropertyNull(string objectName, string propertyName) => new(CurrentCulture(Resources.PropertyNull, objectName, propertyName));
+
+		public static string SanitizeFilename(string fileName)
+		{
+			ThrowNull(fileName, nameof(fileName));
+			var invalidChars = Path.GetInvalidFileNameChars();
+			var split = fileName.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
+			return string.Join('_', split).TrimEnd(TextArrays.Period);
+		}
 
 		/// <summary>Throws an exception if the input value is null.</summary>
 		/// <param name="nullable">The value that may be null.</param>
