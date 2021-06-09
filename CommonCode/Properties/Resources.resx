@@ -120,6 +120,12 @@
   <data name="ArrayTooSmall" xml:space="preserve">
     <value>Array size is less than the dimensions specified.</value>
   </data>
+  <data name="CollectionEmpty" xml:space="preserve">
+    <value>The collection {0} must contain values; it cannot be null or empty.</value>
+  </data>
+  <data name="CollectionInvalid" xml:space="preserve">
+    <value>The collection {0} cannot contain values that are null or only whitespace.</value>
+  </data>
   <data name="DuplicateKeyInItems" xml:space="preserve">
     <value>Multiple items with the same key were found in the provided collection. Key: {0}</value>
   </data>
@@ -134,5 +140,8 @@
   </data>
   <data name="PropertyNull" xml:space="preserve">
     <value>{0}.{1} was unexpectedly null.</value>
+  </data>
+  <data name="StringInvalid" xml:space="preserve">
+    <value>The parameter {0} cannot be null or only whitespace.</value>
   </data>
 </root>

@@ -1,6 +1,8 @@
 ﻿namespace RobinHood70.CommonCode
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
@@ -163,12 +165,27 @@
 		/// <returns>An <see cref="InvalidOperationException"/> for the specified object and property.</returns>
 		public static InvalidOperationException PropertyNull(string objectName, string propertyName) => new(CurrentCulture(Resources.PropertyNull, objectName, propertyName));
 
+		/// <summary>Creates an empty read-only dictionary of the specified type.</summary>
+		/// <typeparam name="TKey">The key type.</typeparam>
+		/// <typeparam name="TValue">The value type.</typeparam>
+		/// <returns>An empty read-only dictionary.</returns>
+		public static IReadOnlyDictionary<TKey, TValue> ReadOnlyDictionary<TKey, TValue>()
+			where TKey : notnull => new ReadOnlyDictionary<TKey, TValue>(new Dictionary<TKey, TValue>());
+
 		public static string SanitizeFilename(string fileName)
 		{
 			ThrowNull(fileName, nameof(fileName));
 			var invalidChars = Path.GetInvalidFileNameChars();
 			var split = fileName.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
+		}
+
+		public static void ThrowCollectionEmpty<T>(IEnumerable<T> collection, string paramName)
+		{
+			if (collection.IsEmpty())
+			{
+				throw new ArgumentException(CurrentCulture(Resources.CollectionEmpty, paramName), nameof(paramName));
+			}
 		}
 
 		/// <summary>Throws an exception if the input value is null.</summary>
@@ -193,6 +210,30 @@
 			if (nullable is null)
 			{
 				throw PropertyNull(objectName, propertyName);
+			}
+		}
+
+		public static void ThrowNullOrWhiteSpace(string text, string paramName)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				throw new ArgumentException(CurrentCulture(Resources.StringInvalid, paramName), nameof(text));
+			}
+		}
+
+		public static void ThrowNullOrWhiteSpace(IEnumerable<string> collection, string paramName)
+		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException(paramName);
+			}
+
+			foreach (var item in collection)
+			{
+				if (string.IsNullOrWhiteSpace(item))
+				{
+					throw new ArgumentException(CurrentCulture(Resources.CollectionInvalid, paramName), nameof(collection));
+				}
 			}
 		}
 		#endregion

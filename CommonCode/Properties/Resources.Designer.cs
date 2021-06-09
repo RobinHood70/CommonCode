@@ -70,6 +70,24 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The collection {0} must contain values; it cannot be null or empty..
+        /// </summary>
+        internal static string CollectionEmpty {
+            get {
+                return ResourceManager.GetString("CollectionEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The collection {0} cannot contain values that are null or only whitespace..
+        /// </summary>
+        internal static string CollectionInvalid {
+            get {
+                return ResourceManager.GetString("CollectionInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multiple items with the same key were found in the provided collection. Key: {0}.
         /// </summary>
         internal static string DuplicateKeyInItems {
@@ -111,6 +129,15 @@ namespace RobinHood70.CommonCode.Properties {
         internal static string PropertyNull {
             get {
                 return ResourceManager.GetString("PropertyNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter {0} cannot be null or only whitespace..
+        /// </summary>
+        internal static string StringInvalid {
+            get {
+                return ResourceManager.GetString("StringInvalid", resourceCulture);
             }
         }
     }
