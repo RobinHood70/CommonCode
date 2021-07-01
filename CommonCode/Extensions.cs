@@ -270,6 +270,43 @@
 		}
 		#endregion
 
+		#region IReadOnlyDictionary<TKey, TValue> Extentions
+
+		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
+		/// <typeparam name="T">The type for both the key and the value.</typeparam>
+		/// <param name="dictionary">The dictionary to search.</param>
+		/// <param name="key">The key to look for.</param>
+		/// <returns>The substitute value if one is found; otherwise, the original key.</returns>
+		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key)
+		{
+			ThrowNull(dictionary, nameof(dictionary));
+			if (!dictionary.TryGetValue(key, out var retval))
+			{
+				retval = key;
+			}
+
+			return retval;
+		}
+
+		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
+		/// <typeparam name="TKey">The type for the key.</typeparam>
+		/// <typeparam name="TValue">The type for the value.</typeparam>
+		/// <param name="dictionary">The dictionary to search.</param>
+		/// <param name="key">The key to look for.</param>
+		/// <param name="defaultValue">The default value to use if the key is not found.</param>
+		/// <returns>The substitute value if one is found; otherwise, the default value.</returns>
+		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+		{
+			ThrowNull(dictionary, nameof(dictionary));
+			if (!dictionary.TryGetValue(key, out var retval))
+			{
+				retval = defaultValue;
+			}
+
+			return retval;
+		}
+		#endregion
+
 		#region LinkedList<T> Extensions
 
 		/// <summary>Adds a collection of values to the list in the order provided.</summary>
