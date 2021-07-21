@@ -65,6 +65,19 @@
 			}
 		}
 
+		/// <summary>Determines whether or not an enum has any of the provided flags set.</summary>
+		/// <typeparam name="T">The enumeration type.</typeparam>
+		/// <param name="flagValue">The flags enumeration value to check.</param>
+		/// <param name="values">The flag values to check.</param>
+		/// <returns><see langword="true"/> if any of the flags in <paramref name="values"/> is set; otherwise, <see langword="false"/>.</returns>
+		public static bool HasAnyFlag<T>(this T flagValue, T values)
+			where T : Enum
+		{
+			var numericFlags = ((IConvertible)flagValue).ToUInt64(CultureInfo.InvariantCulture);
+			var numericValues = ((IConvertible)values).ToUInt64(CultureInfo.InvariantCulture);
+			return (numericFlags & numericValues) != 0;
+		}
+
 		/// <summary>Determines whether or not an enum represents a single-bit flag value.</summary>
 		/// <typeparam name="T">The enumeration type.</typeparam>
 		/// <param name="flagValue">The flags enumeration value to check.</param>
