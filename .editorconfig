@@ -10,28 +10,7 @@
 # Default severity for analyzer diagnostics - Requires **VS2019 16.5** or later
 dotnet_analyzer_diagnostic.severity = warning
 
-dotnet_diagnostic.CA1710.severity = none
-dotnet_diagnostic.CA1814.severity = none
 dotnet_diagnostic.CA5350.severity = none
 dotnet_diagnostic.CA5351.severity = none
 dotnet_diagnostic.CA5358.severity = warning
 dotnet_diagnostic.CA5394.severity = none
-
-dotnet_diagnostic.IDE0005.severity = suggestion
-dotnet_diagnostic.IDE0009.severity = suggestion
-dotnet_diagnostic.IDE0058.severity = none
-dotnet_diagnostic.IDE0065.severity = suggestion
-
-dotnet_diagnostic.MA0003.severity = none
-dotnet_diagnostic.MA0007.severity = none
-dotnet_diagnostic.MA0048.severity = none
-dotnet_diagnostic.MA0051.severity = none
-
-dotnet_diagnostic.SA0001.severity = none
-dotnet_diagnostic.SA1124.severity = none
-dotnet_diagnostic.SA1407.severity = silent
-dotnet_diagnostic.SA1413.severity = none
-dotnet_diagnostic.SA1507.severity = suggestion
-dotnet_diagnostic.SA1515.severity = suggestion
-dotnet_diagnostic.SA1600.severity = none
-dotnet_diagnostic.SA1633.severity = none
