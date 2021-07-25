@@ -14,7 +14,7 @@
 		#region Public Static Properties
 		public static ICommand OpenFourCC => new RelayCommand(TestRunner.OpenFourCC);
 
-		public static ICommand TestReaderCommand => new RelayCommand(TestRunner.RunTest);
+		public static ICommand TestReaderCommand => new RelayCommand(TestRunner.RunTests);
 		#endregion
 	}
 }
