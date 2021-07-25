@@ -3,7 +3,7 @@
 	using System.Text;
 	using RobinHood70.CommonCode;
 
-	internal class IStringBuilderTest1 : IStringBuilder
+	internal sealed class StringBuilderTest1 : IStringBuilder
 	{
 		public StringBuilder BuildString(StringBuilder sb) => sb.Append("Hello world!");
 

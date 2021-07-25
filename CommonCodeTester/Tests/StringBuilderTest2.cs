@@ -3,7 +3,7 @@
 	using System.Text;
 	using RobinHood70.CommonCode;
 
-	public class IStringBuilderTest2 : IStringBuilder
+	public class StringBuilderTest2 : IStringBuilder
 	{
 		public StringBuilder BuildString(StringBuilder sb) => sb.Append("Built");
 

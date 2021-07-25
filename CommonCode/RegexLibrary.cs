@@ -10,7 +10,7 @@
 
 		public static Regex EolNotLineFeed { get; } = new Regex(@"((?<!\n)\r\n?|(?<!\r)\n\r?)", RegexOptions.ExplicitCapture, DefaultRegexTimeout);
 
-		public static Regex MultipleSpaces { get; } = new Regex(@" {2,}", RegexOptions.None, DefaultRegexTimeout);
+		public static Regex MultipleSpaces { get; } = new Regex(" {2,}", RegexOptions.None, DefaultRegexTimeout);
 
 		public static Regex MultipleWhitespaces { get; } = new Regex(@"\s{2,}", RegexOptions.None, DefaultRegexTimeout);
 

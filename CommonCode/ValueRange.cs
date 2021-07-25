@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 
-	public class ValueRange<T> : IEquatable<ValueRange<T>>
+	public sealed class ValueRange<T> : IEquatable<ValueRange<T>>
 		where T : IComparable<T>
 	{
 		#region Constructor

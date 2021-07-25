@@ -8,7 +8,7 @@
 	public class MainViewModel : ViewModelBase
 	{
 		#region Constructors
-		public MainViewModel() => TestRunner.Initialize();
+		// public MainViewModel() => TestRunner.Initialize();
 		#endregion
 
 		#region Public Static Properties

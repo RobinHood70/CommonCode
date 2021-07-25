@@ -5,7 +5,7 @@
 
 	/// <summary>Represents a single row in a <see cref="CsvFile"/>.</summary>
 	/// <remarks>Once created, the number of values in a row may not be changed.</remarks>
-	public class CsvRow : IReadOnlyList<string>, IReadOnlyCollection<string>, IEnumerable<string>
+	public class CsvRow : IReadOnlyList<string>
 	{
 		#region Fields
 		private readonly IReadOnlyDictionary<string, int> nameMap;

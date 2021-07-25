@@ -67,7 +67,7 @@
 		public char ReadChar()
 		{
 			var retval = BitConverter.ToChar(this.rawData, this.offset);
-			this.offset += 1;
+			this.offset++;
 			return retval;
 		}
 

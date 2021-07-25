@@ -1,6 +1,7 @@
 ﻿namespace RobinHood70.CommonCode
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
@@ -13,7 +14,7 @@
 	// A + could also be added to handle explicitly positive numbers, but this can lead to odd sorting like "a100", "a+100", "a100". The fix would be to add "x.Length.CompareTo(y.Length)" if splitX and splitY are equal, but this was unnecessary for my purposes, so left out.
 
 	/// <summary>An IComparer that provides natural sorting for mixed text and numeric strings.</summary>
-	public class NaturalSort : IComparer<string>
+	public sealed class NaturalSort : IComparer<string>, IComparer
 	{
 		#region Fields
 
@@ -69,9 +70,7 @@
 					double.TryParse(splitX[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numX) &&
 					double.TryParse(splitY[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numY))
 						? numX.CompareTo(numY)
-#pragma warning disable CA1309 // Use ordinal string comparison
 						: string.Compare(splitX[i], splitY[i], culture, options);
-#pragma warning restore CA1309 // Use ordinal string comparison
 				if (result != 0)
 				{
 					return result;
@@ -92,6 +91,8 @@
 		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
 		public int Compare(string? x, string? y) => Compare(x, y, CultureInfo.CurrentCulture, CompareOptions.None);
+
+		public int Compare(object? x, object? y) => Compare(x as string, y as string, CultureInfo.CurrentCulture, CompareOptions.None);
 		#endregion
 	}
 }

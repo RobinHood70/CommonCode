@@ -20,9 +20,7 @@
 	/// <param name="eventArgs">The event data.</param>
 	// From: http://stackoverflow.com/questions/1046016/event-signature-in-net-using-a-strong-typed-sender and http://msdn.microsoft.com/en-us/library/sx2bwtw7.aspx. Originally had a TEventArgs : EventArgs constraint, but mirroring EventHandler<TEventArgs>, I removed it.
 	[Serializable]
-#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
-	public delegate void StrongEventHandler<TSender, TEventArgs>(TSender sender, TEventArgs eventArgs);
-#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
+	public delegate void StrongEventHandler<in TSender, in TEventArgs>(TSender sender, TEventArgs eventArgs);
 	#endregion
 
 	#region Public Enumerations
@@ -122,20 +120,19 @@
 		/// <param name="data">The byte data.</param>
 		/// <param name="hashType">The type of the hash.</param>
 		/// <returns>The hash, represented as a <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
 		public static string GetHash(byte[] data, HashType hashType)
 		{
-			// At one point, this was a try/finally block because mono wasn't quite implementing IDisposable properly. This doesn't appear to be the case anymore, so doing it the traditional method. It looks like a using block would probably have worked in any event, since that would presumably coerce hash to IDisposable.
-			// See https://xamarin.github.io/bugzilla-archives/33/3375/bug.html
+			ThrowNull(data, nameof(data));
 			using var hash = hashType switch
 			{
 				HashType.Md5 => MD5.Create(),
 				HashType.Sha1 => SHA1.Create() as HashAlgorithm,
-				_ => throw new InvalidOperationException(),
+				_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
 			};
 
 			var sb = new StringBuilder(40);
-			var hashBytes = hash.ComputeHash(data);
-			foreach (var b in hashBytes)
+			foreach (var b in hash.ComputeHash(data))
 			{
 				sb.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
 			}
@@ -156,6 +153,7 @@
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="formattable">A formattable string.</param>
 		/// <returns>The formatted text.</returns>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
 		public static string Invariant(FormattableString formattable) => (formattable ?? throw ArgumentNull(nameof(formattable))).ToString(CultureInfo.InvariantCulture);
 
@@ -205,6 +203,7 @@
 		/// <param name="objectName">The name of the object in the original method.</param>
 		/// <param name="propertyName">The property of the object which was found to be null.</param>
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="nullable" /> is null.</exception>
+		/// <exception cref="InvalidOperationException">Thrown when <paramref name="nullable"/> is null.</exception>
 		public static void ThrowNull([ValidatedNotNull][NotNull] object? nullable, string objectName, string propertyName)
 		{
 			if (nullable is null)

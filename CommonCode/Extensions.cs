@@ -156,6 +156,7 @@
 		/// <returns>The first value in the enumerable, or throws an error.</returns>
 		/// <exception cref="KeyNotFoundException">The list was empty.</exception>
 		/// <remarks>Although the current implementation of dictionaries appears to maintain insertion order, this is not guaranteed. This function should be used only to get the value from a single-entry dictionary, or to get a unspecified value from a multi-entry dictionary.</remarks>
+		/// <exception cref="InvalidOperationException">Thrown when <paramref name="dictionary"/> is empty.</exception>
 		public static TValue First<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
 			where TKey : notnull
 		{
@@ -171,11 +172,13 @@
 		/// <typeparam name="T">The type of the original enumerable.</typeparam>
 		/// <param name="enumerable">The enumerable to convert.</param>
 		/// <returns>The existing enumerable as an IReadOnlyList or a new list.</returns>
-		public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T>? enumerable) => enumerable == null || enumerable.IsEmpty()
-			? Array.Empty<T>()
-			: enumerable is IReadOnlyList<T> list
-				? list
-				: new List<T>(enumerable);
+		public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T>? enumerable) => enumerable switch
+		{
+			null => Array.Empty<T>(),
+			IReadOnlyList<T> list => list,
+			var other when other.IsEmpty() => Array.Empty<T>(),
+			_ => new List<T>(enumerable),
+		};
 
 		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
 		/// <typeparam name="T">The type of the original enumerable.</typeparam>
@@ -240,7 +243,7 @@
 		/// <param name="enumerable">The enumerable to check.</param>
 		/// <returns><see langword="true"/> if the list is non-null and has at least one item; otherwise, <see langword="false"/>.</returns>
 		/// <exception cref="KeyNotFoundException">The list was empty.</exception>
-		public static bool IsEmpty(this IEnumerable? enumerable) => enumerable == null || !enumerable.GetEnumerator().MoveNext();
+		public static bool IsEmpty(this IEnumerable? enumerable) => enumerable?.GetEnumerator().MoveNext() != true;
 		#endregion
 
 		#region IFormattable Extensions
@@ -362,6 +365,8 @@
 		/// <param name="node">The node to add the values after.</param>
 		/// <param name="value">The value to add.</param>
 		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
+		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value) =>
 			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
 				? list.AddAfter(node, value)
@@ -389,6 +394,8 @@
 		/// <param name="node">The node to add the values before.</param>
 		/// <param name="value">The value to add.</param>
 		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
+		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value) =>
 			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
 				? list.AddBefore(node, value)
@@ -421,9 +428,10 @@
 		/// <remarks>This limits only the initial string length, not the total, so the return value can have a maximum length of maxLength + 3.</remarks>
 		[return: NotNullIfNotNull("text")]
 		public static string? Ellipsis(this string? text, int maxLength) =>
-			text == null ? null :
-			text.Length > maxLength ? text.Substring(0, maxLength) + "..." :
-			text;
+			text is string testString &&
+			testString.Length > maxLength
+				? text.Substring(0, maxLength) + "..."
+				: text;
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
@@ -461,15 +469,9 @@
 			var i = text.Length - 2;
 			while (i > 0)
 			{
-				if (char.IsLower(text[i + 1]) && char.IsUpper(text[i]))
-				{
-					if (char.IsLetter(text[i - 1]))
-					{
-						text = text.Insert(i, " ");
-					}
-				}
-
-				if (char.IsLower(text[i - 1]) && char.IsUpper(text[i]))
+				if (char.IsUpper(text[i]) &&
+						(char.IsLower(text[i - 1]) ||
+						(char.IsLower(text[i + 1]) && char.IsLetter(text[i - 1]))))
 				{
 					text = text.Insert(i, " ");
 				}

@@ -51,7 +51,7 @@
 		/// <summary>Gets the ini key with the specified name.</summary>
 		/// <param name="name">The name.</param>
 		/// <returns>The <see cref="IniKey"/> with the specified name.</returns>
-		public IniKey this[string name] => this.keys.Find(k => k.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) ?? throw new KeyNotFoundException();
+		public IniKey? this[string name] => this.keys.Find(k => k.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 		#endregion
 
 		#region Public Methods

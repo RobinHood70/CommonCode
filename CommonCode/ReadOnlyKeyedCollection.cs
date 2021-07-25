@@ -12,6 +12,7 @@
 	/// <typeparam name="TItem">The type of the item.</typeparam>
 	/// <seealso cref="IReadOnlyList{TItem}" />
 	/// <seealso cref="IReadOnlyDictionary{TKey, TValue}"/>
+	[SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Matches KeyedCollection")]
 	public class ReadOnlyKeyedCollection<TKey, TItem> : IReadOnlyDictionary<TKey, TItem>, IReadOnlyList<TItem>
 		where TKey : notnull
 	{
@@ -127,7 +128,11 @@
 		/// <param name="key">The key of the value to get.</param>
 		/// <returns>The value associated with the specified key, or <see langword="default"/> if not found.</returns>
 		[return: MaybeNull]
-		public TItem ValueOrDefault(TKey key) => key != null && this.Dictionary.TryGetValue(key, out var value) ? value : default;
+		public TItem ValueOrDefault(TKey key) =>
+			!EqualityComparer<TKey>.Default.Equals(key, default) &&
+			this.Dictionary.TryGetValue(key, out var value)
+				? value
+				: default;
 		#endregion
 	}
 }

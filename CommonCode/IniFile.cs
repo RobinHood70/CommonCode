@@ -61,21 +61,21 @@
 		/// <summary>Gets a section by name.</summary>
 		/// <param name="name">The name of the section.</param>
 		/// <returns>The relevant section.</returns>
-		public IniSection this[string name] => this.sections.Find(s => s.Name.Equals(name, StringComparison.Ordinal)) ?? throw new KeyNotFoundException();
+		public IniSection? this[string name] => this.sections.Find(s => s.Name.Equals(name, StringComparison.Ordinal));
 		#endregion
 
 		#region Public Methods
+
+		/// <summary>Finds all sections with the given name, in the event that there is more than one identically named section.</summary>
+		/// <param name="name">The section name to search for.</param>
+		/// <returns>A list of sections.</returns>
+		public IList<IniSection> FindAll(string name) => this.sections.FindAll(s => s.Name.Equals(name, StringComparison.Ordinal));
 
 		/// <summary>Returns an enumerator that iterates through each section.</summary>
 		/// <returns>An enumerator that iterates through each section.</returns>
 		public IEnumerator<IniSection> GetEnumerator() => this.sections.GetEnumerator();
 
 		IEnumerator IEnumerable.GetEnumerator() => this.sections.GetEnumerator();
-
-		/// <summary>Finds all sections with the given name, in the event that there is more than one identically named section.</summary>
-		/// <param name="name">The section name to search for.</param>
-		/// <returns>A list of sections.</returns>
-		private IList<IniSection> FindAll(string name) => this.sections.FindAll(s => s.Name.Equals(name, StringComparison.Ordinal));
 
 		private void ReadStream(StreamReader stream)
 		{

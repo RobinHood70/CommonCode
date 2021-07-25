@@ -444,10 +444,14 @@
 			{
 				if (columnNumber < columnCount)
 				{
-					rewriteFields.Add(
-						field == null ? string.Empty :
-						(field.Length > 0 && field.IndexOfAny(specialChars) == -1 && !this.AlwaysDelimitFields) ? field :
-						this.RewriteField(field));
+					var value = field switch
+					{
+						null => string.Empty,
+						string when this.AlwaysDelimitFields || field.IndexOfAny(specialChars) >= 0 => this.RewriteField(field),
+						_ => field
+					};
+
+					rewriteFields.Add(value);
 					columnNumber++;
 				}
 			}
