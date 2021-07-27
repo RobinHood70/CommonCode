@@ -150,12 +150,28 @@
 		[ModuleInitializer]
 		public static void Initialize() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+		/// <summary>The error thrown when a parameter could not be cast to the expected type.</summary>
+		/// <param name="parameterName">Name of the parameter.</param>
+		/// <param name="wantedType">The type that was wanted.</param>
+		/// <param name="actualType">The actual type of the parameter passed.</param>
+		/// <param name="caller">The caller.</param>
+		/// <returns>An <see cref="InvalidCastException"/>.</returns>
+		public static InvalidCastException InvalidParameterType(string parameterName, string wantedType, string actualType, [CallerMemberName] string caller = "Unknown") => new(CurrentCulture(Resources.ParameterInvalidCast, parameterName, caller, actualType, wantedType));
+
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="formattable">A formattable string.</param>
 		/// <returns>The formatted text.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
 		public static string Invariant(FormattableString formattable) => (formattable ?? throw ArgumentNull(nameof(formattable))).ToString(CultureInfo.InvariantCulture);
+
+		public static int? NullComparer<T>(T? x, T? y) => (x, y) switch
+		{
+			(object, object) => null,
+			(object, null) => 1,
+			(null, object) => -1,
+			_ => 0
+		};
 
 		/// <summary>The error thrown when a property of an object was unexpectedly null.</summary>
 		/// <param name="objectName">The name of the object in the original method.</param>

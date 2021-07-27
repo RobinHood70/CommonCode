@@ -124,6 +124,15 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} parameter passed to {1} could not be cast to {2}, as it&apos;s type was {3}..
+        /// </summary>
+        internal static string ParameterInvalidCast {
+            get {
+                return ResourceManager.GetString("ParameterInvalidCast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}.{1} was unexpectedly null..
         /// </summary>
         internal static string PropertyNull {

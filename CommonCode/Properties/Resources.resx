@@ -138,10 +138,13 @@
   <data name="NotAtEnd" xml:space="preserve">
     <value>{0} is not at end of data.</value>
   </data>
-  <data name="PropertyNull" xml:space="preserve">
+  <data name="ParameterInvalidCast" xml:space="preserve">
+    <value>The {0} parameter passed to {1} could not be cast to {2}, as it's type was {3}.</value>
+  </data>
+	<data name="PropertyNull" xml:space="preserve">
     <value>{0}.{1} was unexpectedly null.</value>
   </data>
-  <data name="StringInvalid" xml:space="preserve">
+	<data name="StringInvalid" xml:space="preserve">
     <value>The parameter {0} cannot be null or only whitespace.</value>
   </data>
 </root>
