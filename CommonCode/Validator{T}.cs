@@ -46,9 +46,14 @@
 
 		public T? Item { get; }
 
-		public InvalidOperationException ValidatorException => new(CurrentCulture(TypeText[this.validationType], this.name, this.caller));
+		// Always true because if it didn't validate, it threw an error. Useful for cases like .Validate ? TrueAction : FalseAction.
+		public bool Validated => true;
 
 		public T Value => this.Item ?? throw this.ValidatorException;
+		#endregion
+
+		#region Private Properties
+		private InvalidOperationException ValidatorException => new(CurrentCulture(TypeText[this.validationType], this.name, this.caller));
 		#endregion
 
 		#region Public Methods

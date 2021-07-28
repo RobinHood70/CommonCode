@@ -15,12 +15,17 @@
 
 	public static class Validator
 	{
-		public static T NotNull<T>([NotNull] this T? item, [CallerMemberName] string caller = Globals.Unknown)
-			where T : class? => NotNull(item, nameof(item), caller);
-
-		public static T NotNull<T>([NotNull] this T? item, string name, [CallerMemberName] string caller = Globals.Unknown)
+		public static T NotNull<T>([NotNull][ValidatedNotNull] this T? item, string name, [CallerMemberName] string caller = Globals.Unknown)
 			where T : class? =>
-			item ?? throw new InvalidOperationException(Globals.CurrentCulture(ValidatorMessages.ItemTypeValue, name, caller));
+			item ?? throw new ArgumentNullException(Globals.CurrentCulture(ValidatorMessages.ItemTypeValue, name, caller));
+
+		public static void ThrowNull([NotNull][ValidatedNotNull] this object item, string name, [CallerMemberName] string caller = Globals.Unknown)
+		{
+			if (item is null)
+			{
+				throw new ArgumentNullException(Globals.CurrentCulture(ValidatorMessages.ItemTypeValue, name, caller));
+			}
+		}
 
 		public static Validator<T> Validate<T>(this T? item)
 			where T : class? => new(item, nameof(item));
