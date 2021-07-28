@@ -1,8 +1,6 @@
 ﻿namespace RobinHood70.CommonCode
 {
 	using System;
-	using System.Collections.Generic;
-	using static RobinHood70.CommonCode.Globals;
 
 	// Note that class assumes read-only use and trims excess spacing that could otherwise be important for formatting.
 
@@ -24,10 +22,11 @@
 		/// <exception cref="ArgumentException">Invalid INI line. There is more than one equals sign on the line, or there are no equals signs, and <paramref name="allowComments"/> is false.</exception>
 		public IniKey(string line, bool allowComments)
 		{
-			ThrowNull(line, nameof(line));
+			line.ThrowNull(nameof(line));
 			if (allowComments)
 			{
-				var delimiters = ((List<string>)IniFile.CommentDelimiters).ToArray();
+				var delimiters = new string[IniFile.CommentDelimiters.Count];
+				IniFile.CommentDelimiters.CopyTo(delimiters, 0);
 				var commentSplit = line.Split(delimiters, 2, StringSplitOptions.None);
 				if (commentSplit[0].Length == 0)
 				{
@@ -68,10 +67,8 @@
 		/// <param name="comment">The comment.</param>
 		public IniKey(string name, string value, string? comment)
 		{
-			ThrowNull(name, nameof(name));
-			ThrowNull(value, nameof(value));
-			this.Name = name.Trim();
-			this.Value = value.Trim();
+			this.Name = name.NotNull(nameof(name)).Trim();
+			this.Value = value.NotNull(nameof(value)).Trim();
 			this.Comment = comment?.Trim();
 		}
 		#endregion

@@ -4,7 +4,6 @@
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
-	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>A class for basic ini file management.</summary>
 	public class IniFile : IReadOnlyList<IniSection>
@@ -16,24 +15,20 @@
 		#region Constructors
 
 		/// <summary>Initializes a new instance of the <see cref="IniFile"/> class.</summary>
-		/// <param name="iniFileName">The file name to parse.</param>
-		public IniFile(string iniFileName)
+		/// <param name="path">The path of the file to parse.</param>
+		/// <remarks>If <paramref name="path"/> is not a full path, it will be changed into one and have ".ini" appended if necessary.</remarks>
+		public IniFile(string path)
 		{
-			ThrowNull(iniFileName, nameof(iniFileName));
-			if (Path.GetExtension(iniFileName).Length == 0)
+			if (Path.GetExtension(path.NotNull(nameof(path))).Length == 0)
 			{
-				iniFileName += ".ini";
+				path += ".ini";
 			}
 
-			using var stream = File.OpenText(Path.GetFullPath(iniFileName));
+			using var stream = File.OpenText(Path.GetFullPath(path));
 			this.ReadStream(stream);
 		}
 
-		public IniFile(StreamReader stream)
-		{
-			ThrowNull(stream, nameof(stream));
-			this.ReadStream(stream);
-		}
+		public IniFile(StreamReader stream) => this.ReadStream(stream.NotNull(nameof(stream)));
 		#endregion
 
 		#region Public Static Properties

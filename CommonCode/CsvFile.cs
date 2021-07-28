@@ -3,11 +3,9 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
 	using System.Text;
-	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>Reads or writes a CSV file, including tab-separated files and similar formats.</summary>
 	/// <remarks>This class is primarily designed to handle entire files at once. <see cref="TextReader"/>- and <see cref="TextWriter"/>-based methods are also available to support streaming and the like.</remarks>
@@ -94,9 +92,8 @@
 		/// <returns>The CsvRow that was added.</returns>
 		public CsvRow Add(IEnumerable<object> fields)
 		{
-			ThrowNull(fields, nameof(fields));
 			var list = new List<string>();
-			foreach (var item in fields)
+			foreach (var item in fields.NotNull(nameof(fields)))
 			{
 				if (item.ToString() is string value)
 				{
@@ -115,19 +112,14 @@
 		/// <summary>Adds the specified field values.</summary>
 		/// <param name="fields">The field values.</param>
 		/// <returns>The CsvRow that was added.</returns>
-		public CsvRow Add(IEnumerable<string> fields)
-		{
-			ThrowNull(fields, nameof(fields));
-			return this.Add(new CsvRow(fields, this.nameMap));
-		}
+		public CsvRow Add(IEnumerable<string> fields) => this.Add(new CsvRow(fields.NotNull(nameof(fields)), this.nameMap));
 
 		/// <summary>Adds a <see cref="CsvRow"/> directly to the file.</summary>
 		/// <param name="item">The row to add to the file.</param>
 		/// <returns>The original <paramref name="item"/> parameter.</returns>
-		public CsvRow Add([NotNull] CsvRow? item)
+		public CsvRow Add(CsvRow item)
 		{
-			ThrowNull(item, nameof(item));
-			this.rows.Add(item);
+			this.rows.Add(item.NotNull(nameof(item)));
 			return item;
 		}
 
@@ -176,13 +168,12 @@
 		/// <returns>A <see cref="CsvRow"/> with the field values. If names are provided and not enough fields are present to match the name count, the row will be padded with empty strings.</returns>
 		public IEnumerable<string>? ReadRow(TextReader reader)
 		{
-			ThrowNull(reader, nameof(reader));
+			reader.ThrowNull(nameof(reader));
 			var fields = new List<string>(this.nameMap.Count);
 			var field = new StringBuilder();
 			var insideQuotes = false;
 			var endOfLine = false;
 			var outsideValue = true;
-
 			while (!endOfLine && reader.Peek() != -1)
 			{
 				var endOfField = false;
@@ -279,10 +270,9 @@
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
 		public void ReadText(TextReader reader, bool hasHeader)
 		{
-			ThrowNull(reader, nameof(reader));
 			if (hasHeader)
 			{
-				this.Header = this.ReadRow(reader);
+				this.Header = this.ReadRow(reader.NotNull(nameof(reader)));
 				if (this.Header == null)
 				{
 					return;
@@ -369,13 +359,14 @@
 		/// <summary>Writes a row to the specified <see cref="TextWriter"/> derivative.</summary>
 		/// <param name="writer">The <see cref="TextWriter"/> derivative to write to.</param>
 		/// <param name="row">The values for the row. This parameter allows for any string enumeration and may thus be either plain data or a <see cref="CsvRow"/>.</param>
-		public void WriteRow(TextWriter writer, IEnumerable<string> row) => this.InternalWriteRow(writer, row, 0, this.GetSpecialCharacters());
+		public void WriteRow(TextWriter writer, IEnumerable<string> row) => this.InternalWriteRow(writer.NotNull(nameof(writer)), row.NotNull(nameof(row)), 0, this.GetSpecialCharacters());
 
 		/// <summary>Writes the file to the specified <see cref="TextWriter"/> derivative.</summary>
 		/// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
 		public void WriteText(TextWriter writer)
 		{
 			// We're allowing rows to be ragged internally, so figure out the highest column count and use that. If a header is specified, that always takes priority. Count could, of course, just be assumed from the first row, but even in a large list, the scan is very quick, so there's no reason not to.
+			writer.ThrowNull(nameof(writer));
 			int columnCount;
 			var specialChars = this.GetSpecialCharacters();
 			if (this.Header != null)
@@ -431,8 +422,6 @@
 
 		private void InternalWriteRow(TextWriter textWriter, IEnumerable<string> row, int columnCount, char[] specialChars)
 		{
-			ThrowNull(textWriter, nameof(textWriter));
-			ThrowNull(row, nameof(row));
 			var rewriteFields = new List<string>(columnCount);
 			if (columnCount == 0)
 			{

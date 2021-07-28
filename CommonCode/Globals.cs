@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
 	using System.Runtime.CompilerServices;
@@ -127,7 +126,7 @@
 		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
 		public static string GetHash(byte[] data, HashType hashType)
 		{
-			ThrowNull(data, nameof(data));
+			data.ThrowNull(nameof(data));
 			using var hash = hashType switch
 			{
 				HashType.Md5 => MD5.Create(),
@@ -182,11 +181,10 @@
 		public static IReadOnlyDictionary<TKey, TValue> ReadOnlyDictionary<TKey, TValue>()
 			where TKey : notnull => new ReadOnlyDictionary<TKey, TValue>(new Dictionary<TKey, TValue>());
 
-		public static string SanitizeFilename(string fileName)
+		public static string SanitizeFilename(string filename)
 		{
-			ThrowNull(fileName, nameof(fileName));
 			var invalidChars = Path.GetInvalidFileNameChars();
-			var split = fileName.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
+			var split = filename.NotNull(nameof(filename)).Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 

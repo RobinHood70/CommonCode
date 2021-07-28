@@ -7,7 +7,6 @@
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using static System.Math;
-	using static RobinHood70.CommonCode.Globals;
 
 	// Adapted from http://stackoverflow.com/questions/248603/natural-sort-order-in-c-sharp/11624488#11624488
 	// For some reason, the default Regex produces a 3-element split with strings like "a100" (a, 100, ""), but this does not affect sorting.
@@ -50,7 +49,7 @@
 		public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
-			ThrowNull(culture, nameof(culture));
+			culture.ThrowNull(nameof(culture));
 			if (x == null)
 			{
 				return y == null ? 0 : -1;
