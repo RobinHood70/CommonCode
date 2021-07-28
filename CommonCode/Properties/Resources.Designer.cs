@@ -149,14 +149,5 @@ namespace RobinHood70.CommonCode.Properties {
                 return ResourceManager.GetString("StringInvalid", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The value in {0} was unexpectedly null..
-        /// </summary>
-        internal static string ValueNull {
-            get {
-                return ResourceManager.GetString("ValueNull", resourceCulture);
-            }
-        }
     }
 }

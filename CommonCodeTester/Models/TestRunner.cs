@@ -31,6 +31,7 @@
 		public static void RunTests()
 		{
 			IStringBuilder sbClass = new StringBuilderTest1();
+
 			Debug.WriteLine("== Class 1 ==");
 			Debug.WriteLine(sbClass);
 			Debug.WriteLine(sbClass.ToString());

@@ -39,6 +39,10 @@
 	/// <summary>Global helper methods that are useful in a variety of scenarios.</summary>
 	public static class Globals
 	{
+		#region Public Constants
+		public const string Unknown = "Unknown";
+		#endregion
+
 		#region Public Properties
 
 		/// <summary>Gets a <see cref="TimeSpan"/> that is a good general time to abort Regex operations after.</summary>
@@ -149,14 +153,6 @@
 		/// <summary>Initializes .NET Core's encoding so that it can load code-page based encodings.</summary>
 		[ModuleInitializer]
 		public static void Initialize() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-		/// <summary>The error thrown when a parameter could not be cast to the expected type.</summary>
-		/// <param name="parameterName">Name of the parameter.</param>
-		/// <param name="wantedType">The type that was wanted.</param>
-		/// <param name="actualType">The actual type of the parameter passed.</param>
-		/// <param name="caller">The caller.</param>
-		/// <returns>An <see cref="InvalidCastException"/>.</returns>
-		public static InvalidCastException InvalidParameterType(string parameterName, string wantedType, string actualType, [CallerMemberName] string caller = "Unknown") => new(CurrentCulture(Resources.ParameterInvalidCast, parameterName, caller, actualType, wantedType));
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="formattable">A formattable string.</param>
