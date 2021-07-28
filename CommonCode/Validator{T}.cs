@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Runtime.CompilerServices;
 	using RobinHood70.CommonCode.Properties;
@@ -72,16 +73,6 @@
 				? this
 				: throw this.ValidatorException;
 
-		public Validator<T> NotIsNullOrEmpty() =>
-			this.Item is string s && !string.IsNullOrWhiteSpace(s)
-				? this
-				: throw this.ValidatorException;
-
-		public Validator<T> NotIsNullOrWhiteSpace() =>
-			this.Item is string s && !string.IsNullOrWhiteSpace(s)
-				? this
-				: throw this.ValidatorException;
-
 		/// <summary>Gets a Validator if the provided value is not null.</summary>
 		/// <typeparam name="T">The type of the value to check.</typeparam>
 		/// <param name="instance">The value that may be null.</param>
@@ -93,6 +84,34 @@
 			: this.validationType == ValidationType.Argument
 				? throw new ArgumentNullException(this.name)
 				: throw this.ValidatorException;
+
+		public Validator<T> NotNullOrEmpty() =>
+			this.Item is string s && !string.IsNullOrWhiteSpace(s)
+				? this
+				: throw this.ValidatorException;
+
+		public Validator<T> NotNullOrWhiteSpace() =>
+			this.Item is string s && !string.IsNullOrWhiteSpace(s)
+				? this
+				: throw this.ValidatorException;
+
+		public Validator<T> StringsNotNullOrWhiteSpace()
+		{
+			if (this.Item is not IEnumerable<string> collection)
+			{
+				throw this.ValidatorException;
+			}
+
+			foreach (var item in collection)
+			{
+				if (string.IsNullOrWhiteSpace(item))
+				{
+					throw this.ValidatorException;
+				}
+			}
+
+			return this;
+		}
 		#endregion
 
 		#region Private Methods
