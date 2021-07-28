@@ -21,8 +21,7 @@
 		/// <returns>The string.</returns>
 		public static string BString8(this BinaryReader reader)
 		{
-			ThrowNull(reader, nameof(reader));
-			var size = reader.ReadByte();
+			var size = reader.NotNull(nameof(reader)).ReadByte();
 			return new string(reader.ReadChars(size));
 		}
 
@@ -32,9 +31,8 @@
 		/// <remarks>For fixed-length strings, it's normally better to read the entire thing and then trim everything after the null. This function is intended for those cases where the length is unknown.</remarks>
 		public static string ZString(this BinaryReader reader)
 		{
-			ThrowNull(reader, nameof(reader));
 			var retval = new StringBuilder();
-			var c = reader.ReadChar();
+			var c = reader.NotNull(nameof(reader)).ReadChar();
 			while (c != '\0')
 			{
 				retval.Append(c);
@@ -104,19 +102,17 @@
 		/// <param name="values">The collection to be added.</param>
 		public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
 		{
-			ThrowNull(collection, nameof(collection));
 			if (values != null)
 			{
-				if (collection is List<T> list)
+				if (collection.NotNull(nameof(collection)) is List<T> list)
 				{
 					list.AddRange(values);
 				}
 				else
 				{
-					using var enumerator = values.GetEnumerator();
-					while (enumerator.MoveNext())
+					foreach (var value in values)
 					{
-						collection.Add(enumerator.Current);
+						collection.Add(value);
 					}
 				}
 			}
@@ -133,9 +129,8 @@
 		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
 			where TKey : notnull
 		{
-			ThrowNull(dictionary, nameof(dictionary));
-			ThrowNull(items, nameof(items));
-			foreach (var item in items)
+			dictionary.ThrowNull(nameof(dictionary));
+			foreach (var item in items.NotNull(nameof(items)))
 			{
 				dictionary.Add(item.Key, item.Value);
 			}
@@ -160,8 +155,7 @@
 		public static TValue First<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
 			where TKey : notnull
 		{
-			ThrowNull(dictionary, nameof(dictionary));
-			using var enumerator = dictionary.GetEnumerator();
+			using var enumerator = dictionary.NotNull(nameof(dictionary)).GetEnumerator();
 			return enumerator.MoveNext() ? enumerator.Current.Value : throw new InvalidOperationException();
 		}
 		#endregion
@@ -196,9 +190,8 @@
 		public static bool Contains<T>(this IEnumerable<T> enumerable, T value, IEqualityComparer<T>? comparer)
 		{
 			// It's understandable why this wasn't in IEnumerable<T>, since enumerating can potentially be a slow-running operation, but it's beyond me why this wasn't put into IReadOnlyCollection<T>. MS covered it with Linq, using a virtually identical implementation to this, but that's still only a workaround (as is this).
-			ThrowNull(enumerable, nameof(enumerable));
 			comparer ??= EqualityComparer<T>.Default;
-			foreach (var item in enumerable)
+			foreach (var item in enumerable.NotNull(nameof(enumerable)))
 			{
 				if (comparer.Equals(item, value))
 				{
@@ -253,11 +246,9 @@
 		/// <summary>Convenience method to format any IFormattable value as an invariant value.</summary>
 		/// <param name="value">The value to format.</param>
 		/// <returns>The value as an invariant string.</returns>
-		public static string ToStringInvariant(this IFormattable value)
-		{
-			ThrowNull(value, nameof(value));
-			return value.ToString(null, CultureInfo.InvariantCulture);
-		}
+		public static string ToStringInvariant(this IFormattable value) => value
+			.NotNull(nameof(value))
+			.ToString(null, CultureInfo.InvariantCulture);
 		#endregion
 
 		#region IList<T> Extensions
@@ -267,10 +258,9 @@
 		/// <param name="list">The list.</param>
 		public static void Shuffle<T>(this IList<T>? list)
 		{
-			ThrowNull(list, nameof(list));
 			var random = new Random();
-			var i = list.Count - 1;
-			if (i == 0)
+			var i = list.NotNull(nameof(list)).Count - 1;
+			if (i <= 0)
 			{
 				return;
 			}
@@ -293,16 +283,12 @@
 		/// <param name="dictionary">The dictionary to search.</param>
 		/// <param name="key">The key to look for.</param>
 		/// <returns>The substitute value if one is found; otherwise, the original key.</returns>
-		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key)
-		{
-			ThrowNull(dictionary, nameof(dictionary));
-			if (!dictionary.TryGetValue(key, out var retval))
-			{
-				retval = key;
-			}
-
-			return retval;
-		}
+		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key) =>
+			dictionary
+			.NotNull(nameof(dictionary))
+			.TryGetValue(key, out var retval)
+				? retval
+				: key;
 
 		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
 		/// <typeparam name="TKey">The type for the key.</typeparam>
@@ -311,16 +297,12 @@
 		/// <param name="key">The key to look for.</param>
 		/// <param name="defaultValue">The default value to use if the key is not found.</param>
 		/// <returns>The substitute value if one is found; otherwise, the default value.</returns>
-		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
-		{
-			ThrowNull(dictionary, nameof(dictionary));
-			if (!dictionary.TryGetValue(key, out var retval))
-			{
-				retval = defaultValue;
-			}
-
-			return retval;
-		}
+		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue) =>
+			dictionary
+			.NotNull(nameof(dictionary))
+			.TryGetValue(key, out var retval)
+				? retval
+				: defaultValue;
 		#endregion
 
 		#region LinkedList<T> Extensions
@@ -332,10 +314,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			ThrowNull(list, nameof(list));
-			ThrowNull(node, nameof(node));
-			ThrowNull(values, nameof(values));
-			foreach (var newNode in values)
+			list.ThrowNull(nameof(list));
+			node.ThrowNull(nameof(node));
+			foreach (var newNode in values.NotNull(nameof(values)))
 			{
 				node = list.AddAfter(node, newNode);
 			}
@@ -348,10 +329,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			ThrowNull(list, nameof(list));
-			ThrowNull(node, nameof(node));
-			ThrowNull(values, nameof(values));
-			foreach (var newNode in values)
+			list.ThrowNull(nameof(list));
+			node.ThrowNull(nameof(node));
+			foreach (var newNode in values.NotNull(nameof(values)))
 			{
 				list.AddBefore(node, newNode);
 			}
@@ -378,11 +358,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			ThrowNull(node, nameof(node));
-			ThrowNull(values, nameof(values));
-			if (node.List is LinkedList<T> list)
+			if (node.NotNull(nameof(node)).List is LinkedList<T> list)
 			{
-				foreach (var newNode in values)
+				foreach (var newNode in values.NotNull(nameof(values)))
 				{
 					node = list.AddAfter(node, newNode);
 				}
@@ -407,11 +385,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			ThrowNull(node, nameof(node));
-			ThrowNull(values, nameof(values));
-			if (node.List is LinkedList<T> list)
+			if (node.NotNull(nameof(node)).List is LinkedList<T> list)
 			{
-				foreach (var newNode in values)
+				foreach (var newNode in values.NotNull(nameof(values)))
 				{
 					list.AddBefore(node, newNode);
 				}
@@ -444,13 +420,12 @@
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
 		public static string LowerFirst(this string text, CultureInfo culture)
 		{
-			ThrowNull(culture, nameof(culture));
 			if (string.IsNullOrEmpty(text))
 			{
 				return text;
 			}
 
-			var retval = text.Substring(0, 1).ToLower(culture);
+			var retval = text.Substring(0, 1).ToLower(culture.NotNull(nameof(culture)));
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 
@@ -493,13 +468,12 @@
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
 		public static string UpperFirst(this string text, CultureInfo culture)
 		{
-			ThrowNull(culture, nameof(culture));
 			if (string.IsNullOrEmpty(text))
 			{
 				return text;
 			}
 
-			var retval = text.Substring(0, 1).ToUpper(culture);
+			var retval = text.Substring(0, 1).ToUpper(culture.NotNull(nameof(culture)));
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 		#endregion

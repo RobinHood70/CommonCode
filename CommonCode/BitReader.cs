@@ -15,11 +15,10 @@
 		#endregion
 
 		#region Constructors
-		public BitReader(byte[] rawData)
-		{
-			ThrowNull(rawData, nameof(rawData));
-			this.rawData = rawData;
-		}
+		public BitReader(byte[] rawData) => this.rawData = rawData
+			.Validate(nameof(rawData))
+			.NotEmpty()
+			.Value;
 		#endregion
 
 		#region Public Static Properties
@@ -73,9 +72,8 @@
 
 		public char ReadChar(Encoding encoding)
 		{
-			ThrowNull(encoding, nameof(encoding));
 			char retval;
-			if (encoding.IsSingleByte)
+			if (encoding.NotNull(nameof(encoding)).IsSingleByte)
 			{
 				retval = encoding.GetChars(this.rawData, this.offset, 1)[0];
 				this.offset++;

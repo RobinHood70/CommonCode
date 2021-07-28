@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using RobinHood70.CommonCode.Properties;
-	using static RobinHood70.CommonCode.Globals;
 
 	public class FixedArray2D<T>
 	{
@@ -17,8 +16,7 @@
 		public FixedArray2D(T[] array, int rows, int columns, bool readHorizontalFirst, int offset)
 		{
 			// Currently ignores if array is too big.
-			ThrowNull(array, nameof(array));
-			if (array.Length < rows * columns + offset)
+			if (array.NotNull(nameof(array)).Length < rows * columns + offset)
 			{
 				throw new ArgumentException(Resources.ArrayTooSmall, nameof(array));
 			}
