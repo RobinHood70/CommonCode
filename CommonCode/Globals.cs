@@ -188,7 +188,6 @@
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 
-		/*
 		public static void ThrowCollectionEmpty<T>(IEnumerable<T> collection, string paramName)
 		{
 			if (collection.IsEmpty())
@@ -246,7 +245,6 @@
 				}
 			}
 		}
-		*/
 		#endregion
 	}
 }
