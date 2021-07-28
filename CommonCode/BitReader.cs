@@ -3,7 +3,6 @@
 	using System;
 	using System.Text;
 	using RobinHood70.CommonCode.Properties;
-	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>A quick hack of a class to make BitConverter act a bit more like BinaryReader.</summary>
 	/// <remarks>There is currently almost no buffer overflow checking apart from that provided by the BitConverter calls, so those methods will simply crash if you do overflow.</remarks>
@@ -36,7 +35,7 @@
 		{
 			if (this.offset < this.rawData.Length)
 			{
-				throw new InvalidOperationException(CurrentCulture(Resources.NotAtEnd, nameof(BitReader)));
+				throw new InvalidOperationException(Globals.CurrentCulture(Resources.NotAtEnd, nameof(BitReader)));
 			}
 		}
 

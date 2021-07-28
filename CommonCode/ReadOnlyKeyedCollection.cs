@@ -5,7 +5,6 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using RobinHood70.CommonCode.Properties;
-	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>A read-only version of the KeyedCollection class.</summary>
 	/// <typeparam name="TKey">The type of the key.</typeparam>
@@ -42,7 +41,7 @@
 			{
 				if (!this.Dictionary.TryAdd(keyFunc(item), item))
 				{
-					throw new ArgumentException(CurrentCulture(Resources.DuplicateKeyInItems, keyFunc(item)), nameof(items));
+					throw new ArgumentException(Globals.CurrentCulture(Resources.DuplicateKeyInItems, keyFunc(item)), nameof(items));
 				}
 			}
 		}

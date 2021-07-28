@@ -6,7 +6,6 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.Text.RegularExpressions;
-	using static System.Math;
 
 	// Adapted from http://stackoverflow.com/questions/248603/natural-sort-order-in-c-sharp/11624488#11624488
 	// For some reason, the default Regex produces a 3-element split with strings like "a100" (a, 100, ""), but this does not affect sorting.
@@ -62,7 +61,7 @@
 
 			var splitX = NumberRegex.Split(x);
 			var splitY = NumberRegex.Split(y);
-			var len = Min(splitX.Length, splitY.Length);
+			var len = Math.Min(splitX.Length, splitY.Length);
 			for (var i = 0; i < len; i++)
 			{
 				var result = (
