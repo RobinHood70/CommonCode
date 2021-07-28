@@ -2,25 +2,13 @@
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Runtime.CompilerServices;
 	using RobinHood70.CommonCode.Properties;
-	using static RobinHood70.CommonCode.Globals;
 
 	public class Validator<T>
 		where T : class?
 	{
-		#region Static fields
-		private static readonly IReadOnlyDictionary<ValidationType, string> TypeText = new Dictionary<ValidationType, string>()
-		{
-			[ValidationType.Argument] = ValidatorMessages.ItemTypeArgument,
-			[ValidationType.Property] = ValidatorMessages.ItemTypeProperty,
-			[ValidationType.Unknown] = ValidatorMessages.ItemTypeUnknown,
-			[ValidationType.Value] = ValidatorMessages.ItemTypeValue,
-		};
-		#endregion
-
 		#region Fields
 		private readonly string caller;
 		private readonly ValidationType validationType;
@@ -28,14 +16,14 @@
 		#endregion
 
 		#region Constructors
-		public Validator(T? value, string name, [CallerMemberName] string caller = Unknown)
-			: this(value, ValidationType.Unknown, name, caller)
+		public Validator(T? item, string name, [CallerMemberName] string caller = Globals.Unknown)
+			: this(item, ValidationType.Unknown, name, caller)
 		{
 		}
 
-		public Validator(T? value, ValidationType validationType, string name, [CallerMemberName] string caller = Unknown)
+		public Validator(T? item, ValidationType validationType, string name, [CallerMemberName] string caller = Globals.Unknown)
 		{
-			this.Item = value;
+			this.Item = item;
 			this.validationType = validationType;
 			this.name = name;
 			this.caller = caller;
@@ -53,7 +41,7 @@
 		#endregion
 
 		#region Private Properties
-		private InvalidOperationException ValidatorException => new(CurrentCulture(TypeText[this.validationType], this.name, this.caller));
+		private InvalidOperationException ValidatorException => new(Globals.CurrentCulture(Validator.ValueNullText(this.validationType), this.name, this.caller));
 		#endregion
 
 		#region Public Methods
@@ -62,20 +50,20 @@
 			where TWanted : class? =>
 			this.Value is TWanted output
 				? new Validator<TWanted>(output, this.name, this.caller)
-				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Unknown, this.caller);
+				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Globals.Unknown, this.caller);
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Rule bug")]
 		public Validator<TWanted> CastToSameType<TWanted>(TWanted _)
 			where TWanted : class? =>
 			this.Value is TWanted output
 				? new Validator<TWanted>(output, this.name, this.caller)
-				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Unknown, this.caller);
+				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Globals.Unknown, this.caller);
 
 		public Validator<T> Is<TWanted>()
 			where TWanted : class? =>
 			this.Value is TWanted
 				? this
-				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Unknown, this.caller);
+				: throw InvalidParameterType(this.name, typeof(TWanted).FullName, (this.Value?.GetType() ?? typeof(T)).FullName ?? Globals.Unknown, this.caller);
 
 		public Validator<T> NotEmpty() =>
 			(this.Item is ICollection collection && collection.Count > 0) ||
@@ -115,7 +103,7 @@
 		/// <param name="actualType">The actual type of the parameter passed.</param>
 		/// <param name="caller">The caller.</param>
 		/// <returns>An <see cref="InvalidCastException"/>.</returns>
-		private static InvalidCastException InvalidParameterType(string parameterName, string? wantedType, string? actualType, [CallerMemberName] string caller = "Unknown") => new(CurrentCulture(Resources.ParameterInvalidCast, parameterName, caller, actualType ?? Unknown, wantedType ?? Unknown));
+		private static InvalidCastException InvalidParameterType(string parameterName, string? wantedType, string? actualType, [CallerMemberName] string caller = "Unknown") => new(Globals.CurrentCulture(Resources.ParameterInvalidCast, parameterName, caller, actualType ?? Globals.Unknown, wantedType ?? Globals.Unknown));
 		#endregion
 	}
 }
