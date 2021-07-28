@@ -9,7 +9,6 @@
 	using System.IO;
 	using System.Text;
 	using RobinHood70.CommonCode.Properties;
-	using static RobinHood70.CommonCode.Globals;
 
 	/// <summary>Extension methods for a variety of types.</summary>
 	public static class Extensions
@@ -348,7 +347,7 @@
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value) =>
-			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
+			node.NotNull(nameof(node)).List is LinkedList<T> list
 				? list.AddAfter(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
 
@@ -375,7 +374,7 @@
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value) =>
-			(node ?? throw ArgumentNull(nameof(node))).List is LinkedList<T> list
+			node.NotNull(nameof(node)).List is LinkedList<T> list
 				? list.AddBefore(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
 

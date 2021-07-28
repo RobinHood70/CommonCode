@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
 	using System.Runtime.CompilerServices;
@@ -159,7 +158,7 @@
 		/// <returns>The formatted text.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
-		public static string Invariant(FormattableString formattable) => (formattable ?? throw ArgumentNull(nameof(formattable))).ToString(CultureInfo.InvariantCulture);
+		public static string Invariant(FormattableString formattable) => formattable.NotNull(nameof(formattable)).ToString(CultureInfo.InvariantCulture);
 
 		public static int? NullComparer<T>(T? x, T? y) => (x, y) switch
 		{
@@ -189,6 +188,7 @@
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 
+		/*
 		public static void ThrowCollectionEmpty<T>(IEnumerable<T> collection, string paramName)
 		{
 			if (collection.IsEmpty())
@@ -246,6 +246,7 @@
 				}
 			}
 		}
+		*/
 		#endregion
 	}
 }
