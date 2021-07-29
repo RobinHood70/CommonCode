@@ -16,7 +16,7 @@
 		#region Constructors
 		public BitReader(byte[] rawData) => this.rawData = rawData
 			.Validate(nameof(rawData))
-			.NotEmpty()
+			.NotNullOrEmpty()
 			.Value;
 		#endregion
 

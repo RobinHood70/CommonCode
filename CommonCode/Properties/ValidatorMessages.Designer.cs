@@ -61,38 +61,101 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The argument {0} in the call to {1} was unexpectedly null..
+        ///   Looks up a localized string similar to Argument.
         /// </summary>
-        internal static string ItemTypeArgument {
+        internal static string Argument {
             get {
-                return ResourceManager.GetString("ItemTypeArgument", resourceCulture);
+                return ResourceManager.GetString("Argument", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The property value of {0} was unexpectedly null..
+        ///   Looks up a localized string similar to The collection was empty..
         /// </summary>
-        internal static string ItemTypeProperty {
+        internal static string CollectionEmptyMessage {
             get {
-                return ResourceManager.GetString("ItemTypeProperty", resourceCulture);
+                return ResourceManager.GetString("CollectionEmptyMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} in {1} was unexpectedly null..
+        ///   Looks up a localized string similar to {0} ({1}).
         /// </summary>
-        internal static string ItemTypeUnknown {
+        internal static string ErrorFormat {
             get {
-                return ResourceManager.GetString("ItemTypeUnknown", resourceCulture);
+                return ResourceManager.GetString("ErrorFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value of {0} was unexpectedly null..
+        ///   Looks up a localized string similar to {0}: {1}, Called from: {2}.
         /// </summary>
-        internal static string ItemTypeValue {
+        internal static string InfoFormat {
             get {
-                return ResourceManager.GetString("ItemTypeValue", resourceCulture);
+                return ResourceManager.GetString("InfoFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The cast failed..
+        /// </summary>
+        internal static string InvalidCast {
+            get {
+                return ResourceManager.GetString("InvalidCast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value was null..
+        /// </summary>
+        internal static string NullMessage {
+            get {
+                return ResourceManager.GetString("NullMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value was null or the collection/string was empty..
+        /// </summary>
+        internal static string NullOrEmptyMessage {
+            get {
+                return ResourceManager.GetString("NullOrEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value(s) were null or contained only whitespace..
+        /// </summary>
+        internal static string NullOrWhitespaceMessage {
+            get {
+                return ResourceManager.GetString("NullOrWhitespaceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property.
+        /// </summary>
+        internal static string Property {
+            get {
+                return ResourceManager.GetString("Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string was empty..
+        /// </summary>
+        internal static string StringEmptyMessage {
+            get {
+                return ResourceManager.GetString("StringEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        internal static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
     }

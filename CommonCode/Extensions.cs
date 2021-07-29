@@ -482,12 +482,7 @@
 #pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
 
 		// Any calls to any of these methods should be replaced by native methods/properties.
-		public static void AddRange<T>(this List<T> list, params T[] values)
-		{
-			ThrowNull(list, nameof(list));
-			ThrowNull(values, nameof(values));
-			list.AddRange(values);
-		}
+		public static void AddRange<T>(this List<T> list, params T[] values) => list.NotNull(nameof(list)).AddRange(values.NotNull(nameof(values)));
 
 		public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
 

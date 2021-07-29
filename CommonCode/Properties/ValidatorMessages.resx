@@ -117,16 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ItemTypeArgument" xml:space="preserve">
-    <value>The argument {0} in the call to {1} was unexpectedly null.</value>
+  <data name="Argument" xml:space="preserve">
+    <value>Argument</value>
   </data>
-  <data name="ItemTypeProperty" xml:space="preserve">
-    <value>The property value of {0} was unexpectedly null.</value>
+  <data name="CollectionEmptyMessage" xml:space="preserve">
+    <value>The collection was empty.</value>
   </data>
-  <data name="ItemTypeUnknown" xml:space="preserve">
-    <value>{0} in {1} was unexpectedly null.</value>
+  <data name="ErrorFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
-  <data name="ItemTypeValue" xml:space="preserve">
-    <value>The value of {0} was unexpectedly null.</value>
+  <data name="InfoFormat" xml:space="preserve">
+    <value>{0}: {1}, Called from: {2}</value>
+  </data>
+  <data name="InvalidCast" xml:space="preserve">
+    <value>The cast failed.</value>
+  </data>
+  <data name="NullMessage" xml:space="preserve">
+    <value>The value was null.</value>
+  </data>
+  <data name="NullOrEmptyMessage" xml:space="preserve">
+    <value>The value was null or the collection/string was empty.</value>
+  </data>
+  <data name="NullOrWhitespaceMessage" xml:space="preserve">
+    <value>The value(s) were null or contained only whitespace.</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="StringEmptyMessage" xml:space="preserve">
+    <value>The string was empty.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
   </data>
 </root>
