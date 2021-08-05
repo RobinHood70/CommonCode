@@ -180,70 +180,69 @@
 				while (!endOfField)
 				{
 					var character = (char)reader.Read();
-					if (character == 0xffff)
+					switch (character)
 					{
-						endOfField = true;
-					}
-					else if ("\n\r\u2028\u2029".IndexOf(character, StringComparison.Ordinal) != -1)
-					{
-						if (insideQuotes)
-						{
-							field.Append(character);
-						}
-						else
-						{
-							if (character == '\r' && reader.Peek() == '\n')
+						case '\uFFFF':
+							endOfField = true;
+							break;
+						case '\n':
+						case '\r':
+						case '\u2028':
+						case '\u2029':
+							if (insideQuotes)
 							{
-								reader.Read();
+								field.Append(character);
+							}
+							else
+							{
+								if (character == '\r' && reader.Peek() == '\n')
+								{
+									reader.Read();
+								}
+
+								endOfField = true;
+								endOfLine = true;
 							}
 
-							endOfField = true;
-							endOfLine = true;
-						}
-					}
-					else if (character == this.FieldDelimiter)
-					{
-						if (!outsideValue && this.DoubleUpDelimiters && reader.Peek() == this.FieldDelimiter)
-						{
-							reader.Read();
-							field.Append('"');
-						}
-						else
-						{
-							outsideValue = insideQuotes;
-							insideQuotes = !insideQuotes;
-						}
-					}
-					else if (character == this.FieldSeparator)
-					{
-						if (insideQuotes)
-						{
-							outsideValue = false;
-							field.Append(character);
-						}
-						else
-						{
-							endOfField = true;
-						}
-					}
-					else if (character == this.EscapeCharacter)
-					{
-						var newChar = reader.Read();
-						if (newChar == -1)
-						{
-							outsideValue = true;
-							field.Append(character);
-						}
-						else
-						{
-							outsideValue = false;
-							field.Append(newChar);
-						}
-					}
-					else if (!outsideValue || !this.IgnoreSurroundingWhiteSpace || !char.IsWhiteSpace(character))
-					{
-						outsideValue = false;
-						field.Append(character);
+							break;
+						case var _ when character == this.FieldDelimiter:
+							if (!outsideValue && this.DoubleUpDelimiters && reader.Peek() == this.FieldDelimiter)
+							{
+								reader.Read();
+								field.Append('"');
+							}
+							else
+							{
+								outsideValue = insideQuotes;
+								insideQuotes = !insideQuotes;
+							}
+
+							break;
+						case var _ when character == this.FieldSeparator:
+							if (insideQuotes)
+							{
+								outsideValue = false;
+								field.Append(character);
+							}
+							else
+							{
+								endOfField = true;
+							}
+
+							break;
+						case var _ when character == this.EscapeCharacter:
+							var newChar = reader.Read();
+							outsideValue = newChar == -1;
+							field.Append(newChar == -1 ? character : newChar);
+							break;
+						default:
+							if (!outsideValue || !this.IgnoreSurroundingWhiteSpace || !char.IsWhiteSpace(character))
+							{
+								outsideValue = false;
+								field.Append(character);
+							}
+
+							break;
 					}
 				}
 
