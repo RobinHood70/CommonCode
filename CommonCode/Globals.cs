@@ -85,7 +85,7 @@
 				return dataString;
 			}
 
-			var sb = new StringBuilder(dataString.Length * 2);
+			StringBuilder sb = new(dataString.Length * 2);
 			var offset = 0;
 			while (offset < dataString.Length)
 			{
@@ -147,7 +147,7 @@
 				_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
 			};
 
-			var sb = new StringBuilder(40);
+			StringBuilder sb = new(40);
 			foreach (var b in hash.ComputeHash(data))
 			{
 				sb.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);

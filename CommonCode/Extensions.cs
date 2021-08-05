@@ -30,7 +30,7 @@
 		/// <remarks>For fixed-length strings, it's normally better to read the entire thing and then trim everything after the null. This function is intended for those cases where the length is unknown.</remarks>
 		public static string ZString(this BinaryReader reader)
 		{
-			var retval = new StringBuilder();
+			StringBuilder retval = new();
 			var c = reader.NotNull(nameof(reader)).ReadChar();
 			while (c != '\0')
 			{
@@ -257,7 +257,7 @@
 		/// <param name="list">The list.</param>
 		public static void Shuffle<T>(this IList<T>? list)
 		{
-			var random = new Random();
+			Random random = new();
 			var i = list.NotNull(nameof(list)).Count - 1;
 			if (i <= 0)
 			{

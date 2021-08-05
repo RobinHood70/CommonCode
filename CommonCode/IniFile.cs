@@ -75,7 +75,7 @@
 		private void ReadStream(StreamReader stream)
 		{
 			var name = string.Empty;
-			var lines = new List<string>();
+			List<string> lines = new();
 			if (stream.BaseStream is FileStream fileStream)
 			{
 				this.FileName = fileStream.Name;

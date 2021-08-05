@@ -92,7 +92,7 @@
 		/// <returns>The CsvRow that was added.</returns>
 		public CsvRow Add(IEnumerable<object> fields)
 		{
-			var list = new List<string>();
+			List<string> list = new();
 			foreach (var item in fields.NotNull(nameof(fields)))
 			{
 				if (item.ToString() is string value)
@@ -159,7 +159,7 @@
 		/// <param name="encoding">The encoding.</param>
 		public void ReadFile(string fileName, bool hasHeader, Encoding encoding)
 		{
-			using var reader = new StreamReader(fileName, encoding);
+			using StreamReader reader = new(fileName, encoding);
 			this.ReadText(reader, hasHeader);
 		}
 
@@ -169,8 +169,8 @@
 		public IEnumerable<string>? ReadRow(TextReader reader)
 		{
 			reader.ThrowNull(nameof(reader));
-			var fields = new List<string>(this.nameMap.Count);
-			var field = new StringBuilder();
+			List<string> fields = new(this.nameMap.Count);
+			StringBuilder field = new();
 			var insideQuotes = false;
 			var endOfLine = false;
 			var outsideValue = true;
@@ -260,7 +260,7 @@
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
 		public void ReadText(string txt, bool hasHeader)
 		{
-			using var textReader = new StringReader(txt);
+			using StringReader textReader = new(txt);
 			this.ReadText(textReader, hasHeader);
 		}
 
@@ -350,8 +350,8 @@
 		/// <param name="encoding">The encoding.</param>
 		public void WriteFile(string fileName, Encoding encoding)
 		{
-			using var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
-			using var writeStream = new StreamWriter(fileStream, encoding);
+			using FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+			using StreamWriter writeStream = new(fileStream, encoding);
 			this.WriteText(writeStream);
 		}
 
@@ -405,7 +405,8 @@
 		#region Private Methods
 		private char[] GetSpecialCharacters()
 		{
-			var specialList = new List<char> { '\n', '\r', '\u2028', '\u2029', this.FieldSeparator };
+			List<char> specialList = new()
+			{ '\n', '\r', '\u2028', '\u2029', this.FieldSeparator };
 			if (this.EscapeCharacter.HasValue)
 			{
 				specialList.Add(this.EscapeCharacter.Value);
@@ -421,7 +422,7 @@
 
 		private void InternalWriteRow(TextWriter textWriter, IEnumerable<string> row, int columnCount, char[] specialChars)
 		{
-			var rewriteFields = new List<string>(columnCount);
+			List<string> rewriteFields = new(columnCount);
 			if (columnCount == 0)
 			{
 				columnCount = int.MaxValue;
@@ -462,7 +463,7 @@
 
 		private string RewriteField(string field)
 		{
-			var sb = new StringBuilder();
+			StringBuilder sb = new();
 			if (field.Length == 0)
 			{
 				field = this.EmptyFieldText;

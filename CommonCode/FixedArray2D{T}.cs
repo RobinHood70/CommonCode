@@ -64,7 +64,7 @@
 		public IList<T> CopyOfColumn(int columnNum)
 		{
 			var columnSize = this.array.GetUpperBound(0);
-			var list = new T[columnSize];
+			T[] list = new T[columnSize];
 			for (var i = 0; i < columnSize; i++)
 			{
 				list[i] = this.array[i, columnNum];
@@ -76,7 +76,7 @@
 		public IList<T> CopyOfRow(int rowNum)
 		{
 			var rowSize = this.array.GetUpperBound(1);
-			var list = new T[rowSize];
+			T[] list = new T[rowSize];
 			for (var i = 0; i < rowSize; i++)
 			{
 				list[i] = this.array[rowNum, i];

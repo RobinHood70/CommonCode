@@ -20,7 +20,7 @@
 		public IniSection(string name, IEnumerable<string> keys)
 		{
 			this.Name = name.NotNull(nameof(name));
-			var list = new List<IniKey>();
+			List<IniKey> list = new();
 			foreach (var key in keys.NotNull(nameof(keys)))
 			{
 				list.Add(new IniKey(key.Trim()));
