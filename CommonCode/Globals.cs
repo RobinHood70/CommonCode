@@ -201,65 +201,6 @@
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 
-		/*
-		public static void ThrowCollectionEmpty<T>(IEnumerable<T> collection, string paramName)
-		{
-			if (collection.IsEmpty())
-			{
-				throw new ArgumentException(CurrentCulture(Resources.CollectionEmpty, paramName), nameof(paramName));
-			}
-		}
-
-		/// <summary>Throws an exception if the input value is null.</summary>
-		/// <param name="nullable">The value that may be null.</param>
-		/// <param name="name">The name of the parameter in the original method.</param>
-		/// <exception cref="ArgumentNullException">Thrown if <paramref name="nullable" /> is null.</exception>
-		public static void ThrowNull([ValidatedNotNull][NotNull] object? nullable, params string[] nameParts)
-		{
-			if (nullable is null)
-			{
-				throw ArgumentNull(name);
-			}
-		}
-
-		/// <summary>Throws an exception if the property value is null.</summary>
-		/// <param name="nullable">The value that may be null.</param>
-		/// <param name="objectName">The name of the object in the original method.</param>
-		/// <param name="propertyName">The property of the object which was found to be null.</param>
-		/// <exception cref="ArgumentNullException">Thrown if <paramref name="nullable" /> is null.</exception>
-		/// <exception cref="InvalidOperationException">Thrown when <paramref name="nullable"/> is null.</exception>
-		public static void ThrowNull([ValidatedNotNull][NotNull] object? nullable, string objectName, string propertyName)
-		{
-			if (nullable is null)
-			{
-				throw PropertyNull(objectName, propertyName);
-			}
-		}
-
-		public static void ThrowNullOrWhiteSpace(string text, string paramName)
-		{
-			if (string.IsNullOrWhiteSpace(text))
-			{
-				throw new ArgumentException(CurrentCulture(Resources.StringInvalid, paramName), nameof(text));
-			}
-		}
-
-		public static void ThrowNullOrWhiteSpace(IEnumerable<string> collection, string paramName)
-		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException(paramName);
-			}
-
-			foreach (var item in collection)
-			{
-				if (string.IsNullOrWhiteSpace(item))
-				{
-					throw new ArgumentException(CurrentCulture(Resources.CollectionInvalid, paramName), nameof(collection));
-				}
-			}
-		}
-		*/
 		#endregion
 	}
 }

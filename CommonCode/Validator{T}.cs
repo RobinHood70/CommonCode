@@ -15,11 +15,6 @@
 		#endregion
 
 		#region Constructors
-		public Validator(T? item, string name)
-			: this(item, ValidationType.Other, name)
-		{
-		}
-
 		public Validator(T? item, ValidationType validationType, string name)
 		{
 			this.NullableValue = item;
@@ -29,21 +24,16 @@
 		#endregion
 
 		#region Public Properties
-
 		public T? NullableValue { get; }
-
-		// Always true because if it didn't validate, it threw an error. Useful for cases like .Validate ? TrueAction : FalseAction.
-		public bool Validated => true;
 
 		public T Value => this.NullableValue ?? throw Validator.GetException(ValidatorMessages.NullMessage);
 		#endregion
 
 		#region Public Methods
-
 		public Validator<TWanted> CastTo<TWanted>()
 			where TWanted : class? =>
 			this.Value is TWanted output
-				? new Validator<TWanted>(output, this.name)
+				? new(output, this.validationType, this.name)
 				: throw Validator.GetException(ValidatorMessages.InvalidCast);
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Rule bug")]
@@ -71,10 +61,7 @@
 		}
 
 		/// <summary>Gets a Validator if the provided value is not null.</summary>
-		/// <typeparam name="T">The type of the value to check.</typeparam>
-		/// <param name="instance">The value that may be null.</param>
-		/// <param name="valueName">The name of the value in the original method.</param>
-		/// <exception cref="InvalidOperationException">Thrown if <paramref name="instance" /> is null.</exception>
+		/// <exception cref="InvalidOperationException">Thrown if the value is null.</exception>
 		// [MemberNotNull(nameof(NullableValue))]
 		public Validator<T> NotNull() => this.NullableValue is object
 			? this
@@ -87,7 +74,7 @@
 			var retval = this.NullableValue switch
 			{
 				null => null,
-				string s when string.IsNullOrWhiteSpace(s) => null,
+				string s when s.Trim().Length == 0 => null,
 				IEnumerable<string> ienum => CheckStrings(ienum),
 				_ => this
 			};
