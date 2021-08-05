@@ -88,7 +88,7 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: {1}, Called from: {2}.
+        ///   Looks up a localized string similar to {0}: {1}.
         /// </summary>
         internal static string InfoFormat {
             get {

@@ -127,7 +127,7 @@
     <value>{0} ({1})</value>
   </data>
   <data name="InfoFormat" xml:space="preserve">
-    <value>{0}: {1}, Called from: {2}</value>
+    <value>{0}: {1}</value>
   </data>
   <data name="InvalidCast" xml:space="preserve">
     <value>The cast failed.</value>
