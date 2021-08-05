@@ -58,6 +58,19 @@
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
+		/// <param name="value">The value of the parameter in the <paramref name="text" /> parameter.</param>
+		/// <returns>The formatted text.</returns>
+		public static string CurrentCulture(string text, object value) => string.Format(CultureInfo.CurrentCulture, text, value);
+
+		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
+		/// <param name="text">The text to format.</param>
+		/// <param name="value1">The value of the first parameter in the <paramref name="text" /> parameter.</param>
+		/// <param name="value2">The value of the second parameter in the <paramref name="text" /> parameter.</param>
+		/// <returns>The formatted text.</returns>
+		public static string CurrentCulture(string text, object? value1, object? value2) => string.Format(CultureInfo.CurrentCulture, text, value1, value2);
+
+		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
+		/// <param name="text">The text to format.</param>
 		/// <param name="values">The values of any parameters in the <paramref name="text" /> parameter.</param>
 		/// <returns>The formatted text.</returns>
 		public static string CurrentCulture(string text, params object?[] values) => string.Format(CultureInfo.CurrentCulture, text, values);
@@ -201,7 +214,7 @@
 		/// <param name="nullable">The value that may be null.</param>
 		/// <param name="name">The name of the parameter in the original method.</param>
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="nullable" /> is null.</exception>
-		public static void ThrowNull([ValidatedNotNull][NotNull] object? nullable, string name)
+		public static void ThrowNull([ValidatedNotNull][NotNull] object? nullable, params string[] nameParts)
 		{
 			if (nullable is null)
 			{
