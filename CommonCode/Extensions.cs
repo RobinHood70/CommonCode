@@ -428,6 +428,12 @@
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 
+		/// <summary>Extension shortcut to explicitly compare two strings ordinally.</summary>
+		/// <param name="a">The string to compare.</param>
+		/// <param name="b">The string to compare the first one with.</param>
+		/// <returns><see langword="true"/>if the strings are identical; otherwise, <see langword="false"/>.</returns>
+		public static bool OrdinalEquals(this string? a, string? b) => string.Equals(a, b, StringComparison.Ordinal);
+
 		/// <summary>Takes a camel-case text and adds spaces before each block of one or more upper-case letters.</summary>
 		/// <param name="text">The text to convert.</param>
 		/// <returns>The original text with spaces inserted.</returns>
