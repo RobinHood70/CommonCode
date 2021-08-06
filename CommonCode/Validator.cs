@@ -120,7 +120,7 @@
 		{
 			if (item is null)
 			{
-				throw new ArgumentNullException(Globals.CurrentCulture(MessageText(validationType, ValidatorMessages.NullMessage, name)));
+				throw new ArgumentNullException(MessageText(validationType, ValidatorMessages.NullMessage, name));
 			}
 		}
 

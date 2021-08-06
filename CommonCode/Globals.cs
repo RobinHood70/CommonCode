@@ -60,7 +60,7 @@
 		/// <param name="text">The text to format.</param>
 		/// <param name="value">The value of the parameter in the <paramref name="text" /> parameter.</param>
 		/// <returns>The formatted text.</returns>
-		public static string CurrentCulture(string text, object value) => string.Format(CultureInfo.CurrentCulture, text, value);
+		public static string CurrentCulture(string text, object? value) => string.Format(CultureInfo.CurrentCulture, text, value);
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
@@ -71,9 +71,20 @@
 
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
+		/// <param name="firstValue">The first value of any parameters in the <paramref name="text"/>.</param>
 		/// <param name="values">The values of any parameters in the <paramref name="text" /> parameter.</param>
 		/// <returns>The formatted text.</returns>
-		public static string CurrentCulture(string text, params object?[] values) => string.Format(CultureInfo.CurrentCulture, text, values);
+		/// <remarks>The method signature is done this way because calling CurrentCulture with no parameters is nearly unintended, since no parameters require formatting. In the rare event where you're formatting a constant value according via CurrentCulture (e.g., <c>{ 1.0:2 }</c>), use the long-form <c>string.Format(CultureInfo.CurrentCulture, text)</c> to achieve the same effect.</remarks>
+		public static string CurrentCulture(string text, object? firstValue, params object?[] values)
+		{
+			List<object?>? combinedValues = new(values.Length + 1)
+			{
+				firstValue
+			};
+
+			combinedValues.AddRange(values);
+			return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
+		}
 
 		/// <summary>Works around Uri.EscapeDataString's length limits.</summary>
 		/// <param name="dataString">The string to escape.</param>
