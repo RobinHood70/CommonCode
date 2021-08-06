@@ -77,13 +77,24 @@
 		/// <remarks>The method signature is done this way because calling CurrentCulture with no parameters is nearly unintended, since no parameters require formatting. In the rare event where you're formatting a constant value according via CurrentCulture (e.g., <c>{ 1.0:2 }</c>), use the long-form <c>string.Format(CultureInfo.CurrentCulture, text)</c> to achieve the same effect.</remarks>
 		public static string CurrentCulture(string text, object? firstValue, params object?[] values)
 		{
-			List<object?>? combinedValues = new(values.Length + 1)
+			static string ManyValues(string text, object? firstValue, object?[] values)
 			{
-				firstValue
-			};
+				List<object?>? combinedValues = new(values.Length + 1)
+				{
+					firstValue
+				};
 
-			combinedValues.AddRange(values);
-			return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
+				combinedValues.AddRange(values);
+				return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
+			}
+
+			return values.Length switch
+			{
+				0 => string.Format(CultureInfo.CurrentCulture, text, firstValue),
+				1 => string.Format(CultureInfo.CurrentCulture, text, firstValue, values[0]),
+				2 => string.Format(CultureInfo.CurrentCulture, text, firstValue, values[0], values[1]),
+				_ => ManyValues(text, firstValue, values)
+			};
 		}
 
 		/// <summary>Works around Uri.EscapeDataString's length limits.</summary>
