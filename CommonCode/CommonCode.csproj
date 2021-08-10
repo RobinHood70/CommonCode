@@ -16,6 +16,10 @@
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DocumentationFile>D:\Users\rmorl\Source\Repos\CommonCode\CommonCode\CommonCode.xml</DocumentationFile>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
 	</ItemGroup>
