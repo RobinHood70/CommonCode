@@ -56,6 +56,18 @@
 		/// <returns>An <see cref="ArgumentNullException"/> for the specified parameter name.</returns>
 		public static ArgumentNullException ArgumentNull(string name) => new(name);
 
+		/// <summary>A CompareTo function that returns null instead of zero.</summary>
+		/// <typeparam name="T">The type of the values to compare.</typeparam>
+		/// <param name="x">The first value.</param>
+		/// <param name="y">The second value.</param>
+		/// <returns><see langword="null"/> if the values are identical; otherwise, 1 or -1 as a normal <see cref="IComparable{T}.CompareTo"/> function would.</returns>
+		public static int? ChainedCompareTo<T>(T x, T y)
+			where T : IComparable<T>
+		{
+			var retval = x.CompareTo(y);
+			return retval == 0 ? null : retval;
+		}
+
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="text">The text to format.</param>
 		/// <param name="value">The value of the parameter in the <paramref name="text" /> parameter.</param>
@@ -197,9 +209,9 @@
 
 		public static int? NullComparer<T>(T? x, T? y) => (x, y) switch
 		{
-			(object, object) => null,
-			(object, null) => 1,
-			(null, object) => -1,
+			(not null, not null) => null,
+			(not null, null) => 1,
+			(null, not null) => -1,
 			_ => 0
 		};
 
