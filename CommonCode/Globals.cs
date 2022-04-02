@@ -7,7 +7,6 @@
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	using RobinHood70.CommonCode.Properties;
 
 	#region Public Delegates
 
@@ -209,12 +208,6 @@
 			(null, not null) => -1,
 			_ => 0
 		};
-
-		/// <summary>The error thrown when a property of an object was unexpectedly null.</summary>
-		/// <param name="objectName">The name of the object in the original method.</param>
-		/// <param name="propertyName">The property of the object which was found to be null.</param>
-		/// <returns>An <see cref="InvalidOperationException"/> for the specified object and property.</returns>
-		public static InvalidOperationException PropertyNull(string objectName, string propertyName) => new(CurrentCulture(Resources.PropertyNull, objectName, propertyName));
 
 		/// <summary>Creates an empty read-only dictionary of the specified type.</summary>
 		/// <typeparam name="TKey">The key type.</typeparam>
