@@ -48,7 +48,7 @@
 		public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
-			culture.ThrowNull(nameof(culture));
+			culture.ThrowNull();
 			if (x == null)
 			{
 				return y == null ? 0 : -1;

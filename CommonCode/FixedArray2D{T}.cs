@@ -11,12 +11,15 @@
 		#endregion
 
 		#region Constructors
-		public FixedArray2D(T[,] array) => this.array = array;
+		public FixedArray2D(T[,] array)
+		{
+			this.array = array;
+		}
 
 		public FixedArray2D(T[] array, int rows, int columns, bool readHorizontalFirst, int offset)
 		{
 			// Currently ignores if array is too big.
-			if (array.NotNull(nameof(array)).Length < rows * columns + offset)
+			if (array.NotNull().Length < rows * columns + offset)
 			{
 				throw new ArgumentException(Resources.ArrayTooSmall, nameof(array));
 			}

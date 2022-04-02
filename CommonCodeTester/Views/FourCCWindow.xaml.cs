@@ -5,6 +5,9 @@
 	/// <summary>Interaction logic for FourCC.xaml.</summary>
 	public partial class FourCCWindow : Window
 	{
-		public FourCCWindow() => this.InitializeComponent();
+		public FourCCWindow()
+		{
+			this.InitializeComponent();
+		}
 	}
 }

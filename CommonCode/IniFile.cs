@@ -19,7 +19,7 @@
 		/// <remarks>If <paramref name="path"/> is not a full path, it will be changed into one and have ".ini" appended if necessary.</remarks>
 		public IniFile(string path)
 		{
-			if (Path.GetExtension(path.NotNull(nameof(path))).Length == 0)
+			if (Path.GetExtension(path.NotNull()).Length == 0)
 			{
 				path += ".ini";
 			}
@@ -28,7 +28,10 @@
 			this.ReadStream(stream);
 		}
 
-		public IniFile(StreamReader stream) => this.ReadStream(stream.NotNull(nameof(stream)));
+		public IniFile(StreamReader stream)
+		{
+			this.ReadStream(stream.NotNull());
+		}
 		#endregion
 
 		#region Public Static Properties

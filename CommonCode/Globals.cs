@@ -5,7 +5,6 @@
 	using System.Collections.ObjectModel;
 	using System.Globalization;
 	using System.IO;
-	using System.Runtime.CompilerServices;
 	using System.Security.Cryptography;
 	using System.Text;
 	using RobinHood70.CommonCode.Properties;
@@ -100,7 +99,7 @@
 				return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
 			}
 
-			return values.Length switch
+			return values.NotNull().Length switch
 			{
 				0 => string.Format(CultureInfo.CurrentCulture, text, firstValue),
 				1 => string.Format(CultureInfo.CurrentCulture, text, firstValue, values[0]),
@@ -156,7 +155,7 @@
 						var lastDash = languageCode!.LastIndexOf('-');
 						if (lastDash > -1)
 						{
-							languageCode = languageCode.Substring(0, lastDash);
+							languageCode = languageCode[..lastDash];
 						}
 					}
 				}
@@ -173,7 +172,7 @@
 		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
 		public static string GetHash(byte[] data, HashType hashType)
 		{
-			data.ThrowNull(nameof(data));
+			data.ThrowNull();
 			using var hash = hashType switch
 			{
 				HashType.Md5 => MD5.Create(),
@@ -196,16 +195,12 @@
 		/// <returns>The hash, represented as a <see cref="string"/>.</returns>
 		public static string GetHash(this string data, HashType hashType) => GetHash(Encoding.UTF8.GetBytes(data ?? string.Empty), hashType);
 
-		/// <summary>Initializes .NET Core's encoding so that it can load code-page based encodings.</summary>
-		[ModuleInitializer]
-		public static void Initialize() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
 		/// <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
 		/// <param name="formattable">A formattable string.</param>
 		/// <returns>The formatted text.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
-		public static string Invariant(FormattableString formattable) => formattable.NotNull(nameof(formattable)).ToString(CultureInfo.InvariantCulture);
+		public static string Invariant(FormattableString formattable) => formattable.NotNull().ToString(CultureInfo.InvariantCulture);
 
 		public static int? NullComparer<T>(T? x, T? y) => (x, y) switch
 		{
@@ -231,7 +226,7 @@
 		public static string SanitizeFilename(string filename)
 		{
 			var invalidChars = Path.GetInvalidFileNameChars();
-			var split = filename.NotNull(nameof(filename)).Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
+			var split = filename.NotNull().Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 

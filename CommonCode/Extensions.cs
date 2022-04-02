@@ -20,7 +20,7 @@
 		/// <returns>The string.</returns>
 		public static string BString8(this BinaryReader reader)
 		{
-			var size = reader.NotNull(nameof(reader)).ReadByte();
+			var size = reader.NotNull().ReadByte();
 			return new string(reader.ReadChars(size));
 		}
 
@@ -31,7 +31,7 @@
 		public static string ZString(this BinaryReader reader)
 		{
 			StringBuilder retval = new();
-			var c = reader.NotNull(nameof(reader)).ReadChar();
+			var c = reader.NotNull().ReadChar();
 			while (c != '\0')
 			{
 				retval.Append(c);
@@ -103,7 +103,7 @@
 		{
 			if (values != null)
 			{
-				if (collection.NotNull(nameof(collection)) is List<T> list)
+				if (collection.NotNull() is List<T> list)
 				{
 					list.AddRange(values);
 				}
@@ -128,8 +128,8 @@
 		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
 			where TKey : notnull
 		{
-			dictionary.ThrowNull(nameof(dictionary));
-			foreach (var item in items.NotNull(nameof(items)))
+			dictionary.ThrowNull();
+			foreach (var item in items.NotNull())
 			{
 				dictionary.Add(item.Key, item.Value);
 			}
@@ -154,7 +154,7 @@
 		public static TValue First<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
 			where TKey : notnull
 		{
-			using var enumerator = dictionary.NotNull(nameof(dictionary)).GetEnumerator();
+			using var enumerator = dictionary.NotNull().GetEnumerator();
 			return enumerator.MoveNext() ? enumerator.Current.Value : throw new InvalidOperationException();
 		}
 		#endregion
@@ -190,7 +190,7 @@
 		{
 			// It's understandable why this wasn't in IEnumerable<T>, since enumerating can potentially be a slow-running operation, but it's beyond me why this wasn't put into IReadOnlyCollection<T>. MS covered it with Linq, using a virtually identical implementation to this, but that's still only a workaround (as is this).
 			comparer ??= EqualityComparer<T>.Default;
-			foreach (var item in enumerable.NotNull(nameof(enumerable)))
+			foreach (var item in enumerable.NotNull())
 			{
 				if (comparer.Equals(item, value))
 				{
@@ -246,7 +246,7 @@
 		/// <param name="value">The value to format.</param>
 		/// <returns>The value as an invariant string.</returns>
 		public static string ToStringInvariant(this IFormattable value) => value
-			.NotNull(nameof(value))
+			.NotNull()
 			.ToString(null, CultureInfo.InvariantCulture);
 		#endregion
 
@@ -258,7 +258,7 @@
 		public static void Shuffle<T>(this IList<T>? list)
 		{
 			Random random = new();
-			var i = list.NotNull(nameof(list)).Count - 1;
+			var i = list.NotNull().Count - 1;
 			if (i <= 0)
 			{
 				return;
@@ -267,9 +267,7 @@
 			while (i >= 0)
 			{
 				var swapWith = random.Next(list.Count);
-				var value = list[i];
-				list[i] = list[swapWith];
-				list[swapWith] = value;
+				(list[swapWith], list[i]) = (list[i], list[swapWith]);
 				i--;
 			}
 		}
@@ -284,7 +282,7 @@
 		/// <returns>The substitute value if one is found; otherwise, the original key.</returns>
 		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key) =>
 			dictionary
-			.NotNull(nameof(dictionary))
+			.NotNull()
 			.TryGetValue(key, out var retval)
 				? retval
 				: key;
@@ -298,7 +296,7 @@
 		/// <returns>The substitute value if one is found; otherwise, the default value.</returns>
 		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue) =>
 			dictionary
-			.NotNull(nameof(dictionary))
+			.NotNull()
 			.TryGetValue(key, out var retval)
 				? retval
 				: defaultValue;
@@ -313,9 +311,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			list.ThrowNull(nameof(list));
-			node.ThrowNull(nameof(node));
-			foreach (var newNode in values.NotNull(nameof(values)))
+			list.ThrowNull();
+			node.ThrowNull();
+			foreach (var newNode in values.NotNull())
 			{
 				node = list.AddAfter(node, newNode);
 			}
@@ -328,9 +326,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			list.ThrowNull(nameof(list));
-			node.ThrowNull(nameof(node));
-			foreach (var newNode in values.NotNull(nameof(values)))
+			list.ThrowNull();
+			node.ThrowNull();
+			foreach (var newNode in values.NotNull())
 			{
 				list.AddBefore(node, newNode);
 			}
@@ -347,7 +345,7 @@
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value) =>
-			node.NotNull(nameof(node)).List is LinkedList<T> list
+			node.NotNull().List is LinkedList<T> list
 				? list.AddAfter(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
 
@@ -357,9 +355,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			if (node.NotNull(nameof(node)).List is LinkedList<T> list)
+			if (node.NotNull().List is LinkedList<T> list)
 			{
-				foreach (var newNode in values.NotNull(nameof(values)))
+				foreach (var newNode in values.NotNull())
 				{
 					node = list.AddAfter(node, newNode);
 				}
@@ -374,7 +372,7 @@
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
 		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value) =>
-			node.NotNull(nameof(node)).List is LinkedList<T> list
+			node.NotNull().List is LinkedList<T> list
 				? list.AddBefore(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
 
@@ -384,9 +382,9 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			if (node.NotNull(nameof(node)).List is LinkedList<T> list)
+			if (node.NotNull().List is LinkedList<T> list)
 			{
-				foreach (var newNode in values.NotNull(nameof(values)))
+				foreach (var newNode in values.NotNull())
 				{
 					list.AddBefore(node, newNode);
 				}
@@ -405,7 +403,7 @@
 		public static string? Ellipsis(this string? text, int maxLength) =>
 			text is string testString &&
 			testString.Length > maxLength
-				? text.Substring(0, maxLength) + "..."
+				? text[..maxLength] + "..."
 				: text;
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
@@ -424,7 +422,7 @@
 				return text;
 			}
 
-			var retval = text.Substring(0, 1).ToLower(culture.NotNull(nameof(culture)));
+			var retval = text[..1].ToLower(culture.NotNull());
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 
@@ -478,7 +476,7 @@
 				return text;
 			}
 
-			var retval = text.Substring(0, 1).ToUpper(culture.NotNull(nameof(culture)));
+			var retval = text[..1].ToUpper(culture.NotNull());
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 		#endregion
@@ -488,7 +486,7 @@
 #pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
 
 		// Any calls to any of these methods should be replaced by native methods/properties.
-		public static void AddRange<T>(this List<T> list, params T[] values) => list.NotNull(nameof(list)).AddRange(values.NotNull(nameof(values)));
+		public static void AddRange<T>(this List<T> list, params T[] values) => list.NotNull().AddRange(values.NotNull());
 
 		public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
 

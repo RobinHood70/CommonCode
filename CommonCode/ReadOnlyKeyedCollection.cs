@@ -31,8 +31,8 @@
 		/// <param name="comparer">The implementation of the <see cref="IEqualityComparer{TKey}"/> generic interface to use when comparing keys, or null to use the default equality comparer for the type of the key, obtained from <see cref="EqualityComparer{TKey}.Default"/>.</param>
 		public ReadOnlyKeyedCollection(Func<TItem, TKey> keyFunc, IEnumerable<TItem> items, IEqualityComparer<TKey>? comparer)
 		{
-			this.KeyFunction = keyFunc.NotNull(nameof(keyFunc));
-			this.Items = new List<TItem>(items.NotNull(nameof(items)));
+			this.KeyFunction = keyFunc.NotNull();
+			this.Items = new List<TItem>(items.NotNull());
 			this.Comparer = comparer ?? EqualityComparer<TKey>.Default;
 			this.Dictionary = new Dictionary<TKey, TItem>();
 

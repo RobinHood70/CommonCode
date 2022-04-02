@@ -28,7 +28,7 @@
 
 		#region Public Methods
 		public bool Equals(ValueRange<T>? other) =>
-			!(other is null) &&
+			other is not null &&
 			EqualityComparer<T>.Default.Equals(this.Max, other.Max) &&
 			EqualityComparer<T>.Default.Equals(this.Min, other.Min);
 

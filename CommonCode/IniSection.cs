@@ -19,9 +19,9 @@
 		/// <param name="keys">The section's keys.</param>
 		public IniSection(string name, IEnumerable<string> keys)
 		{
-			this.Name = name.NotNull(nameof(name));
+			this.Name = name.NotNull();
 			List<IniKey> list = new();
-			foreach (var key in keys.NotNull(nameof(keys)))
+			foreach (var key in keys.NotNull())
 			{
 				list.Add(new IniKey(key.Trim()));
 			}
