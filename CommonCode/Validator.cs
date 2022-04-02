@@ -122,7 +122,7 @@
 		{
 			if (item is null)
 			{
-				throw new ArgumentNullException(MessageText(validationType, ValidatorMessages.NullMessage, name ?? Globals.Unknown));
+				throw new InvalidOperationException(MessageText(validationType, ValidatorMessages.NullMessage, name ?? Globals.Unknown));
 			}
 		}
 
@@ -151,15 +151,13 @@
 		#endregion
 
 		#region Private Methods
-		private static string MessageText(ValidationType valueType, string message, string name)
-		{
-			var valueTypeText = ValueTypeTexts.TryGetValue(valueType, out var retval)
-				? retval
-				: throw new KeyNotFoundException();
-			valueTypeText = Globals.CurrentCulture(ValidatorMessages.InfoFormat, valueTypeText, name);
-			valueTypeText = Globals.CurrentCulture(ValidatorMessages.ErrorFormat, message, valueTypeText);
-			return valueTypeText;
-		}
+		private static string MessageText(ValidationType valueType, string message, string name) => Globals.CurrentCulture(ValidatorMessages.ErrorFormat, message, NameText(valueType, name));
+
+		private static string NameText(ValidationType valueType, string name) =>
+			Globals.CurrentCulture(
+				ValidatorMessages.InfoFormat,
+				ValueTypeTexts.TryGetValue(valueType, out var retval) ? retval : throw new KeyNotFoundException(),
+				name);
 		#endregion
 	}
 }
