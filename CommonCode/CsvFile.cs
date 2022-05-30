@@ -436,9 +436,16 @@
 					var value = field switch
 					{
 						null => string.Empty,
-						string when this.AlwaysDelimitFields || field.IndexOfAny(specialChars) >= 0 => this.RewriteField(field),
+						string when field.Length == 0 => this.EmptyFieldText ?? string.Empty,
 						_ => field
 					};
+
+					if (this.AlwaysDelimitFields ||
+						!string.Equals(value.Trim(), value, StringComparison.Ordinal) ||
+						value.IndexOfAny(specialChars) >= 0)
+					{
+						value = this.RewriteField(value);
+					}
 
 					rewriteFields.Add(value);
 					columnNumber++;
@@ -464,21 +471,10 @@
 		private string RewriteField(string field)
 		{
 			StringBuilder sb = new();
-			if (field.Length == 0)
-			{
-				field = this.EmptyFieldText;
-				if (field == null)
-				{
-					return string.Empty;
-				}
-			}
-
-			var addDelimiter = field.Length == 0 || this.AlwaysDelimitFields;
 			foreach (var character in field)
 			{
 				if (character == this.FieldDelimiter)
 				{
-					addDelimiter = true;
 					if (this.DoubleUpDelimiters)
 					{
 						sb.Append(new string(this.FieldDelimiter.Value, 2));
@@ -494,28 +490,15 @@
 				}
 				else if (character == this.FieldSeparator)
 				{
-					addDelimiter |= this.FieldDelimiter.HasValue;
-					if (addDelimiter)
-					{
-						sb.Append(this.FieldSeparator);
-					}
-					else
-					{
-						sb.Append(this.EscapeCharacter + this.FieldSeparator);
-					}
+					sb.Append(this.FieldSeparator);
 				}
 				else
 				{
-					if ("\n\r\u2028\u2029".IndexOf(character, StringComparison.Ordinal) != -1)
-					{
-						addDelimiter = true;
-					}
-
 					sb.Append(character);
 				}
 			}
 
-			return (addDelimiter && this.FieldDelimiter.HasValue) ? this.FieldDelimiter.Value + sb.ToString() + this.FieldDelimiter.Value : sb.ToString();
+			return this.FieldDelimiter.HasValue ? this.FieldDelimiter.Value + sb.ToString() + this.FieldDelimiter.Value : sb.ToString();
 		}
 		#endregion
 	}

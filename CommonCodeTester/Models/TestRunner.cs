@@ -45,6 +45,11 @@
 
 			const string testText = "ON-trailer-Gates of Oblivion-Eveli.jpg";
 			Debug.WriteLine(testText.UnCamelCase());
+
+			var csv = new CsvFile() { EmptyFieldText = " " };
+			csv.AddHeader("Test");
+			csv.Add(string.Empty);
+			csv.WriteFile(@"D:\Test.txt");
 		}
 	}
 }
