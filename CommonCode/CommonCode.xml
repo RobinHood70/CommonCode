@@ -580,20 +580,11 @@
             <param name="hashType">The type of the hash.</param>
             <returns>The hash, represented as a <see cref="T:System.String"/>.</returns>
         </member>
-        <member name="M:RobinHood70.CommonCode.Globals.Initialize">
-            <summary>Initializes .NET Core's encoding so that it can load code-page based encodings.</summary>
-        </member>
         <member name="M:RobinHood70.CommonCode.Globals.Invariant(System.FormattableString)">
             <summary>Convenience method so that CurrentCulture and Invariant are all in the same class for both traditional and formattable strings, and are used the same way.</summary>
             <param name="formattable">A formattable string.</param>
             <returns>The formatted text.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
-        </member>
-        <member name="M:RobinHood70.CommonCode.Globals.PropertyNull(System.String,System.String)">
-            <summary>The error thrown when a property of an object was unexpectedly null.</summary>
-            <param name="objectName">The name of the object in the original method.</param>
-            <param name="propertyName">The property of the object which was found to be null.</param>
-            <returns>An <see cref="T:System.InvalidOperationException"/> for the specified object and property.</returns>
         </member>
         <member name="M:RobinHood70.CommonCode.Globals.ReadOnlyDictionary``2">
             <summary>Creates an empty read-only dictionary of the specified type.</summary>
@@ -803,11 +794,6 @@
         <member name="P:RobinHood70.CommonCode.Properties.Resources.ParameterInvalidCast">
             <summary>
               Looks up a localized string similar to The {0} parameter passed to {1} could not be cast to {2}, as it&apos;s type was {3}..
-            </summary>
-        </member>
-        <member name="P:RobinHood70.CommonCode.Properties.Resources.PropertyNull">
-            <summary>
-              Looks up a localized string similar to {0}.{1} was unexpectedly null..
             </summary>
         </member>
         <member name="P:RobinHood70.CommonCode.Properties.Resources.StringInvalid">
