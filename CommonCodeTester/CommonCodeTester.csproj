@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-CA</NeutralLanguage>
@@ -12,7 +11,7 @@
 		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
-		<TargetFramework>net5.0-windows</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<RootNamespace>RobinHood70.CommonCodeTester</RootNamespace>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-CA</NeutralLanguage>
@@ -17,7 +17,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DocumentationFile>D:\Users\rmorl\Source\Repos\CommonCode\CommonCode\CommonCode.xml</DocumentationFile>
+	  <DocumentationFile>D:\Source\Repos\CommonCode\CommonCode\CommonCode.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
