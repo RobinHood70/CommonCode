@@ -234,8 +234,18 @@
 		/// <summary>Determines whether an IEnumerable has items.</summary>
 		/// <param name="enumerable">The enumerable to check.</param>
 		/// <returns><see langword="true"/> if the list is non-null and has at least one item; otherwise, <see langword="false"/>.</returns>
-		/// <exception cref="KeyNotFoundException">The list was empty.</exception>
-		public static bool IsEmpty(this IEnumerable? enumerable) => enumerable?.GetEnumerator().MoveNext() != true;
+		public static bool IsEmpty(this IEnumerable? enumerable)
+		{
+			if (enumerable is not null)
+			{
+				foreach (var _ in enumerable)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 		#endregion
 
 		#region IFormattable Extensions
