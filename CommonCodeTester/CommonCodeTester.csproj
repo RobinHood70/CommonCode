@@ -36,4 +36,8 @@
 	  <ProjectReference Include="..\CommonCode\CommonCode.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Tests\" />
+	</ItemGroup>
+
 </Project>
