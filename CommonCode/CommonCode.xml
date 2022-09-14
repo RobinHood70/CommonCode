@@ -296,6 +296,12 @@
             <returns>The string.</returns>
             <remarks>For fixed-length strings, it's normally better to read the entire thing and then trim everything after the null. This function is intended for those cases where the length is unknown.</remarks>
         </member>
+        <member name="M:RobinHood70.CommonCode.Extensions.RoundSignificant(System.Double,System.Int32)">
+            <summary>Rounds the desired value to a given number of significant digits.</summary>
+            <param name="value">The value to round.</param>
+            <param name="digits">The number of significant digits to round to.</param>
+            <returns>The provided value rounded to a given number of significant digits.</returns>
+        </member>
         <member name="M:RobinHood70.CommonCode.Extensions.GetUniqueFlags``1(``0)">
             <summary>Gets each single-bit value of a flags enumeration.</summary>
             <typeparam name="T">The enumeration type.</typeparam>

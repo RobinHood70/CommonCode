@@ -42,6 +42,25 @@
 		}
 		#endregion
 
+		#region Double Extensions
+
+		/// <summary>Rounds the desired value to a given number of significant digits.</summary>
+		/// <param name="value">The value to round.</param>
+		/// <param name="digits">The number of significant digits to round to.</param>
+		/// <returns>The provided value rounded to a given number of significant digits.</returns>
+		public static double RoundSignificant(this double value, int digits)
+		{
+			if (value == 0)
+			{
+				return 0;
+			}
+
+			var logValue = Math.Floor(Math.Log10(Math.Abs(value)));
+			var exp = Math.Pow(10, logValue + 1);
+			return exp * Math.Round(value / exp, digits);
+		}
+		#endregion
+
 		#region Enum Extensions
 
 		/// <summary>Gets each single-bit value of a flags enumeration.</summary>
