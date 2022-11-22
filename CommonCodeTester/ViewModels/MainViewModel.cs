@@ -1,11 +1,11 @@
 ﻿namespace RobinHood70.CommonCodeTester.ViewModels
 {
 	using System.Windows.Input;
-	using GalaSoft.MvvmLight;
-	using GalaSoft.MvvmLight.Command;
+	using CommunityToolkit.Mvvm.ComponentModel;
+	using CommunityToolkit.Mvvm.Input;
 	using RobinHood70.CommonCodeTester.Models;
 
-	public class MainViewModel : ViewModelBase
+	public class MainViewModel : ObservableRecipient
 	{
 		#region Constructors
 		// public MainViewModel() => TestRunner.Initialize();

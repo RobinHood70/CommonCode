@@ -1,9 +1,9 @@
 ﻿namespace RobinHood70.CommonCodeTester.ViewModels
 {
-	using GalaSoft.MvvmLight;
+	using CommunityToolkit.Mvvm.ComponentModel;
 	using RobinHood70.CommonCode;
 
-	public class FourCCViewModel : ViewModelBase
+	public class FourCCViewModel : ObservableRecipient
 	{
 		private string? inputText;
 		private string? outputText;
@@ -18,14 +18,14 @@
 					this.OutputText = FourCC.HexString(value);
 				}
 
-				this.Set(ref this.inputText, value, nameof(this.inputText));
+				this.SetProperty(ref this.inputText, value, nameof(this.inputText));
 			}
 		}
 
 		public string? OutputText
 		{
 			get => this.outputText;
-			set => this.Set(ref this.outputText, value, nameof(this.outputText));
+			set => this.SetProperty(ref this.outputText, value, nameof(this.outputText));
 		}
 	}
 }
