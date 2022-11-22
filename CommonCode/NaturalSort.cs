@@ -12,14 +12,8 @@
 	// A + could also be added to handle explicitly positive numbers, but this can lead to odd sorting like "a100", "a+100", "a100". The fix would be to add "x.Length.CompareTo(y.Length)" if splitX and splitY are equal, but this was unnecessary for my purposes, so left out.
 
 	/// <summary>An IComparer that provides natural sorting for mixed text and numeric strings.</summary>
-	public sealed class NaturalSort : IComparer<string>, IComparer
+	public sealed partial class NaturalSort : IComparer<string>, IComparer
 	{
-		#region Fields
-
-		[SuppressMessage("Security", "MA0023:Add RegexOptions.ExplicitCapture", Justification = "Required for Split")]
-		private static readonly Regex NumberRegex = new(@"(\d+([\.,]\d+)?)", RegexOptions.None, TimeSpan.FromSeconds(1));
-		#endregion
-
 		#region Constructors
 
 		private NaturalSort()
@@ -59,8 +53,8 @@
 				return 1;
 			}
 
-			var splitX = NumberRegex.Split(x);
-			var splitY = NumberRegex.Split(y);
+			var splitX = NumberRegex().Split(x);
+			var splitY = NumberRegex().Split(y);
 			var len = Math.Min(splitX.Length, splitY.Length);
 			for (var i = 0; i < len; i++)
 			{
@@ -90,7 +84,19 @@
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
 		public int Compare(string? x, string? y) => Compare(x, y, CultureInfo.CurrentCulture, CompareOptions.None);
 
+		/// <summary>Compares two objects as strings and returns a value indicating whether one is less than, equal to, or greater than the other.</summary>
+		/// <param name="x">The first string to compare.</param>
+		/// <param name="y">The second string to compare.</param>
+		/// <returns>A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.
+		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
+		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
+		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
 		public int Compare(object? x, object? y) => Compare(x as string, y as string, CultureInfo.CurrentCulture, CompareOptions.None);
+		#endregion
+
+		#region Partial Methods
+		[GeneratedRegex(@"(\d+([\.,]\d+)?)", RegexOptions.None, matchTimeoutMilliseconds: 1000)]
+		private static partial Regex NumberRegex();
 		#endregion
 	}
 }
