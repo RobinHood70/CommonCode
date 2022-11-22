@@ -11,7 +11,7 @@
 		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<RootNamespace>RobinHood70.CommonCodeTester</RootNamespace>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-	  <PackageReference Include="Meziantou.Analyzer" Version="*">
+	  <PackageReference Include="Meziantou.Analyzer" Version="1.0.750">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
