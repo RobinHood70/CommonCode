@@ -11,7 +11,6 @@
 	/// <typeparam name="TItem">The type of the item.</typeparam>
 	/// <seealso cref="IReadOnlyList{TItem}" />
 	/// <seealso cref="IReadOnlyDictionary{TKey, TValue}"/>
-	[SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Matches KeyedCollection")]
 	public class ReadOnlyKeyedCollection<TKey, TItem> : IReadOnlyDictionary<TKey, TItem>, IReadOnlyList<TItem>
 		where TKey : notnull
 	{

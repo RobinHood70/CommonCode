@@ -172,12 +172,17 @@
 		public static string GetHash(byte[] data, HashType hashType)
 		{
 			data.ThrowNull();
+
+#pragma warning disable CA5350 // Do Not Use Weak Cryptographic Algorithms
+#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
 			using var hash = hashType switch
 			{
 				HashType.Md5 => MD5.Create(),
 				HashType.Sha1 => SHA1.Create() as HashAlgorithm,
 				_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
 			};
+#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
+#pragma warning restore CA5350 // Do Not Use Weak Cryptographic Algorithms
 
 			StringBuilder sb = new(40);
 			foreach (var b in hash.ComputeHash(data))
