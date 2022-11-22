@@ -253,18 +253,9 @@
 		/// <summary>Determines whether an IEnumerable has items.</summary>
 		/// <param name="enumerable">The enumerable to check.</param>
 		/// <returns><see langword="true"/> if the list is non-null and has at least one item; otherwise, <see langword="false"/>.</returns>
-		public static bool IsEmpty(this IEnumerable? enumerable)
-		{
-			if (enumerable is not null)
-			{
-				foreach (var _ in enumerable)
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
+		public static bool IsEmpty(this IEnumerable? enumerable) =>
+			enumerable is null ||
+			!enumerable.GetEnumerator().MoveNext();
 		#endregion
 
 		#region IFormattable Extensions
