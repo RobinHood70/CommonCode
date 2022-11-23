@@ -106,6 +106,15 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The four-character code is not four characters..
+        /// </summary>
+        internal static string InvalidFourCC {
+            get {
+                return ResourceManager.GetString("InvalidFourCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The LinkedListNode specified does not belong to a list..
         /// </summary>
         internal static string NoNodeList {

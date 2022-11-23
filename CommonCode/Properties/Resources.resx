@@ -132,6 +132,9 @@
   <data name="InvalidArrayBounds" xml:space="preserve">
     <value>Array bounds must be greater than zero.</value>
   </data>
+  <data name="InvalidFourCC" xml:space="preserve">
+    <value>The four-character code is not four characters.</value>
+  </data>
   <data name="NoNodeList" xml:space="preserve">
     <value>The LinkedListNode specified does not belong to a list.</value>
   </data>
