@@ -28,6 +28,8 @@
 			this.ReadStream(stream);
 		}
 
+		/// <summary>Initializes a new instance of the <see cref="IniFile"/> class.</summary>
+		/// <param name="stream">The stream to work with.</param>
 		public IniFile(StreamReader stream)
 		{
 			this.ReadStream(stream.NotNull());

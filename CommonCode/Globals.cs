@@ -37,6 +37,8 @@
 	public static class Globals
 	{
 		#region Public Constants
+
+		/// <summary>Constant text "Unknown" for times when localized text is unwanted/unavailable.</summary>
 		public const string Unknown = "Unknown";
 		#endregion
 
@@ -59,6 +61,7 @@
 		/// <param name="x">The first value.</param>
 		/// <param name="y">The second value.</param>
 		/// <returns><see langword="null"/> if the values are identical; otherwise, 1 or -1 as a normal <see cref="IComparable{T}.CompareTo"/> function would.</returns>
+		/// <remarks>The purpose of this function is to allow simple comparisons of the form <c>x1.ChainedCompareTo(x2) ?? y1.ChainedCompareTo(y2) ?? 0</c>, such that each CompareTo falls through to the next one if the values are equal. The final value should always be zero in order to correctly return zero (instead of null) if all values are equal.</remarks>
 		public static int? ChainedCompareTo<T>(T x, T y)
 			where T : IComparable<T>
 		{
@@ -206,6 +209,11 @@
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
 		public static string Invariant(FormattableString formattable) => formattable.NotNull().ToString(CultureInfo.InvariantCulture);
 
+		/// <summary>Compares nullable types based only on the nullability of the values provided.</summary>
+		/// <typeparam name="T">The data type.</typeparam>
+		/// <param name="x">The value to compare.</param>
+		/// <param name="y">The value to compare to.</param>
+		/// <returns>A standard <see cref="IComparable.CompareTo(object?)"/> value based only on the nullability of the values provided.</returns>
 		public static int? NullComparer<T>(T? x, T? y) => (x, y) switch
 		{
 			(not null, not null) => null,
@@ -221,6 +229,9 @@
 		public static IReadOnlyDictionary<TKey, TValue> ReadOnlyDictionary<TKey, TValue>()
 			where TKey : notnull => new ReadOnlyDictionary<TKey, TValue>(new Dictionary<TKey, TValue>());
 
+		/// <summary>Replaces invalid characters in a file name with underscores.</summary>
+		/// <param name="filename">The file name to sanitize.</param>
+		/// <returns>The sanitized file name.</returns>
 		public static string SanitizeFilename(string filename)
 		{
 			var invalidChars = Path.GetInvalidFileNameChars();
