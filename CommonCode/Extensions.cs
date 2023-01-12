@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
@@ -153,14 +152,6 @@
 				dictionary.Add(item.Key, item.Value);
 			}
 		}
-
-		/// <summary>Convenience method to convert a dictionary to read-only.</summary>
-		/// <typeparam name="TKey">The key-type of the <paramref name="dictionary" /> (inferred).</typeparam>
-		/// <typeparam name="TValue">The value-type of the <paramref name="dictionary" /> (inferred).</typeparam>
-		/// <param name="dictionary">The dictionary to convert.</param>
-		/// <returns>A read-only dictionary based on the provided dictionary. If the input was null, an empty read-only dictionary is returned.</returns>
-		public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue>? dictionary)
-			where TKey : notnull => new(dictionary ?? new Dictionary<TKey, TValue>());
 
 		/// <summary>Gets the value of the "first" item in a dictionary.</summary>
 		/// <typeparam name="TKey">The key type of the dictionary.</typeparam>
