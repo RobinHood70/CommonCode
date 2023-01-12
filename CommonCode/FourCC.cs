@@ -47,7 +47,7 @@
 		/// <returns>The unsigned integer value of the bytes.</returns>
 		/// <exception cref="ArgumentException">Thrown when <paramref name="bytes"/> is not four bytes in length.</exception>
 		[CLSCompliant(false)]
-		public static uint Value(byte[] bytes) => bytes.Length != 4
+		public static uint Value(byte[] bytes) => bytes?.Length != 4
 			? throw new ArgumentException(Resources.InvalidFourCC, nameof(bytes))
 			: BitConverter.ToUInt32(bytes, 0);
 
@@ -66,7 +66,7 @@
 		/// <param name="bytes">The bytes to convert.</param>
 		/// <returns>The signed integer value of the bytes.</returns>
 		/// <exception cref="ArgumentException">Thrown when <paramref name="bytes"/> is not four bytes in length.</exception>
-		public static int ValueInt(byte[] bytes) => bytes.Length != 4
+		public static int ValueInt(byte[] bytes) => bytes?.Length != 4
 			? throw new ArgumentException(Resources.InvalidFourCC, nameof(bytes))
 			: BitConverter.ToInt32(bytes, 0);
 		#endregion
