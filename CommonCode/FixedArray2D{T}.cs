@@ -1,10 +1,11 @@
-﻿namespace RobinHood70.CommonCode
+﻿#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+namespace RobinHood70.CommonCode
 {
 	using System;
 	using System.Collections.Generic;
 	using RobinHood70.CommonCode.Properties;
 
-	/// <summary>This class embodies a fix-sized, two-dimensional array. Its designed primarily to be used in conjunction with properties, so the traditional issues with using an array as a property is avoided.</summary>
+	/// <summary>This class embodies a fix-sized, two-dimensional array. It's designed primarily to be used in conjunction with properties, so the traditional issues with using an array as a property is avoided.</summary>
 	/// <remarks>Currently, this is a bare-bones class which allows modification of elements within the array, though not changing the array size itself. That functionality could easily be expanded to include a read-only mode (throwing an error of the setter is accessed).</remarks>
 	/// <typeparam name="T">The type of each element in the array.</typeparam>
 	public class FixedArray2D<T>
@@ -120,3 +121,4 @@
 		#endregion
 	}
 }
+#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
