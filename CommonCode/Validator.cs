@@ -78,25 +78,25 @@
 				? throw ValidatorException(validationType, ValidatorMessages.NullOrWhitespaceMessage, name)
 				: item;
 
-		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? item, [CallerArgumentExpression("item")] string? name = null) =>
-			NotNullOrWhiteSpace(item, ValidationType.Argument, name);
+		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, [CallerArgumentExpression("items")] string? name = null) =>
+			NotNullOrWhiteSpace(items, ValidationType.Argument, name);
 
-		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null)
+		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, ValidationType validationType, [CallerArgumentExpression("items")] string? name = null)
 		{
-			if (item is null)
+			if (items is null)
 			{
 				throw ValidatorException(validationType, ValidatorMessages.CollectionEmptyMessage, name);
 			}
 
-			foreach (var s in item)
+			foreach (var item in items)
 			{
-				if (string.IsNullOrWhiteSpace(s))
+				if (string.IsNullOrWhiteSpace(item))
 				{
 					throw ValidatorException(validationType, ValidatorMessages.CollectionEmptyMessage, name);
 				}
 			}
 
-			return item;
+			return items;
 		}
 
 		public static T PropertyNotNull<T>([NotNull][ValidatedNotNull] this T? item, string className, [CallerArgumentExpression("item")] string? propertyNull = null)
