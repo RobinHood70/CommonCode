@@ -187,13 +187,6 @@
 		/// <typeparam name="T">The type of the original enumerable.</typeparam>
 		/// <param name="enumerable">The enumerable to convert.</param>
 		/// <param name="value">The value to find.</param>
-		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
-		public static bool Contains<T>(this IEnumerable<T> enumerable, T value) => (enumerable as ICollection<T>)?.Contains(value) ?? Contains(enumerable, value, null);
-
-		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
-		/// <typeparam name="T">The type of the original enumerable.</typeparam>
-		/// <param name="enumerable">The enumerable to convert.</param>
-		/// <param name="value">The value to find.</param>
 		/// <param name="comparer">The equality comparer to use to make the comparison.</param>
 		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
 		public static bool Contains<T>(this IEnumerable<T> enumerable, T value, IEqualityComparer<T>? comparer)
@@ -211,12 +204,19 @@
 			return false;
 		}
 
+		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
+		/// <typeparam name="T">The type of the original enumerable.</typeparam>
+		/// <param name="enumerable">The enumerable to convert.</param>
+		/// <param name="value">The value to find.</param>
+		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
+		public static bool ContainsValue<T>(this IEnumerable<T> enumerable, T value) => (enumerable as ICollection<T>)?.Contains(value) ?? Contains(enumerable, value, null);
+
 		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
 		/// <typeparam name="T">The collection type.</typeparam>
 		/// <param name="enumerable">The collection to enumerate.</param>
 		/// <returns>The first item in the collection or the specified default value.</returns>
 		[return: MaybeNull]
-		public static T First<T>(this IEnumerable<T>? enumerable) => First(enumerable, default!);
+		public static T First<T>(this IEnumerable<T>? enumerable) => First(enumerable, default);
 
 		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
 		/// <typeparam name="T">The collection type.</typeparam>
