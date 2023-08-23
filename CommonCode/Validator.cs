@@ -32,11 +32,11 @@
 		#endregion
 
 		#region Public Methods
-		public static T NotNull<T>([NotNull][ValidatedNotNull] this T? item, [CallerArgumentExpression("item")] string? name = null)
+		public static T NotNull<T>([NotNull][ValidatedNotNull] this T? item, [CallerArgumentExpression(nameof(item))] string? name = null)
 			where T : class? =>
 			NotNull(item, ValidationType.Argument, name);
 
-		public static T NotNull<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null)
+		public static T NotNull<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null)
 			where T : class?
 		{
 			if (item is object)
@@ -52,36 +52,36 @@
 			throw exception;
 		}
 
-		public static string NotNullOrEmpty([NotNull][ValidatedNotNull] this string? item, [CallerArgumentExpression("item")] string? name = null) =>
+		public static string NotNullOrEmpty([NotNull][ValidatedNotNull] this string? item, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			NotNullOrEmpty(item, ValidationType.Argument, name);
 
-		public static string NotNullOrEmpty([NotNull][ValidatedNotNull] this string? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null) =>
+		public static string NotNullOrEmpty([NotNull][ValidatedNotNull] this string? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			string.IsNullOrEmpty(item)
 				? throw ValidatorException(validationType, ValidatorMessages.StringEmptyMessage, name)
 				: item;
 
-		public static T NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this T? item, [CallerArgumentExpression("item")] string? name = null)
+		public static T NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this T? item, [CallerArgumentExpression(nameof(item))] string? name = null)
 			where T : IEnumerable =>
 			NotNullOrEmpty(item, ValidationType.Argument, name);
 
-		public static T NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null)
+		public static T NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null)
 			where T : IEnumerable =>
 			(item != null && item.GetEnumerator().MoveNext())
 				? item
 				: throw ValidatorException(validationType, ValidatorMessages.StringEmptyMessage, name);
 
-		public static string NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, [CallerArgumentExpression("item")] string? name = null) =>
+		public static string NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			NotNullOrWhiteSpace(item, ValidationType.Argument, name);
 
-		public static string NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null) =>
+		public static string NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			string.IsNullOrWhiteSpace(item)
 				? throw ValidatorException(validationType, ValidatorMessages.NullOrWhitespaceMessage, name)
 				: item;
 
-		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, [CallerArgumentExpression("items")] string? name = null) =>
+		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, [CallerArgumentExpression(nameof(items))] string? name = null) =>
 			NotNullOrWhiteSpace(items, ValidationType.Argument, name);
 
-		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, ValidationType validationType, [CallerArgumentExpression("items")] string? name = null)
+		public static IEnumerable<string> NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? items, ValidationType validationType, [CallerArgumentExpression(nameof(items))] string? name = null)
 		{
 			if (items is null)
 			{
@@ -99,26 +99,26 @@
 			return items;
 		}
 
-		public static T PropertyNotNull<T>([NotNull][ValidatedNotNull] this T? item, string className, [CallerArgumentExpression("item")] string? propertyNull = null)
+		public static T PropertyNotNull<T>([NotNull][ValidatedNotNull] this T? item, string className, [CallerArgumentExpression(nameof(item))] string? propertyNull = null)
 			where T : class? =>
 			NotNull(item, ValidationType.Property, className + '.' + propertyNull);
 
-		public static T PropertyNotNull<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, string className, [CallerArgumentExpression("item")] string? propertyName = null)
+		public static T PropertyNotNull<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, string className, [CallerArgumentExpression(nameof(item))] string? propertyName = null)
 			where T : class? => NotNull(item, validationType, className + '.' + propertyName);
 
-		public static string PropertyNotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, string className, [CallerArgumentExpression("item")] string? propertyName = null) =>
+		public static string PropertyNotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, string className, [CallerArgumentExpression(nameof(item))] string? propertyName = null) =>
 			NotNullOrWhiteSpace(item, ValidationType.Argument, className + '.' + propertyName);
 
-		public static IEnumerable<string> PropertyNotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? item, string className, [CallerArgumentExpression("item")] string? propertyName = null) =>
+		public static IEnumerable<string> PropertyNotNullOrWhiteSpace([NotNull][ValidatedNotNull] this IEnumerable<string>? item, string className, [CallerArgumentExpression(nameof(item))] string? propertyName = null) =>
 			NotNullOrWhiteSpace(item, ValidationType.Property, className + '.' + propertyName);
 
-		public static void PropertyThrowNull([NotNull][ValidatedNotNull] this object? item, string className, [CallerArgumentExpression("item")] string? propertyName = null) =>
+		public static void PropertyThrowNull([NotNull][ValidatedNotNull] this object? item, string className, [CallerArgumentExpression(nameof(item))] string? propertyName = null) =>
 			ThrowNull(item, ValidationType.Property, className + '.' + propertyName);
 
-		public static void ThrowNull([NotNull][ValidatedNotNull] this object? item, [CallerArgumentExpression("item")] string? name = null) =>
+		public static void ThrowNull([NotNull][ValidatedNotNull] this object? item, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			ThrowNull(item, ValidationType.Argument, name);
 
-		public static void ThrowNull([NotNull][ValidatedNotNull] this object? item, ValidationType validationType, [CallerArgumentExpression("item")] string? name = null)
+		public static void ThrowNull([NotNull][ValidatedNotNull] this object? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null)
 		{
 			if (item is null)
 			{
@@ -126,7 +126,7 @@
 			}
 		}
 
-		public static Validator<T> Validate<T>(this T? item, [CallerArgumentExpression("item")] string? name = null)
+		public static Validator<T> Validate<T>(this T? item, [CallerArgumentExpression(nameof(item))] string? name = null)
 			where T : class? =>
 			new(item, ValidationType.Value, name ?? Globals.Unknown);
 		/*

@@ -410,7 +410,7 @@
 		/// <param name="maxLength">The maximum length.</param>
 		/// <returns>System.String.</returns>
 		/// <remarks>This limits only the initial string length, not the total, so the return value can have a maximum length of maxLength + 3.</remarks>
-		[return: NotNullIfNotNull("text")]
+		[return: NotNullIfNotNull(nameof(text))]
 		public static string? Ellipsis(this string? text, int maxLength) =>
 			text is string testString &&
 			testString.Length > maxLength
@@ -446,7 +446,7 @@
 		/// <summary>Takes a camel-case text and adds spaces before each block of one or more upper-case letters.</summary>
 		/// <param name="text">The text to convert.</param>
 		/// <returns>The original text with spaces inserted.</returns>
-		[return: NotNullIfNotNull("text")]
+		[return: NotNullIfNotNull(nameof(text))]
 		public static string? UnCamelCase(this string text)
 		{
 			if (text == null)
