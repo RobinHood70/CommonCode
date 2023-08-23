@@ -64,6 +64,10 @@
 		/// <value><see langword="true"/> if leading or trailing whitespace in a field should be ignored when no delimiter is present; otherwise, <see langword="false"/>.</value>
 		/// <remarks>When this is set to <see langword="true"/>, a row of <c>ABC, DEF</c> is treated the same as <c>ABC,DEF</c>; when false, the second value would be " DEF" rather than "DEF".</remarks>
 		public bool IgnoreSurroundingWhiteSpace { get; set; } = true;
+
+		/// <summary>Gets or sets the number of lines to ignore at the beginning of the file.</summary>
+		/// <remarks>If the amount of lines is inconsistent, you will have to parse the file via other means, then set this appropriately when reading it as CSV.</remarks>
+		public int SkipLines { get; set; }
 		#endregion
 
 		#region Interface Properties
@@ -151,13 +155,13 @@
 		/// <summary>Reads and parses a CSV file with UTF-8 encoding.</summary>
 		/// <param name="fileName">Name of the file.</param>
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void ReadFile(string fileName, bool hasHeader) => this.ReadFile(fileName, hasHeader, Encoding.UTF8);
+		public void Load(string fileName, bool hasHeader) => this.Load(fileName, hasHeader, Encoding.UTF8);
 
 		/// <summary>Reads and parses a CSV file.</summary>
 		/// <param name="fileName">Name of the file.</param>
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
 		/// <param name="encoding">The encoding.</param>
-		public void ReadFile(string fileName, bool hasHeader, Encoding encoding)
+		public void Load(string fileName, bool hasHeader, Encoding encoding)
 		{
 			using StreamReader reader = new(fileName, encoding);
 			this.ReadText(reader, hasHeader);
@@ -269,9 +273,15 @@
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
 		public void ReadText(TextReader reader, bool hasHeader)
 		{
+			ArgumentNullException.ThrowIfNull(reader);
+			for (var i = 0; i < this.SkipLines; i++)
+			{
+				reader.ReadLine();
+			}
+
 			if (hasHeader)
 			{
-				this.Header = this.ReadRow(reader.NotNull());
+				this.Header = this.ReadRow(reader);
 				if (this.Header == null)
 				{
 					return;
