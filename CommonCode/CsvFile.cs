@@ -72,8 +72,6 @@
 
 		#region Interface Properties
 		bool ICollection<CsvRow>.IsReadOnly => false;
-
-		int ICollection<CsvRow>.Count { get; }
 		#endregion
 
 		#region Public Indexers
@@ -274,6 +272,8 @@
 		public void ReadText(TextReader reader, bool hasHeader)
 		{
 			ArgumentNullException.ThrowIfNull(reader);
+			this.Header = null;
+			this.Clear();
 			for (var i = 0; i < this.SkipLines; i++)
 			{
 				reader.ReadLine();
