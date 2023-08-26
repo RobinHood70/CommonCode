@@ -56,7 +56,15 @@
 			set
 			{
 				this.headerRow = value;
-				this.ResetHeader();
+				this.nameMap.Clear();
+				if (value is not null)
+				{
+					foreach (var field in value)
+					{
+						Console.WriteLine(field);
+						this.nameMap.Add(field, this.nameMap.Count);
+					}
+				}
 			}
 		}
 
@@ -281,11 +289,19 @@
 
 			if (hasHeader)
 			{
-				this.Header = this.ReadRow(reader);
-				if (this.Header == null)
+				var header = this.ReadRow(reader);
+				if (header is null)
 				{
 					return;
 				}
+
+				var newHeader = new List<string>();
+				foreach (var name in header)
+				{
+					newHeader.Add(name.Trim());
+				}
+
+				this.Header = newHeader;
 			}
 
 			IEnumerable<string>? row;
@@ -464,18 +480,6 @@
 
 			var line = string.Join(this.FieldSeparator.ToString(CultureInfo.InvariantCulture), rewriteFields);
 			textWriter.WriteLine(line);
-		}
-
-		private void ResetHeader()
-		{
-			this.nameMap.Clear();
-			if (this.Header != null)
-			{
-				foreach (var field in this.Header)
-				{
-					this.nameMap.Add(field.Trim(), this.nameMap.Count);
-				}
-			}
 		}
 
 		private string RewriteField(string field)
