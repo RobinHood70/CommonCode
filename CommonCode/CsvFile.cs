@@ -473,7 +473,7 @@
 			{
 				foreach (var field in this.Header)
 				{
-					this.nameMap.Add(field, this.nameMap.Count);
+					this.nameMap.Add(field.Trim(), this.nameMap.Count);
 				}
 			}
 		}
