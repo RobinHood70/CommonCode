@@ -1,7 +1,6 @@
 ﻿namespace RobinHood70.CommonCodeTester.Models
 {
 	using System;
-	using System.Diagnostics;
 	using RobinHood70.CommonCode;
 	using RobinHood70.CommonCodeTester.Views;
 
@@ -28,13 +27,8 @@
 
 		public static void RunTests()
 		{
-			const string testText = "ON-trailer-Gates of Oblivion-Eveli.jpg";
-			Debug.WriteLine(testText.UnCamelCase());
-
-			var csv = new CsvFile() { EmptyFieldText = " " };
-			csv.AddHeader("Test");
-			csv.Add(string.Empty);
-			csv.WriteFile(@"D:\Test.txt");
+			var csv = new CsvFile();
+			csv.Load(@"D:\Data\HoodBot\Starfield\Quests.csv", true);
 		}
 	}
 }

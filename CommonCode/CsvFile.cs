@@ -181,11 +181,11 @@
 			reader.ThrowNull();
 			List<string> fields = new(this.nameMap.Count);
 			StringBuilder field = new();
-			var insideQuotes = false;
 			var endOfLine = false;
-			var outsideValue = true;
 			while (!endOfLine && reader.Peek() != -1)
 			{
+				var insideDelims = false;
+				var outsideValue = true;
 				var endOfField = false;
 				while (!endOfField)
 				{
@@ -199,7 +199,7 @@
 						case '\r':
 						case '\u2028':
 						case '\u2029':
-							if (insideQuotes)
+							if (insideDelims)
 							{
 								field.Append(character);
 							}
@@ -223,13 +223,13 @@
 							}
 							else
 							{
-								outsideValue = insideQuotes;
-								insideQuotes = !insideQuotes;
+								outsideValue = insideDelims;
+								insideDelims = !insideDelims;
 							}
 
 							break;
 						case var _ when character == this.FieldSeparator:
-							if (insideQuotes)
+							if (insideDelims)
 							{
 								outsideValue = false;
 								field.Append(character);
@@ -246,9 +246,16 @@
 							field.Append(newChar == -1 ? character : newChar);
 							break;
 						default:
-							if (!outsideValue || !this.IgnoreSurroundingWhiteSpace || !char.IsWhiteSpace(character))
+							if (outsideValue)
 							{
-								outsideValue = false;
+								if (!this.IgnoreSurroundingWhiteSpace || !char.IsWhiteSpace(character))
+								{
+									outsideValue = false;
+									field.Append(character);
+								}
+							}
+							else
+							{
 								field.Append(character);
 							}
 
