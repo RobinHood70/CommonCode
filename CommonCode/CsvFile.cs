@@ -31,6 +31,9 @@
 		///   <see langword="true"/> if a delimiter character should be emitted twice; <see langword="false"/> if it should be escaped instead.</value>
 		public bool DoubleUpDelimiters { get; set; } = true;
 
+		/// <summary>Gets or sets the file encoding.</summary>
+		public Encoding Encoding { get; set; } = Encoding.UTF8;
+
 		/// <summary>Gets or sets the text to emit if a field is present but is an empty string.</summary>
 		/// <value>The text to use for empty fields.</value>
 		/// <remarks>If this field is null, empty fields will be treated the same as null fields. If it's an empty string, two field delimiters will be emitted with nothing between them. For any other value, that value will be emitted, with field delimiters emitted (or not) as normal.</remarks>
@@ -72,10 +75,6 @@
 		/// <value><see langword="true"/> if leading or trailing whitespace in a field should be ignored when no delimiter is present; otherwise, <see langword="false"/>.</value>
 		/// <remarks>When this is set to <see langword="true"/>, a row of <c>ABC, DEF</c> is treated the same as <c>ABC,DEF</c>; when false, the second value would be " DEF" rather than "DEF".</remarks>
 		public bool IgnoreSurroundingWhiteSpace { get; set; } = true;
-
-		/// <summary>Gets or sets the number of lines to ignore at the beginning of the file.</summary>
-		/// <remarks>If the amount of lines is inconsistent, you will have to parse the file via other means, then set this appropriately when reading it as CSV.</remarks>
-		public int SkipLines { get; set; }
 		#endregion
 
 		#region Interface Properties
@@ -158,18 +157,23 @@
 		/// <param name="item">The row to insert into the file.</param>
 		public void Insert(int index, CsvRow item) => this.rows.Insert(index, item);
 
-		/// <summary>Reads and parses a CSV file with UTF-8 encoding.</summary>
+		/// <summary>Reads and parses a CSV file.</summary>
 		/// <param name="fileName">Name of the file.</param>
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void Load(string fileName, bool hasHeader) => this.Load(fileName, hasHeader, Encoding.UTF8);
+		public void Load(string fileName, bool hasHeader) => this.Load(fileName, hasHeader, 0);
 
 		/// <summary>Reads and parses a CSV file.</summary>
 		/// <param name="fileName">Name of the file.</param>
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		/// <param name="encoding">The encoding.</param>
-		public void Load(string fileName, bool hasHeader, Encoding encoding)
+		/// <param name="skipLines">The number of lines to ignore at the beginning of the file.</param>
+		public void Load(string fileName, bool hasHeader, int skipLines)
 		{
-			using StreamReader reader = new(fileName, encoding);
+			using StreamReader reader = new(fileName, this.Encoding);
+			for (var i = 0; i < skipLines; i++)
+			{
+				reader.ReadLine();
+			}
+
 			this.ReadText(reader, hasHeader);
 		}
 
@@ -275,10 +279,21 @@
 		/// <summary>Reads CSV text from a string.</summary>
 		/// <param name="txt">The CSV text.</param>
 		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void ReadText(string txt, bool hasHeader)
+		public void ReadText(string txt, bool hasHeader) => this.ReadText(txt, hasHeader, 0);
+
+		/// <summary>Reads CSV text from a string.</summary>
+		/// <param name="txt">The CSV text.</param>
+		/// <param name="hasHeader">Whether or not the data has a header.</param>
+		/// <param name="skipLines">The number of lines to ignore at the beginning of the file.</param>
+		public void ReadText(string txt, bool hasHeader, int skipLines)
 		{
-			using StringReader textReader = new(txt);
-			this.ReadText(textReader, hasHeader);
+			using StringReader reader = new(txt);
+			for (var i = 0; i < skipLines; i++)
+			{
+				reader.ReadLine();
+			}
+
+			this.ReadText(reader, hasHeader);
 		}
 
 		/// <summary>Reads an entire file from a <see cref="TextReader"/> derivative.</summary>
@@ -289,11 +304,6 @@
 			ArgumentNullException.ThrowIfNull(reader);
 			this.Header = null;
 			this.Clear();
-			for (var i = 0; i < this.SkipLines; i++)
-			{
-				reader.ReadLine();
-			}
-
 			if (hasHeader)
 			{
 				var header = this.ReadRow(reader);
@@ -374,17 +384,12 @@
 		/// <param name="index">The zero-based index of the row to remove.</param>
 		public void RemoveAt(int index) => this.rows.RemoveAt(index);
 
-		/// <summary>Writes a CSV file to the specified file with UTF-8 encoding.</summary>
+		/// <summary>Saves a CSV file to the specified file with UTF-8 encoding.</summary>
 		/// <param name="fileName">The name of the file.</param>
-		public void WriteFile(string fileName) => this.WriteFile(fileName, Encoding.UTF8);
-
-		/// <summary>Writes a CSV file to the specified file.</summary>
-		/// <param name="fileName">The name of the file.</param>
-		/// <param name="encoding">The encoding.</param>
-		public void WriteFile(string fileName, Encoding encoding)
+		public void Save(string fileName)
 		{
 			using FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
-			using StreamWriter writeStream = new(fileStream, encoding);
+			using StreamWriter writeStream = new(fileStream, this.Encoding);
 			this.WriteText(writeStream);
 		}
 

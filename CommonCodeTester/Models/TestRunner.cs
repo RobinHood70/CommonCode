@@ -1,6 +1,7 @@
 ﻿namespace RobinHood70.CommonCodeTester.Models
 {
 	using System;
+	using System.Diagnostics;
 	using RobinHood70.CommonCode;
 	using RobinHood70.CommonCodeTester.Views;
 
@@ -29,6 +30,21 @@
 		{
 			var csv = new CsvFile();
 			csv.Load(@"D:\Data\HoodBot\Starfield\Quests.csv", true);
+			if (csv.Header is not null)
+			{
+				foreach (var field in csv.Header)
+				{
+					Debug.WriteLine(field);
+				}
+			}
+
+			foreach (var row in csv)
+			{
+				foreach (var col in row)
+				{
+					Debug.WriteLine(col);
+				}
+			}
 		}
 	}
 }
