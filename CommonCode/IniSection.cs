@@ -19,9 +19,11 @@
 		/// <param name="keys">The section's keys.</param>
 		public IniSection(string name, IEnumerable<string> keys)
 		{
-			this.Name = name.NotNull();
+			ArgumentNullException.ThrowIfNull(name);
+			ArgumentNullException.ThrowIfNull(keys);
+			this.Name = name;
 			List<IniKey> list = [];
-			foreach (var key in keys.NotNull())
+			foreach (var key in keys)
 			{
 				list.Add(new IniKey(key.Trim()));
 			}

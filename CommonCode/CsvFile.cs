@@ -101,8 +101,9 @@
 		/// <returns>The CsvRow that was added.</returns>
 		public CsvRow Add(IEnumerable<object> fields)
 		{
+			ArgumentNullException.ThrowIfNull(fields);
 			List<string> list = [];
-			foreach (var item in fields.NotNull())
+			foreach (var item in fields)
 			{
 				if (item.ToString() is string value)
 				{
@@ -121,14 +122,19 @@
 		/// <summary>Adds the specified field values.</summary>
 		/// <param name="fields">The field values.</param>
 		/// <returns>The CsvRow that was added.</returns>
-		public CsvRow Add(IEnumerable<string> fields) => this.Add(new CsvRow(fields.NotNull(), this.nameMap));
+		public CsvRow Add(IEnumerable<string> fields)
+		{
+			ArgumentNullException.ThrowIfNull(fields);
+			return this.Add(new CsvRow(fields, this.nameMap));
+		}
 
 		/// <summary>Adds a <see cref="CsvRow"/> directly to the file.</summary>
 		/// <param name="item">The row to add to the file.</param>
 		/// <returns>The original <paramref name="item"/> parameter.</returns>
 		public CsvRow Add(CsvRow item)
 		{
-			this.rows.Add(item.NotNull());
+			ArgumentNullException.ThrowIfNull(item);
+			this.rows.Add(item);
 			return item;
 		}
 
@@ -182,7 +188,7 @@
 		/// <returns>A <see cref="CsvRow"/> with the field values. If names are provided and not enough fields are present to match the name count, the row will be padded with empty strings.</returns>
 		public IEnumerable<string>? ReadRow(TextReader reader)
 		{
-			reader.ThrowNull();
+			ArgumentNullException.ThrowIfNull(reader);
 			List<string> fields = new(this.nameMap.Count);
 			StringBuilder field = new();
 			var endOfLine = false;
@@ -396,14 +402,19 @@
 		/// <summary>Writes a row to the specified <see cref="TextWriter"/> derivative.</summary>
 		/// <param name="writer">The <see cref="TextWriter"/> derivative to write to.</param>
 		/// <param name="row">The values for the row. This parameter allows for any string enumeration and may thus be either plain data or a <see cref="CsvRow"/>.</param>
-		public void WriteRow(TextWriter writer, IEnumerable<string> row) => this.InternalWriteRow(writer.NotNull(), row.NotNull(), 0, this.GetSpecialCharacters());
+		public void WriteRow(TextWriter writer, IEnumerable<string> row)
+		{
+			ArgumentNullException.ThrowIfNull(writer);
+			ArgumentNullException.ThrowIfNull(row);
+			this.InternalWriteRow(writer, row, 0, this.GetSpecialCharacters());
+		}
 
 		/// <summary>Writes the file to the specified <see cref="TextWriter"/> derivative.</summary>
 		/// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
 		public void WriteText(TextWriter writer)
 		{
 			// We're allowing rows to be ragged internally, so figure out the highest column count and use that. If a header is specified, that always takes priority. Count could, of course, just be assumed from the first row, but even in a large list, the scan is very quick, so there's no reason not to.
-			writer.ThrowNull();
+			ArgumentNullException.ThrowIfNull(writer);
 			int columnCount;
 			var specialChars = this.GetSpecialCharacters();
 			if (this.Header != null)

@@ -22,7 +22,7 @@
 		/// <exception cref="ArgumentException">Invalid INI line. There is more than one equals sign on the line, or there are no equals signs, and <paramref name="allowComments"/> is false.</exception>
 		public IniKey(string line, bool allowComments)
 		{
-			line.ThrowNull();
+			ArgumentNullException.ThrowIfNull(line);
 			if (allowComments)
 			{
 				var delimiters = new string[IniFile.CommentDelimiters.Count];
@@ -67,8 +67,10 @@
 		/// <param name="comment">The comment.</param>
 		public IniKey(string name, string value, string? comment)
 		{
-			this.Name = name.NotNull().Trim();
-			this.Value = value.NotNull().Trim();
+			ArgumentNullException.ThrowIfNull(name);
+			ArgumentNullException.ThrowIfNull(value);
+			this.Name = name.Trim();
+			this.Value = value.Trim();
 			this.Comment = comment?.Trim();
 		}
 		#endregion

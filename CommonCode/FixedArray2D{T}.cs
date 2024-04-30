@@ -35,7 +35,8 @@ namespace RobinHood70.CommonCode
 		public FixedArray2D(T[] array, int rows, int columns, bool readHorizontalFirst, int offset)
 		{
 			// Currently ignores if array is too big.
-			if (array.NotNull().Length < rows * columns + offset)
+			ArgumentNullException.ThrowIfNull(array);
+			if (array.Length < rows * columns + offset)
 			{
 				throw new ArgumentException(Resources.ArrayTooSmall, nameof(array));
 			}

@@ -19,7 +19,8 @@
 		/// <returns>The string.</returns>
 		public static string BString8(this BinaryReader reader)
 		{
-			var size = reader.NotNull().ReadByte();
+			ArgumentNullException.ThrowIfNull(reader);
+			var size = reader.ReadByte();
 			return new string(reader.ReadChars(size));
 		}
 
@@ -29,8 +30,9 @@
 		/// <remarks>For fixed-length strings, it's normally better to read the entire thing and then trim everything after the null. This function is intended for those cases where the length is unknown.</remarks>
 		public static string ZString(this BinaryReader reader)
 		{
+			ArgumentNullException.ThrowIfNull(reader);
 			StringBuilder retval = new();
-			var c = reader.NotNull().ReadChar();
+			var c = reader.ReadChar();
 			while (c != '\0')
 			{
 				retval.Append(c);
@@ -119,18 +121,17 @@
 		/// <param name="values">The collection to be added.</param>
 		public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
 		{
-			if (values != null)
+			ArgumentNullException.ThrowIfNull(collection);
+			ArgumentNullException.ThrowIfNull(values);
+			if (collection is List<T> list)
 			{
-				if (collection.NotNull() is List<T> list)
+				list.AddRange(values);
+			}
+			else
+			{
+				foreach (var value in values)
 				{
-					list.AddRange(values);
-				}
-				else
-				{
-					foreach (var value in values)
-					{
-						collection.Add(value);
-					}
+					collection.Add(value);
 				}
 			}
 		}
@@ -146,8 +147,9 @@
 		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
 			where TKey : notnull
 		{
-			dictionary.ThrowNull();
-			foreach (var item in items.NotNull())
+			ArgumentNullException.ThrowIfNull(dictionary);
+			ArgumentNullException.ThrowIfNull(items);
+			foreach (var item in items)
 			{
 				dictionary.Add(item.Key, item.Value);
 			}
@@ -164,8 +166,11 @@
 		public static TValue First<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
 			where TKey : notnull
 		{
-			using var enumerator = dictionary.NotNull().GetEnumerator();
-			return enumerator.MoveNext() ? enumerator.Current.Value : throw new InvalidOperationException();
+			ArgumentNullException.ThrowIfNull(dictionary);
+			using var enumerator = dictionary.GetEnumerator();
+			return enumerator.MoveNext()
+				? enumerator.Current.Value
+				: throw new InvalidOperationException();
 		}
 		#endregion
 
@@ -192,8 +197,9 @@
 		public static bool Contains<T>(this IEnumerable<T> enumerable, T value, IEqualityComparer<T>? comparer)
 		{
 			// It's understandable why this wasn't in IEnumerable<T>, since enumerating can potentially be a slow-running operation, but it's beyond me why this wasn't put into IReadOnlyCollection<T>. MS covered it with Linq, using a virtually identical implementation to this, but that's still only a workaround (as is this).
+			ArgumentNullException.ThrowIfNull(enumerable);
 			comparer ??= EqualityComparer<T>.Default;
-			foreach (var item in enumerable.NotNull())
+			foreach (var item in enumerable)
 			{
 				if (comparer.Equals(item, value))
 				{
@@ -209,7 +215,9 @@
 		/// <param name="enumerable">The enumerable to convert.</param>
 		/// <param name="value">The value to find.</param>
 		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
-		public static bool ContainsValue<T>(this IEnumerable<T> enumerable, T value) => (enumerable as ICollection<T>)?.Contains(value) ?? Contains(enumerable, value, null);
+		public static bool ContainsValue<T>(this IEnumerable<T> enumerable, T value) => enumerable is ICollection<T> collection
+				? collection.Contains(value)
+				: Contains(enumerable, value, null);
 
 		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
 		/// <typeparam name="T">The collection type.</typeparam>
@@ -256,9 +264,11 @@
 		/// <summary>Convenience method to format any IFormattable value as an invariant value.</summary>
 		/// <param name="value">The value to format.</param>
 		/// <returns>The value as an invariant string.</returns>
-		public static string ToStringInvariant(this IFormattable value) => value
-			.NotNull()
-			.ToString(null, CultureInfo.InvariantCulture);
+		public static string ToStringInvariant(this IFormattable value)
+		{
+			ArgumentNullException.ThrowIfNull(value);
+			return value.ToString(null, CultureInfo.InvariantCulture);
+		}
 		#endregion
 
 		#region IList<T> Extensions
@@ -266,10 +276,11 @@
 		/// <summary>Shuffles the specified list into a random order.</summary>
 		/// <typeparam name="T">The list type.</typeparam>
 		/// <param name="list">The list.</param>
-		public static void Shuffle<T>(this IList<T>? list)
+		public static void Shuffle<T>(this IList<T> list)
 		{
+			ArgumentNullException.ThrowIfNull(list);
 			Random random = new();
-			var i = list.NotNull().Count - 1;
+			var i = list.Count - 1;
 			if (i <= 0)
 			{
 				return;
@@ -291,12 +302,13 @@
 		/// <param name="dictionary">The dictionary to search.</param>
 		/// <param name="key">The key to look for.</param>
 		/// <returns>The substitute value if one is found; otherwise, the original key.</returns>
-		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key) =>
-			dictionary
-			.NotNull()
-			.TryGetValue(key, out var retval)
+		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key)
+		{
+			ArgumentNullException.ThrowIfNull(dictionary);
+			return dictionary.TryGetValue(key, out var retval)
 				? retval
 				: key;
+		}
 
 		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
 		/// <typeparam name="TKey">The type for the key.</typeparam>
@@ -305,12 +317,13 @@
 		/// <param name="key">The key to look for.</param>
 		/// <param name="defaultValue">The default value to use if the key is not found.</param>
 		/// <returns>The substitute value if one is found; otherwise, the default value.</returns>
-		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue) =>
-			dictionary
-			.NotNull()
-			.TryGetValue(key, out var retval)
+		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+		{
+			ArgumentNullException.ThrowIfNull(dictionary);
+			return dictionary.TryGetValue(key, out var retval)
 				? retval
 				: defaultValue;
+		}
 		#endregion
 
 		#region LinkedList<T> Extensions
@@ -322,9 +335,10 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			list.ThrowNull();
-			node.ThrowNull();
-			foreach (var newNode in values.NotNull())
+			ArgumentNullException.ThrowIfNull(list);
+			ArgumentNullException.ThrowIfNull(node);
+			ArgumentNullException.ThrowIfNull(values);
+			foreach (var newNode in values)
 			{
 				node = list.AddAfter(node, newNode);
 			}
@@ -337,9 +351,10 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedList<T> list, LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			list.ThrowNull();
-			node.ThrowNull();
-			foreach (var newNode in values.NotNull())
+			ArgumentNullException.ThrowIfNull(list);
+			ArgumentNullException.ThrowIfNull(node);
+			ArgumentNullException.ThrowIfNull(values);
+			foreach (var newNode in values)
 			{
 				list.AddBefore(node, newNode);
 			}
@@ -355,10 +370,13 @@
 		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
-		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value) =>
-			node.NotNull().List is LinkedList<T> list
+		public static LinkedListNode<T> AddAfter<T>(this LinkedListNode<T> node, T value)
+		{
+			ArgumentNullException.ThrowIfNull(node);
+			return node.List is LinkedList<T> list
 				? list.AddAfter(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
+		}
 
 		/// <summary>Adds a collection of values to the list in the order provided.</summary>
 		/// <typeparam name="T">The element type of the linked list.</typeparam>
@@ -366,9 +384,11 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddAfter<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			if (node.NotNull().List is LinkedList<T> list)
+			ArgumentNullException.ThrowIfNull(node);
+			ArgumentNullException.ThrowIfNull(values);
+			if (node.List is LinkedList<T> list)
 			{
-				foreach (var newNode in values.NotNull())
+				foreach (var newNode in values)
 				{
 					node = list.AddAfter(node, newNode);
 				}
@@ -382,10 +402,13 @@
 		/// <returns>The new <see cref="LinkedListNode{T}"/> containing value.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="node"/> is null.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when <paramref name="node"/> does not belong to a linked list.</exception>
-		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value) =>
-			node.NotNull().List is LinkedList<T> list
+		public static LinkedListNode<T> AddBefore<T>(this LinkedListNode<T> node, T value)
+		{
+			ArgumentNullException.ThrowIfNull(node);
+			return node.List is LinkedList<T> list
 				? list.AddBefore(node, value)
 				: throw new InvalidOperationException(Resources.NoNodeList);
+		}
 
 		/// <summary>Adds a collection of values to the list in the order provided.</summary>
 		/// <typeparam name="T">The element type of the linked list.</typeparam>
@@ -393,9 +416,11 @@
 		/// <param name="values">The values to add.</param>
 		public static void AddBefore<T>(this LinkedListNode<T> node, IEnumerable<T> values)
 		{
-			if (node.NotNull().List is LinkedList<T> list)
+			ArgumentNullException.ThrowIfNull(node);
+			ArgumentNullException.ThrowIfNull(values);
+			if (node.List is LinkedList<T> list)
 			{
-				foreach (var newNode in values.NotNull())
+				foreach (var newNode in values)
 				{
 					list.AddBefore(node, newNode);
 				}
@@ -428,12 +453,13 @@
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
 		public static string LowerFirst(this string text, CultureInfo culture)
 		{
+			ArgumentNullException.ThrowIfNull(culture);
 			if (string.IsNullOrEmpty(text))
 			{
 				return text;
 			}
 
-			var retval = text[..1].ToLower(culture.NotNull());
+			var retval = text[..1].ToLower(culture);
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 
@@ -482,12 +508,13 @@
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
 		public static string UpperFirst(this string text, CultureInfo culture)
 		{
+			ArgumentNullException.ThrowIfNull(culture);
 			if (string.IsNullOrEmpty(text))
 			{
 				return text;
 			}
 
-			var retval = text[..1].ToUpper(culture.NotNull());
+			var retval = text[..1].ToUpper(culture);
 			return text.Length == 1 ? retval : retval + text[1..];
 		}
 		#endregion

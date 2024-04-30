@@ -100,7 +100,8 @@
 				return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
 			}
 
-			return values.NotNull().Length switch
+			ArgumentNullException.ThrowIfNull(values);
+			return values.Length switch
 			{
 				0 => string.Format(CultureInfo.CurrentCulture, text, firstValue),
 				1 => string.Format(CultureInfo.CurrentCulture, text, firstValue, values[0]),
@@ -173,7 +174,7 @@
 		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
 		public static string GetHash(byte[] data, HashType hashType)
 		{
-			data.ThrowNull();
+			ArgumentNullException.ThrowIfNull(data);
 
 #pragma warning disable CA5350 // Do Not Use Weak Cryptographic Algorithms
 #pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
@@ -206,7 +207,11 @@
 		/// <returns>The formatted text.</returns>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="formattable"/> is null.</exception>
 		// Copy of the same-named method from the FormattableString code so that all culture methods are in the same library.
-		public static string Invariant(FormattableString formattable) => formattable.NotNull().ToString(CultureInfo.InvariantCulture);
+		public static string Invariant(FormattableString formattable)
+		{
+			ArgumentNullException.ThrowIfNull(formattable);
+			return formattable.ToString(CultureInfo.InvariantCulture);
+		}
 
 		/// <summary>Compares nullable types based only on the nullability of the values provided.</summary>
 		/// <typeparam name="T">The data type.</typeparam>
@@ -233,8 +238,9 @@
 		/// <returns>The sanitized file name.</returns>
 		public static string SanitizeFilename(string filename)
 		{
+			ArgumentNullException.ThrowIfNull(filename);
 			var invalidChars = Path.GetInvalidFileNameChars();
-			var split = filename.NotNull().Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
+			var split = filename.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 
