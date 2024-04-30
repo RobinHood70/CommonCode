@@ -177,9 +177,9 @@
 		/// <returns>The existing enumerable as an IReadOnlyList or a new list.</returns>
 		public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T>? enumerable) => enumerable switch
 		{
-			null => Array.Empty<T>(),
+			null => [],
 			IReadOnlyList<T> list => list,
-			var other when other.IsEmpty() => Array.Empty<T>(),
+			var other when other.IsEmpty() => [],
 			_ => new List<T>(enumerable),
 		};
 

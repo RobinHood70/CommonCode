@@ -12,7 +12,7 @@
 	public sealed class CsvFile : IList<CsvRow>
 	{
 		#region Fields
-		private readonly List<CsvRow> rows = new();
+		private readonly List<CsvRow> rows = [];
 		private readonly Dictionary<string, int> nameMap = new(StringComparer.Ordinal);
 		private IEnumerable<string>? headerRow;
 		#endregion
@@ -101,7 +101,7 @@
 		/// <returns>The CsvRow that was added.</returns>
 		public CsvRow Add(IEnumerable<object> fields)
 		{
-			List<string> list = new();
+			List<string> list = [];
 			foreach (var item in fields.NotNull())
 			{
 				if (item.ToString() is string value)
@@ -443,8 +443,7 @@
 		#region Private Methods
 		private char[] GetSpecialCharacters()
 		{
-			List<char> specialList = new()
-			{ '\n', '\r', '\u2028', '\u2029', this.FieldSeparator };
+			List<char> specialList = ['\n', '\r', '\u2028', '\u2029', this.FieldSeparator];
 			if (this.EscapeCharacter.HasValue)
 			{
 				specialList.Add(this.EscapeCharacter.Value);
@@ -455,7 +454,7 @@
 				specialList.Add(this.FieldDelimiter.Value);
 			}
 
-			return specialList.ToArray();
+			return [.. specialList];
 		}
 
 		private void InternalWriteRow(TextWriter textWriter, IEnumerable<string> row, int columnCount, char[] specialChars)

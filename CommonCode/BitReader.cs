@@ -19,10 +19,13 @@
 		/// <param name="rawData">The data to work on.</param>
 		public BitReader(byte[] rawData)
 		{
-			this.rawData = rawData
-				.Validate()
-				.NotNullOrEmpty()
-				.Value;
+			ArgumentNullException.ThrowIfNull(rawData);
+			if (rawData.Length == 0)
+			{
+				throw new InvalidOperationException(Globals.CurrentCulture(Resources.CollectionEmpty, nameof(rawData)));
+			}
+
+			this.rawData = rawData;
 		}
 		#endregion
 

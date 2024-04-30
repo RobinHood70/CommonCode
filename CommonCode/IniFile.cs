@@ -9,7 +9,7 @@
 	public class IniFile : IReadOnlyList<IniSection>
 	{
 		#region Fields
-		private readonly List<IniSection> sections = new();
+		private readonly List<IniSection> sections = [];
 		#endregion
 
 		#region Constructors
@@ -39,7 +39,7 @@
 		#region Public Static Properties
 
 		/// <summary>Gets the characters that constitute comment delimiters. Note that at this point, the handling is very simple, so strings like // or /* */ cannot be dealt with.</summary>
-		public static IList<string> CommentDelimiters { get; } = new List<string> { ";" };
+		public static IList<string> CommentDelimiters { get; } = [";"];
 		#endregion
 
 		#region Public Properties
@@ -80,7 +80,7 @@
 		private void ReadStream(StreamReader stream)
 		{
 			var name = string.Empty;
-			List<string> lines = new();
+			List<string> lines = [];
 			if (stream.BaseStream is FileStream fileStream)
 			{
 				this.FileName = fileStream.Name;
@@ -99,7 +99,7 @@
 						}
 
 						name = trimmedLine[1..^1];
-						lines = new List<string>();
+						lines = [];
 					}
 					else
 					{

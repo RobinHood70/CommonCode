@@ -92,12 +92,11 @@
 		{
 			static string ManyValues(string text, object? firstValue, object?[] values)
 			{
-				List<object?>? combinedValues = new(values.Length + 1)
-				{
-					firstValue
-				};
+				List<object?>? combinedValues =
+				[
+					firstValue, .. values
+				];
 
-				combinedValues.AddRange(values);
 				return string.Format(CultureInfo.CurrentCulture, text, combinedValues);
 			}
 

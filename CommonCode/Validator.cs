@@ -23,7 +23,7 @@
 	public static class Validator
 	{
 		#region Fields
-		private static readonly IReadOnlyDictionary<ValidationType, string> ValueTypeTexts = new Dictionary<ValidationType, string>()
+		private static readonly Dictionary<ValidationType, string> ValueTypeTexts = new()
 		{
 			[ValidationType.Argument] = ValidatorMessages.Argument,
 			[ValidationType.Property] = ValidatorMessages.Property,

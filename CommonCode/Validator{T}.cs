@@ -6,25 +6,11 @@
 	using System.Diagnostics.CodeAnalysis;
 	using RobinHood70.CommonCode.Properties;
 
-	public class Validator<T>
+	public class Validator<T>(T? item, ValidationType validationType, string name)
 		where T : class?
 	{
-		#region Fields
-		private readonly ValidationType validationType;
-		private readonly string name;
-		#endregion
-
-		#region Constructors
-		public Validator(T? item, ValidationType validationType, string name)
-		{
-			this.NullableValue = item;
-			this.validationType = validationType;
-			this.name = name;
-		}
-		#endregion
-
 		#region Public Properties
-		public T? NullableValue { get; }
+		public T? NullableValue { get; } = item;
 
 		public T Value => this.NullableValue ?? throw Validator.GetException(ValidatorMessages.NullMessage);
 		#endregion
@@ -33,7 +19,7 @@
 		public Validator<TWanted> CastTo<TWanted>()
 			where TWanted : class? =>
 			this.Value is TWanted output
-				? new(output, this.validationType, this.name)
+				? new(output, validationType, name)
 				: throw Validator.GetException(ValidatorMessages.InvalidCast);
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Rule bug")]
@@ -65,8 +51,8 @@
 		// [MemberNotNull(nameof(NullableValue))]
 		public Validator<T> NotNull() => this.NullableValue is object
 			? this
-			: this.validationType == ValidationType.Argument
-				? throw new ArgumentNullException(this.name)
+			: validationType == ValidationType.Argument
+				? throw new ArgumentNullException(name)
 				: throw Validator.GetException(ValidatorMessages.NullMessage);
 
 		public Validator<T> NotNullOrWhiteSpace()
@@ -79,7 +65,7 @@
 				_ => this
 			};
 
-			return retval ?? throw Validator.ValidatorException(this.validationType, ValidatorMessages.NullOrWhitespaceMessage, this.name);
+			return retval ?? throw Validator.ValidatorException(validationType, ValidatorMessages.NullOrWhitespaceMessage, name);
 
 			Validator<T>? CheckStrings(IEnumerable<string> ienum)
 			{

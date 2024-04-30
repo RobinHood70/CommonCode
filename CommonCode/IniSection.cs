@@ -9,7 +9,7 @@
 	public class IniSection : IReadOnlyList<IniKey>
 	{
 		#region Fields
-		private readonly List<IniKey> keys = new();
+		private readonly List<IniKey> keys = [];
 		#endregion
 
 		#region Constructors
@@ -20,7 +20,7 @@
 		public IniSection(string name, IEnumerable<string> keys)
 		{
 			this.Name = name.NotNull();
-			List<IniKey> list = new();
+			List<IniKey> list = [];
 			foreach (var key in keys.NotNull())
 			{
 				list.Add(new IniKey(key.Trim()));

@@ -11,7 +11,7 @@
 		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common.pfx</AssemblyOriginatorKeyFile>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<RootNamespace>RobinHood70.CommonCodeTester</RootNamespace>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>

@@ -3,21 +3,13 @@
 	using System;
 	using System.Collections.Generic;
 
-	public sealed class ValueRange<T> : IEquatable<ValueRange<T>>
+	public sealed class ValueRange<T>(T min, T max) : IEquatable<ValueRange<T>>
 		where T : IComparable<T>
 	{
-		#region Constructor
-		public ValueRange(T min, T max)
-		{
-			this.Max = max;
-			this.Min = min;
-		}
-		#endregion
-
 		#region Public Properties
-		public T Max { get; set; }
+		public T Max { get; set; } = max;
 
-		public T Min { get; set; }
+		public T Min { get; set; } = min;
 		#endregion
 
 		#region Public Operators

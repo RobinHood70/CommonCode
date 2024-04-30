@@ -18,7 +18,7 @@
 		/// <param name="comparer">The comparer.</param>
 		public ComparableCollection(IEqualityComparer<T> comparer)
 		{
-			this.list = new();
+			this.list = [];
 			this.Comparer = comparer;
 		}
 

@@ -43,7 +43,7 @@
 				}
 			}
 
-			var split = line.Split(new[] { '=' }, 2);
+			var split = line.Split(TextArrays.EqualsSign, 2);
 			if (split.Length != 2)
 			{
 				throw new ArgumentException($"Invalid INI line: {line}", nameof(line));
