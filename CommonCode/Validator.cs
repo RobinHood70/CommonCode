@@ -64,11 +64,33 @@
 			where T : IEnumerable =>
 			NotNullOrEmpty(item, ValidationType.Argument, name);
 
+		public static ICollection<T> NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this ICollection<T> item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null) => item?.Count > 0 ? item : throw ValidatorException(validationType, ValidatorMessages.CollectionEmptyMessage, name);
+
 		public static T NotNullOrEmpty<T>([NotNull][ValidatedNotNull] this T? item, ValidationType validationType, [CallerArgumentExpression(nameof(item))] string? name = null)
-			where T : IEnumerable =>
-			(item != null && item.GetEnumerator().MoveNext())
-				? item
-				: throw ValidatorException(validationType, ValidatorMessages.StringEmptyMessage, name);
+			where T : IEnumerable
+		{
+			if (item is ICollection<T> coll)
+			{
+				if (coll.Count > 0)
+				{
+					return item;
+				}
+			}
+			else if (item is not null)
+			{
+				var iterator = item.GetEnumerator();
+				using (item as IDisposable)
+				using (iterator as IDisposable) // If iterator is not IDisposable, this does nothing.
+				{
+					if (iterator.MoveNext())
+					{
+						return item;
+					}
+				}
+			}
+
+			throw ValidatorException(validationType, ValidatorMessages.CollectionEmptyMessage, name);
+		}
 
 		public static string NotNullOrWhiteSpace([NotNull][ValidatedNotNull] this string? item, [CallerArgumentExpression(nameof(item))] string? name = null) =>
 			NotNullOrWhiteSpace(item, ValidationType.Argument, name);
