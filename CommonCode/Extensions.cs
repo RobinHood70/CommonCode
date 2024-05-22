@@ -511,13 +511,20 @@
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
-		public static string UpperFirst(this string text) => UpperFirst(text, CultureInfo.InvariantCulture);
+		public static string UpperFirst(this string text) => UpperFirst(text, CultureInfo.InvariantCulture, false);
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
 		/// <param name="culture">The culture to use for converting the first character to upper-case.</param>
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
-		public static string UpperFirst(this string text, CultureInfo culture)
+		public static string UpperFirst(this string text, CultureInfo culture) => UpperFirst(text, culture, false);
+
+		/// <summary>Converts the first character of a string to upper-case.</summary>
+		/// <param name="text">The string to alter.</param>
+		/// <param name="culture">The culture to use for converting the first character to upper-case.</param>
+		/// <param name="findFirstLetter">If <see langword="true"/>, searches for the first letter in the string instead of assuing it's at position 0.</param>
+		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
+		public static string UpperFirst(this string text, CultureInfo culture, bool findFirstLetter)
 		{
 			ArgumentNullException.ThrowIfNull(culture);
 			if (string.IsNullOrEmpty(text))
@@ -525,8 +532,30 @@
 				return text;
 			}
 
-			var retval = text[..1].ToUpper(culture);
-			return text.Length == 1 ? retval : retval + text[1..];
+			var charIndex = 0;
+			if (findFirstLetter)
+			{
+				while (charIndex < text.Length)
+				{
+					var c = text[charIndex];
+					if (char.IsLetter(c))
+					{
+						break;
+					}
+
+					charIndex++;
+				}
+			}
+			else
+			{
+				charIndex = 0;
+			}
+
+			var start = charIndex == 0 ? string.Empty : text[0..charIndex];
+			var upper = char.ToUpper(text[charIndex], culture);
+			var end = charIndex >= text.Length ? string.Empty : text[(charIndex + 1)..];
+
+			return string.Concat(start, upper, end);
 		}
 		#endregion
 
