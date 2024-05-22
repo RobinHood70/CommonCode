@@ -6,6 +6,7 @@
 	public static class TextArrays
 	{
 		// These are all implemented as public fields due to the fact that arrays are strongly discouraged as public properties and the methods these are intended for, such as string.Split, do not allow spans currently.
+		#region Character Arrays
 
 		/// <summary>A character array containing only an at sign.</summary>
 		public static readonly char[] At = ['@'];
@@ -58,11 +59,14 @@
 		/// <summary>A character array containing only a space.</summary>
 		public static readonly char[] Space = [' '];
 
-		/// <summary>A character array containing a open and close brackets (aka: square brackets).</summary>
+		/// <summary>A character array containing open and close square brackets.</summary>
 		public static readonly char[] SquareBrackets = ['[', ']'];
 
 		/// <summary>A character array containing only a tab character.</summary>
 		public static readonly char[] Tab = ['\t'];
+		#endregion
+
+		#region String Arrays
 
 		/// <summary>A string array containing a comma-space combination.</summary>
 		public static readonly string[] CommaSpace = [", "];
@@ -81,5 +85,6 @@
 
 		/// <summary>A string array containing only a MediaWiki template terminator (}}).</summary>
 		public static readonly string[] TemplateMarker = ["{{"];
+		#endregion
 	}
 }
