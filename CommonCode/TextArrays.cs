@@ -23,6 +23,9 @@
 		/// <summary>A character array containing only a comma.</summary>
 		public static readonly char[] Comma = [','];
 
+		/// <summary>A character array containing open and close curly brackets.</summary>
+		public static readonly char[] CurlyBrackets = ['{', '}'];
+
 		/// <summary>A character array containing only an equals sign.</summary>
 		public static readonly char[] EqualsSign = ['='];
 
