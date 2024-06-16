@@ -20,7 +20,7 @@
 		/// <param name="keyFunc">The function that provides the key for the collection.</param>
 		/// <param name="items">The items.</param>
 		public ReadOnlyKeyedCollection(Func<TItem, TKey> keyFunc, IEnumerable<TItem> items)
-			: this(keyFunc, items, null)
+			: this(keyFunc, items, comparer: null)
 		{
 		}
 

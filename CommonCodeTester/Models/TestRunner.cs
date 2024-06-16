@@ -29,7 +29,7 @@
 		public static void RunTests()
 		{
 			var csv = new CsvFile();
-			csv.Load(@"D:\Data\HoodBot\Starfield\Quests.csv", true);
+			csv.Load(@"D:\Data\HoodBot\Starfield\Quests.csv", hasHeader: true);
 			if (csv.Header is not null)
 			{
 				foreach (var field in csv.Header)

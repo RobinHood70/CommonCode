@@ -12,7 +12,7 @@
 		/// <summary>Initializes a new instance of the <see cref="IniKey"/> class.</summary>
 		/// <param name="line">The full line of text representing the key.</param>
 		public IniKey(string line)
-			: this(line, true)
+			: this(line, allowComments: true)
 		{
 		}
 
@@ -57,7 +57,7 @@
 		/// <param name="name">The key name.</param>
 		/// <param name="value">The key value.</param>
 		public IniKey(string name, string value)
-			: this(name, value, null)
+			: this(name, value, comment: null)
 		{
 		}
 

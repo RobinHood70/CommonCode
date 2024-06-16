@@ -217,7 +217,7 @@
 		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
 		public static bool ContainsValue<T>(this IEnumerable<T> enumerable, T value) => enumerable is ICollection<T> collection
 				? collection.Contains(value)
-				: Contains(enumerable, value, null);
+				: Contains(enumerable, value, comparer: null);
 
 		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
 		/// <typeparam name="T">The collection type.</typeparam>
@@ -278,7 +278,7 @@
 		public static string ToStringInvariant(this IFormattable value)
 		{
 			ArgumentNullException.ThrowIfNull(value);
-			return value.ToString(null, CultureInfo.InvariantCulture);
+			return value.ToString(format: null, CultureInfo.InvariantCulture);
 		}
 		#endregion
 
@@ -511,13 +511,13 @@
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
-		public static string UpperFirst(this string text) => UpperFirst(text, CultureInfo.InvariantCulture, false);
+		public static string UpperFirst(this string text) => UpperFirst(text, CultureInfo.InvariantCulture, findFirstLetter: false);
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
 		/// <param name="culture">The culture to use for converting the first character to upper-case.</param>
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
-		public static string UpperFirst(this string text, CultureInfo culture) => UpperFirst(text, culture, false);
+		public static string UpperFirst(this string text, CultureInfo culture) => UpperFirst(text, culture, findFirstLetter: false);
 
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>

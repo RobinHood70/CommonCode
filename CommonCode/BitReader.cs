@@ -183,7 +183,7 @@
 		/// <summary>Reads the specified number of bytes into a string.</summary>
 		/// <param name="count">The number of bytes to read.</param>
 		/// <returns>A string based on the specified data.</returns>
-		public string ReadString(int count) => this.ReadString(count, null);
+		public string ReadString(int count) => this.ReadString(count, encoding: null);
 
 		/// <summary>Reads the specified number of bytes into a string.</summary>
 		/// <param name="count">The number of bytes to read.</param>
@@ -229,7 +229,7 @@
 		/// <summary>Reads a null-terminated string using the specified encoding.</summary>
 		/// <param name="count">The number of characters to read.</param>
 		/// <returns>The null-terminated string found at the current position with the specified byte-length.</returns>
-		public string ReadZString(int count) => this.ReadZString(count, null);
+		public string ReadZString(int count) => this.ReadZString(count, encoding: null);
 
 		/// <summary>Reads a null-terminated string using the specified encoding.</summary>
 		/// <param name="count">The number of characters to read.</param>
