@@ -23,6 +23,11 @@
 		/// <value><see langword="true"/> if fields should always be delimited; otherwise, <see langword="false"/> (in which case, delimiting is automatic as needed).</value>
 		public bool AlwaysDelimitFields { get; set; } // CONSIDER: Replacing (or supplementing) this with a column format scheme. Note, however, that Excel doesn't always respect this in any event, so it should not be a priority.
 
+		/// <summary>Gets or sets a value indicating whether to trim whitespace surrounding a field.</summary>
+		/// <value><see langword="true"/> to trim undelimited whitespace surrounding a field; otherwise, <see langword="false"/>.</value>
+		/// <remarks>When this is set to <see langword="true"/>, a row of <c>ABC, DEF</c> will result in values of "ABC" and "DEF"; when false, the second value will be " DEF". Note that a delimited value, <c>"ABC"," DEF"</c> will always return " DEF" for the second value, regardless of this setting.</remarks>
+		public bool AutoTrim { get; set; } = true;
+
 		/// <summary>Gets the number of rows currently in the file.</summary>
 		public int Count => this.rows.Count;
 
@@ -70,11 +75,6 @@
 				}
 			}
 		}
-
-		/// <summary>Gets or sets a value indicating whether to ignore surrounding white space.</summary>
-		/// <value><see langword="true"/> if leading or trailing whitespace in a field should be ignored when no delimiter is present; otherwise, <see langword="false"/>.</value>
-		/// <remarks>When this is set to <see langword="true"/>, a row of <c>ABC, DEF</c> is treated the same as <c>ABC,DEF</c>; when false, the second value would be " DEF" rather than "DEF".</remarks>
-		public bool IgnoreSurroundingWhiteSpace { get; set; } = true;
 		#endregion
 
 		#region Interface Properties
@@ -258,7 +258,7 @@
 						default:
 							if (outsideValue)
 							{
-								if (!this.IgnoreSurroundingWhiteSpace || !char.IsWhiteSpace(character))
+								if (!this.AutoTrim || !char.IsWhiteSpace(character))
 								{
 									outsideValue = false;
 									field.Append(character);
