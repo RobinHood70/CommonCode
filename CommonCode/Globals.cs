@@ -138,6 +138,24 @@
 			return sb.ToString();
 		}
 
+		/// <summary>Performs a standard comparison for nullable types and if both are non-null, returns the result of the check provided.</summary>
+		/// <typeparam name="T">The data type.</typeparam>
+		/// <param name="x">The value to compare.</param>
+		/// <param name="y">The value to compare to.</param>
+		/// <param name="nonNull">The value to return if both x and y are non-null.</param>
+		/// <returns>A standard <see cref="IComparable.CompareTo(object?)"/> value.</returns>
+		public static int GenericComparer<T>(T? x, T? y, Func<T, T, int> nonNull)
+		{
+			ArgumentNullException.ThrowIfNull(nonNull);
+			return (x, y) switch
+			{
+				(not null, not null) => nonNull(x, y),
+				(not null, null) => 1,
+				(null, not null) => -1,
+				_ => 0
+			};
+		}
+
 		/// <summary>Attempts to figure out the culture associated with the language code, falling back progressively through parent languages.</summary>
 		/// <param name="languageCode">The language code to try.</param>
 		/// <returns>The nearest CultureInfo possible to the given <paramref name="languageCode"/> or CurrentCulture if nothing is found.</returns>
