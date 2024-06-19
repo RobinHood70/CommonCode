@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 
@@ -38,6 +39,7 @@
 		/// Less than zero: <paramref name="x" /> is less than <paramref name="y" />.
 		/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 		/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
+		[SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "False hit, culture is specified.")]
 		public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 		{
 			// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.
@@ -58,8 +60,8 @@
 			for (var i = 0; i < len; i++)
 			{
 				var result = (
-					double.TryParse(splitX[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numX) &&
-					double.TryParse(splitY[i], NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out var numY))
+					Parse(splitX[i], culture, out var numX) &&
+					Parse(splitY[i], culture, out var numY))
 						? numX.CompareTo(numY)
 						: string.Compare(splitX[i], splitY[i], culture, options);
 				if (result != 0)
@@ -69,6 +71,8 @@
 			}
 
 			return splitX.Length.CompareTo(splitY.Length);
+
+			static bool Parse(string value, CultureInfo culture, out double numX) => double.TryParse(value, NumberStyles.Float | NumberStyles.AllowThousands, culture.NumberFormat, out numX);
 		}
 		#endregion
 
