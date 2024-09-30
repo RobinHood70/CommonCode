@@ -1,4 +1,5 @@
-﻿namespace RobinHood70.CommonCode
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+namespace RobinHood70.CommonCode
 {
 	using System;
 	using System.Collections;
@@ -6,6 +7,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using RobinHood70.CommonCode.Properties;
 
+	[Obsolete("Replace with standard methods where possible.", false)]
 	public class Validator<T>(T? item, ValidationType validationType, string name)
 		where T : class?
 	{
@@ -83,3 +85,4 @@
 		#endregion
 	}
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

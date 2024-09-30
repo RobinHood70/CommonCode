@@ -1,4 +1,5 @@
-﻿namespace RobinHood70.CommonCode
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+namespace RobinHood70.CommonCode
 {
 	// TODO: Review all methods in this and the generic class to ensure consistent interace. Currently stripped down to only those methods that are actually in use.
 	using System;
@@ -183,3 +184,4 @@
 		#endregion
 	}
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
