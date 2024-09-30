@@ -186,32 +186,29 @@
 		}
 
 		/// <summary>Gets the requested type of hash for the byte data provided.</summary>
-		/// <param name="data">The byte data.</param>
+		/// <param name="buffer">The byte data.</param>
 		/// <param name="hashType">The type of the hash.</param>
 		/// <returns>The hash, represented as a <see cref="string"/>.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
-		public static string GetHash(byte[] data, HashType hashType)
+		public static string GetHash(byte[] buffer, HashType hashType)
 		{
-			ArgumentNullException.ThrowIfNull(data);
+			ArgumentNullException.ThrowIfNull(buffer);
+			using var algorithm = GetHashAlgorithm(hashType);
+			var hash = algorithm.ComputeHash(buffer);
+			return GetHashString(hash);
+		}
 
-#pragma warning disable CA5350 // Do Not Use Weak Cryptographic Algorithms
-#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
-			using var hash = hashType switch
-			{
-				HashType.Md5 => MD5.Create(),
-				HashType.Sha1 => SHA1.Create() as HashAlgorithm,
-				_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
-			};
-#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
-#pragma warning restore CA5350 // Do Not Use Weak Cryptographic Algorithms
-
-			StringBuilder sb = new(40);
-			foreach (var b in hash.ComputeHash(data))
-			{
-				sb.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
-			}
-
-			return sb.ToString();
+		/// <summary>Gets the requested type of hash for the byte data provided.</summary>
+		/// <param name="stream">The stream data.</param>
+		/// <param name="hashType">The type of the hash.</param>
+		/// <returns>The hash, represented as a <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hashType"/> is neither Md5 nor Sha1.</exception>
+		public static string GetHash(Stream stream, HashType hashType)
+		{
+			ArgumentNullException.ThrowIfNull(stream);
+			using var algorithm = GetHashAlgorithm(hashType);
+			var hash = algorithm.ComputeHash(stream);
+			return GetHashString(hash);
 		}
 
 		/// <summary>Gets the requested type of hash for the byte data provided.</summary>
@@ -262,6 +259,31 @@
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
 		}
 
+		#endregion
+
+		#region Private Methods
+
+#pragma warning disable CA5350 // Do Not Use Weak Cryptographic Algorithms
+#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
+		private static HashAlgorithm GetHashAlgorithm(HashType hashType) => hashType switch
+		{
+			HashType.Md5 => MD5.Create(),
+			HashType.Sha1 => SHA1.Create() as HashAlgorithm,
+			_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
+		};
+#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
+#pragma warning restore CA5350 // Do Not Use Weak Cryptographic Algorithms
+
+		private static string GetHashString(byte[] hash)
+		{
+			StringBuilder sb = new(40);
+			foreach (var b in hash)
+			{
+				sb.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+			}
+
+			return sb.ToString();
+		}
 		#endregion
 	}
 }
