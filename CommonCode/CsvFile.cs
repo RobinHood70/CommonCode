@@ -9,52 +9,63 @@
 
 	/// <summary>Reads or writes a CSV file, including tab-separated files and similar formats.</summary>
 	/// <remarks>This class is primarily designed to handle entire files at once. <see cref="TextReader"/>- and <see cref="TextWriter"/>-based methods are also available to support streaming and the like.</remarks>
-	public sealed class CsvFile : IList<CsvRow>
+	/// <remarks>Initializes a new instance of the <see cref="CsvFile"/> class.</remarks>
+	/// <param name="fullPath">The full path of the file.</param>
+	public sealed class CsvFile(string fullPath) : IList<CsvRow>
 	{
 		#region Fields
-		private readonly List<CsvRow> rows = [];
 		private readonly Dictionary<string, int> nameMap = new(StringComparer.Ordinal);
+		private readonly List<CsvRow> rows = [];
+
 		private IEnumerable<string>? headerRow;
 		#endregion
 
 		#region Public Properties
 
-		/// <summary>Gets or sets a value indicating whether fields should always be delimited as text.</summary>
+		/// <summary>Gets a value indicating whether fields should always be delimited as text.</summary>
 		/// <value><see langword="true"/> if fields should always be delimited; otherwise, <see langword="false"/> (in which case, delimiting is automatic as needed).</value>
-		public bool AlwaysDelimitFields { get; set; } // CONSIDER: Replacing (or supplementing) this with a column format scheme. Note, however, that Excel doesn't always respect this in any event, so it should not be a priority.
+		public bool AlwaysDelimitFields { get; init; } // CONSIDER: Replacing (or supplementing) this with a column format scheme. Note, however, that Excel doesn't always respect this in any event, so it should not be a priority.
 
-		/// <summary>Gets or sets a value indicating whether to trim whitespace surrounding a field.</summary>
+		/// <summary>Gets a value indicating whether to trim whitespace surrounding a field.</summary>
 		/// <value><see langword="true"/> to trim undelimited whitespace surrounding a field; otherwise, <see langword="false"/>.</value>
 		/// <remarks>When this is set to <see langword="true"/>, a row of <c>ABC, DEF</c> will result in values of "ABC" and "DEF"; when false, the second value will be " DEF". Note that a delimited value, <c>"ABC"," DEF"</c> will always return " DEF" for the second value, regardless of this setting.</remarks>
-		public bool AutoTrim { get; set; } = true;
+		public bool AutoTrim { get; init; } = true;
 
 		/// <summary>Gets the number of rows currently in the file.</summary>
 		public int Count => this.rows.Count;
 
-		/// <summary>Gets or sets a value indicating whether to double up the <see cref="FieldDelimiter"/> character if emitted as part of the field value or use the <see cref="EscapeCharacter"/>.</summary>
+		/// <summary>Gets a value indicating whether to double up the <see cref="FieldDelimiter"/> character if emitted as part of the field value or use the <see cref="EscapeCharacter"/>.</summary>
 		/// <value>
 		///   <see langword="true"/> if a delimiter character should be emitted twice; <see langword="false"/> if it should be escaped instead.</value>
-		public bool DoubleUpDelimiters { get; set; } = true;
+		public bool DoubleUpDelimiters { get; init; } = true;
 
-		/// <summary>Gets or sets the file encoding.</summary>
-		public Encoding Encoding { get; set; } = Encoding.UTF8;
+		/// <summary>Gets the file encoding.</summary>
+		/// <remarks>Currently, this can be specified either in the constructor or in the Load method; in future, it will only be available in the constructor.</remarks>
+		public Encoding Encoding { get; init; } = Encoding.UTF8;
 
-		/// <summary>Gets or sets the text to emit if a field is present but is an empty string.</summary>
+		/// <summary>Gets the text to emit if a field is present but is an empty string.</summary>
 		/// <value>The text to use for empty fields.</value>
 		/// <remarks>If this field is null, empty fields will be treated the same as null fields. If it's an empty string, two field delimiters will be emitted with nothing between them. For any other value, that value will be emitted, with field delimiters emitted (or not) as normal.</remarks>
-		public string EmptyFieldText { get; set; } = string.Empty;
+		public string EmptyFieldText { get; init; } = string.Empty;
 
-		/// <summary>Gets or sets the escape character.</summary>
+		/// <summary>Gets the escape character.</summary>
 		/// <value>The escape character.</value>
-		public char? EscapeCharacter { get; set; }
+		public char? EscapeCharacter { get; init; }
 
-		/// <summary>Gets or sets the field delimiter.</summary>
+		/// <summary>Gets the field delimiter.</summary>
 		/// <value>The field delimiter. Defaults to a double-quote (<c>"</c>).</value>
-		public char? FieldDelimiter { get; set; } = '"';
+		public char? FieldDelimiter { get; init; } = '"';
 
-		/// <summary>Gets or sets the field separator.</summary>
+		/// <summary>Gets the field separator.</summary>
 		/// <value>The field separator. Defaults to a comma (<c>,</c>).</value>
-		public char FieldSeparator { get; set; } = ',';
+		public char FieldSeparator { get; init; } = ',';
+
+		/// <summary>Gets the full path to the file to load.</summary>
+		/// <remarks>Currently, this can be specified either in the constructor or in the Load method; in future, it will only be available in the constructor.</remarks>
+		public string FullPath { get; } = fullPath;
+
+		/// <summary>Gets a value indicating whether the text file contains a header or not.</summary>
+		public bool HasHeader { get; init; }
 
 		/// <summary>Gets or sets the header row.</summary>
 		/// <value>The header row. <see langword="null"/> if there is no header row (<c>HasHeader = false</c> or there are no rows in the file).</value>
@@ -67,14 +78,19 @@
 				this.nameMap.Clear();
 				if (value is not null)
 				{
-					foreach (var field in value)
+					foreach (var fieldName in value)
 					{
-						Console.WriteLine(field);
-						this.nameMap.Add(field, this.nameMap.Count);
+						var trimmed = this.AutoTrim
+							? fieldName.Trim()
+							: fieldName;
+						this.nameMap.Add(trimmed, this.nameMap.Count);
 					}
 				}
 			}
 		}
+
+		/// <summary>Gets the number of lines to skip if the file has rows before the header row or first line of data.</summary>
+		public int SkipLines { get; init; }
 		#endregion
 
 		#region Interface Properties
@@ -83,7 +99,7 @@
 
 		#region Public Indexers
 
-		/// <summary>Gets or sets the <see cref="CsvRow"/> at the specified index.</summary>
+		/// <summary>Gets the <see cref="CsvRow"/> at the specified index.</summary>
 		/// <param name="index">The index.</param>
 		/// <value>The <see cref="CsvRow"/>.</value>
 		/// <returns>The row at the specified index.</returns>
@@ -164,23 +180,15 @@
 		public void Insert(int index, CsvRow item) => this.rows.Insert(index, item);
 
 		/// <summary>Reads and parses a CSV file.</summary>
-		/// <param name="fileName">Name of the file.</param>
-		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void Load(string fileName, bool hasHeader) => this.Load(fileName, hasHeader, 0);
-
-		/// <summary>Reads and parses a CSV file.</summary>
-		/// <param name="fileName">Name of the file.</param>
-		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		/// <param name="skipLines">The number of lines to ignore at the beginning of the file.</param>
-		public void Load(string fileName, bool hasHeader, int skipLines)
+		public void Load()
 		{
-			using StreamReader reader = new(fileName, this.Encoding);
-			for (var i = 0; i < skipLines; i++)
+			using StreamReader reader = new(this.FullPath, this.Encoding);
+			for (var i = 0; i < this.SkipLines; i++)
 			{
 				reader.ReadLine();
 			}
 
-			this.ReadText(reader, hasHeader);
+			this.ReadText(reader);
 		}
 
 		/// <summary>Reads a single row from a <see cref="TextReader"/>.</summary>
@@ -282,35 +290,14 @@
 			return fields.Count == 0 ? null : fields;
 		}
 
-		/// <summary>Reads CSV text from a string.</summary>
-		/// <param name="txt">The CSV text.</param>
-		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void ReadText(string txt, bool hasHeader) => this.ReadText(txt, hasHeader, 0);
-
-		/// <summary>Reads CSV text from a string.</summary>
-		/// <param name="txt">The CSV text.</param>
-		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		/// <param name="skipLines">The number of lines to ignore at the beginning of the file.</param>
-		public void ReadText(string txt, bool hasHeader, int skipLines)
-		{
-			using StringReader reader = new(txt);
-			for (var i = 0; i < skipLines; i++)
-			{
-				reader.ReadLine();
-			}
-
-			this.ReadText(reader, hasHeader);
-		}
-
 		/// <summary>Reads an entire file from a <see cref="TextReader"/> derivative.</summary>
 		/// <param name="reader">The <see cref="TextReader"/> to read from.</param>
-		/// <param name="hasHeader">Whether or not the data has a header.</param>
-		public void ReadText(TextReader reader, bool hasHeader)
+		public void ReadText(TextReader reader)
 		{
 			ArgumentNullException.ThrowIfNull(reader);
 			this.Header = null;
 			this.Clear();
-			if (hasHeader)
+			if (this.HasHeader)
 			{
 				var header = this.ReadRow(reader);
 				if (header is null)
@@ -318,13 +305,12 @@
 					return;
 				}
 
-				var newHeader = new List<string>();
-				foreach (var name in header)
+				/* if (this.AutoTrim)
 				{
-					newHeader.Add(name.Trim());
-				}
+					header = header.Select(element => element.Trim());
+				} */
 
-				this.Header = newHeader;
+				this.Header = header;
 			}
 
 			IEnumerable<string>? row;
@@ -391,10 +377,9 @@
 		public void RemoveAt(int index) => this.rows.RemoveAt(index);
 
 		/// <summary>Saves a CSV file to the specified file with UTF-8 encoding.</summary>
-		/// <param name="fileName">The name of the file.</param>
-		public void Save(string fileName)
+		public void Save()
 		{
-			using FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+			using FileStream fileStream = new(this.FullPath, FileMode.Create, FileAccess.Write, FileShare.None);
 			using StreamWriter writeStream = new(fileStream, this.Encoding);
 			this.WriteText(writeStream);
 		}
