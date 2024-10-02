@@ -65,7 +65,7 @@
 		public string FullPath { get; } = fullPath;
 
 		/// <summary>Gets a value indicating whether the text file contains a header or not.</summary>
-		public bool HasHeader { get; init; }
+		public bool HasHeader { get; init; } = true;
 
 		/// <summary>Gets or sets the header row.</summary>
 		/// <value>The header row. <see langword="null"/> if there is no header row (<c>HasHeader = false</c> or there are no rows in the file).</value>
