@@ -122,5 +122,23 @@ namespace RobinHood70.CommonCode.Properties {
                 return ResourceManager.GetString("NotAtEnd", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is null..
+        /// </summary>
+        internal static string NullMessage {
+            get {
+                return ResourceManager.GetString("NullMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value specified is null..
+        /// </summary>
+        internal static string UnknownNullMessage {
+            get {
+                return ResourceManager.GetString("UnknownNullMessage", resourceCulture);
+            }
+        }
     }
 }

@@ -138,4 +138,10 @@
   <data name="NotAtEnd" xml:space="preserve">
     <value>{0} is not at end of data.</value>
   </data>
+  <data name="NullMessage" xml:space="preserve">
+    <value>{0} is null.</value>
+  </data>
+  <data name="UnknownNullMessage" xml:space="preserve">
+    <value>The value specified is null.</value>
+  </data>
 </root>

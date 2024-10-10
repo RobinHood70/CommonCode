@@ -3,10 +3,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
+	using RobinHood70.CommonCode.Properties;
 
 	#region Public Delegates
 
@@ -257,6 +259,22 @@
 			var invalidChars = Path.GetInvalidFileNameChars();
 			var split = filename.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join('_', split).TrimEnd(TextArrays.Period);
+		}
+
+		/// <summary>Generic method that throws if a value is null. Intended for properties and method results rather than arguments.</summary>
+		/// <typeparam name="T">The type of the value.</typeparam>
+		/// <param name="value">The value to check.</param>
+		/// <param name="names">The path to the value.</param>
+		/// <exception cref="InvalidOperationException">Thrown if the value is null.</exception>
+		public static void ThrowIfNull([NotNull] object? value, params string[] names)
+		{
+			if (value is null)
+			{
+				var msg = (names is null || names.Length == 0)
+					? Resources.UnknownNullMessage
+					: Globals.CurrentCulture(Resources.NullMessage, string.Join('.', names) + " is null.");
+				throw new InvalidOperationException(msg);
+			}
 		}
 
 		#endregion
