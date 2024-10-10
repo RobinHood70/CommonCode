@@ -33,6 +33,7 @@
 				HasHeader = true
 			};
 
+			csv.Load();
 			if (csv.Header is not null)
 			{
 				foreach (var field in csv.Header)
