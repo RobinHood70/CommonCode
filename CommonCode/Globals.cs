@@ -262,7 +262,6 @@
 		}
 
 		/// <summary>Generic method that throws if a value is null. Intended for properties and method results rather than arguments.</summary>
-		/// <typeparam name="T">The type of the value.</typeparam>
 		/// <param name="value">The value to check.</param>
 		/// <param name="names">The path to the value.</param>
 		/// <exception cref="InvalidOperationException">Thrown if the value is null.</exception>
