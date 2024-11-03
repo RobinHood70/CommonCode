@@ -79,15 +79,6 @@ namespace RobinHood70.CommonCode.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple items with the same key were found in the provided collection. Key: {0}.
-        /// </summary>
-        internal static string DuplicateKeyInItems {
-            get {
-                return ResourceManager.GetString("DuplicateKeyInItems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Array bounds must be greater than zero..
         /// </summary>
         internal static string InvalidArrayBounds {
