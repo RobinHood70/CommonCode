@@ -563,8 +563,13 @@
 #if DEBUG
 #pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
 
-		// Any calls to any of these methods should be replaced by native methods/properties.
-		public static void AddRange<T>(this List<T> list, params T[] values) => list.NotNull().AddRange(values.NotNull());
+		// Calls to any of these methods should be replaced by native methods/properties.
+		public static void AddRange<T>(this List<T> list, params T[] values)
+		{
+			ArgumentNullException.ThrowIfNull(list);
+			ArgumentNullException.ThrowIfNull(values);
+			list.AddRange(values);
+		}
 
 		public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
 
