@@ -40,6 +40,9 @@
 	{
 		#region Public Constants
 
+		/// <summary>A good general time to abort Regex operations after.</summary>
+		public const int DefaultGeneratedRegexTimeout = 5000;
+
 		/// <summary>Constant text "Unknown" for times when localized text is unwanted/unavailable.</summary>
 		public const string Unknown = "Unknown";
 		#endregion
@@ -47,7 +50,7 @@
 		#region Public Properties
 
 		/// <summary>Gets a <see cref="TimeSpan"/> that is a good general time to abort Regex operations after.</summary>
-		public static TimeSpan DefaultRegexTimeout { get; } = TimeSpan.FromSeconds(5);
+		public static TimeSpan DefaultRegexTimeout { get; } = TimeSpan.FromMilliseconds(DefaultGeneratedRegexTimeout);
 		#endregion
 
 		#region Public Methods
