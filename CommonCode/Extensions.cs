@@ -1,48 +1,14 @@
 ﻿namespace RobinHood70.CommonCode
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
-	using System.IO;
-	using System.Text;
 	using RobinHood70.CommonCode.Properties;
 
 	/// <summary>Extension methods for a variety of types.</summary>
 	public static class Extensions
 	{
-		#region BinaryReader Extensions
-
-		/// <summary>Reads a length-prefixed string. Both length and characters should be bytes.</summary>
-		/// <param name="reader">The <see cref="BinaryReader"/> to read from.</param>
-		/// <returns>The string.</returns>
-		public static string BString8(this BinaryReader reader)
-		{
-			ArgumentNullException.ThrowIfNull(reader);
-			var size = reader.ReadByte();
-			return new string(reader.ReadChars(size));
-		}
-
-		/// <summary>Reads a null-terminated string. Characters should be bytes.</summary>
-		/// <param name="reader">The <see cref="BinaryReader"/> to read from.</param>
-		/// <returns>The string.</returns>
-		/// <remarks>For fixed-length strings, it's normally better to read the entire thing and then trim everything after the null. This function is intended for those cases where the length is unknown.</remarks>
-		public static string ZString(this BinaryReader reader)
-		{
-			ArgumentNullException.ThrowIfNull(reader);
-			StringBuilder retval = new();
-			var c = reader.ReadChar();
-			while (c != '\0')
-			{
-				retval.Append(c);
-				c = reader.ReadChar();
-			}
-
-			return retval.ToString();
-		}
-		#endregion
-
 		#region Double Extensions
 
 		/// <summary>Rounds the desired value to a given number of significant digits.</summary>
@@ -123,54 +89,10 @@
 		{
 			ArgumentNullException.ThrowIfNull(collection);
 			ArgumentNullException.ThrowIfNull(values);
-			if (collection is List<T> list)
+			foreach (var value in values)
 			{
-				list.AddRange(values);
+				collection.Add(value);
 			}
-			else
-			{
-				foreach (var value in values)
-				{
-					collection.Add(value);
-				}
-			}
-		}
-		#endregion
-
-		#region IDictionary<TKey, TValue> Extensions
-
-		/// <summary>Adds the items from one dictionary (or other set of key-value pairs) to another.</summary>
-		/// <typeparam name="TKey">The type of the key.</typeparam>
-		/// <typeparam name="TValue">The type of the value.</typeparam>
-		/// <param name="dictionary">The dictionary to add to.</param>
-		/// <param name="items">The items to add.</param>
-		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
-			where TKey : notnull
-		{
-			ArgumentNullException.ThrowIfNull(dictionary);
-			ArgumentNullException.ThrowIfNull(items);
-			foreach (var item in items)
-			{
-				dictionary.Add(item.Key, item.Value);
-			}
-		}
-
-		/// <summary>Gets the value of the "first" item in a dictionary.</summary>
-		/// <typeparam name="TKey">The key type of the dictionary.</typeparam>
-		/// <typeparam name="TValue">The value type of the dictionary.</typeparam>
-		/// <param name="dictionary">The dictionary from which to retrieve the first value.</param>
-		/// <returns>The first value in the enumerable, or throws an error.</returns>
-		/// <exception cref="KeyNotFoundException">The list was empty.</exception>
-		/// <remarks>Although the current implementation of dictionaries appears to maintain insertion order, this is not guaranteed. This function should be used only to get the value from a single-entry dictionary, or to get a unspecified value from a multi-entry dictionary.</remarks>
-		/// <exception cref="InvalidOperationException">Thrown when <paramref name="dictionary"/> is empty.</exception>
-		public static TValue First<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
-			where TKey : notnull
-		{
-			ArgumentNullException.ThrowIfNull(dictionary);
-			using var enumerator = dictionary.GetEnumerator();
-			return enumerator.MoveNext()
-				? enumerator.Current.Value
-				: throw new InvalidOperationException();
 		}
 		#endregion
 
@@ -184,88 +106,8 @@
 		{
 			null => [],
 			IReadOnlyList<T> list => list,
-			var other when other.IsEmpty() => [],
-			_ => new List<T>(enumerable),
+			_ => new List<T>(enumerable).AsReadOnly(),
 		};
-
-		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
-		/// <typeparam name="T">The type of the original enumerable.</typeparam>
-		/// <param name="enumerable">The enumerable to convert.</param>
-		/// <param name="value">The value to find.</param>
-		/// <param name="comparer">The equality comparer to use to make the comparison.</param>
-		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
-		public static bool Contains<T>(this IEnumerable<T> enumerable, T value, IEqualityComparer<T>? comparer)
-		{
-			// It's understandable why this wasn't in IEnumerable<T>, since enumerating can potentially be a slow-running operation, but it's beyond me why this wasn't put into IReadOnlyCollection<T>. MS covered it with Linq, using a virtually identical implementation to this, but that's still only a workaround (as is this).
-			ArgumentNullException.ThrowIfNull(enumerable);
-			comparer ??= EqualityComparer<T>.Default;
-			foreach (var item in enumerable)
-			{
-				if (comparer.Equals(item, value))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		/// <summary>Determines whether an IEnumerable<typeparamref name="T"/> contains the specified value.</summary>
-		/// <typeparam name="T">The type of the original enumerable.</typeparam>
-		/// <param name="enumerable">The enumerable to convert.</param>
-		/// <param name="value">The value to find.</param>
-		/// <returns><see langword="true"/> if the collection contains the specified value; otherwise, <see langword="false"/>.</returns>
-		public static bool ContainsValue<T>(this IEnumerable<T> enumerable, T value) => enumerable is ICollection<T> collection
-				? collection.Contains(value)
-				: Contains(enumerable, value, comparer: null);
-
-		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
-		/// <typeparam name="T">The collection type.</typeparam>
-		/// <param name="enumerable">The collection to enumerate.</param>
-		/// <returns>The first item in the collection or the specified default value.</returns>
-		[return: MaybeNull]
-		public static T First<T>(this IEnumerable<T>? enumerable) => First(enumerable, default);
-
-		/// <summary>Gets the first item of the collection, or the specified default value.</summary>
-		/// <typeparam name="T">The collection type.</typeparam>
-		/// <param name="enumerable">The collection to enumerate.</param>
-		/// <param name="defaultValue">The default value to use if the collection is empty.</param>
-		/// <returns>The first item in the collection or the specified default value.</returns>
-		[return: MaybeNull]
-		public static T First<T>(this IEnumerable<T>? enumerable, [MaybeNull] T defaultValue)
-		{
-			if (enumerable != null)
-			{
-				using var enumerator = enumerable.GetEnumerator();
-				if (enumerator.MoveNext())
-				{
-					return enumerator.Current;
-				}
-			}
-
-			return defaultValue;
-		}
-		#endregion
-
-		#region IEnumerable Extensions
-
-		/// <summary>Determines whether an IEnumerable has items.</summary>
-		/// <param name="enumerable">The enumerable to check.</param>
-		/// <returns><see langword="true"/> if the list is non-null and has at least one item; otherwise, <see langword="false"/>.</returns>
-		public static bool IsEmpty(this IEnumerable? enumerable)
-		{
-			if (enumerable is null)
-			{
-				return true;
-			}
-
-			var iterator = enumerable.GetEnumerator();
-			using (enumerable as IDisposable)
-			using (iterator as IDisposable)
-			{
-				return !iterator.MoveNext();
-			}
-		}
 		#endregion
 
 		#region IFormattable Extensions
@@ -303,37 +145,6 @@
 				(list[swapWith], list[i]) = (list[i], list[swapWith]);
 				i--;
 			}
-		}
-		#endregion
-
-		#region IReadOnlyDictionary<TKey, TValue> Extentions
-
-		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
-		/// <typeparam name="T">The type for both the key and the value.</typeparam>
-		/// <param name="dictionary">The dictionary to search.</param>
-		/// <param name="key">The key to look for.</param>
-		/// <returns>The substitute value if one is found; otherwise, the original key.</returns>
-		public static T Substitute<T>(this IReadOnlyDictionary<T, T> dictionary, T key)
-		{
-			ArgumentNullException.ThrowIfNull(dictionary);
-			return dictionary.TryGetValue(key, out var retval)
-				? retval
-				: key;
-		}
-
-		/// <summary>Tries to find a substitute value in a dictionary for the key provided.</summary>
-		/// <typeparam name="TKey">The type for the key.</typeparam>
-		/// <typeparam name="TValue">The type for the value.</typeparam>
-		/// <param name="dictionary">The dictionary to search.</param>
-		/// <param name="key">The key to look for.</param>
-		/// <param name="defaultValue">The default value to use if the key is not found.</param>
-		/// <returns>The substitute value if one is found; otherwise, the default value.</returns>
-		public static TValue Substitute<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
-		{
-			ArgumentNullException.ThrowIfNull(dictionary);
-			return dictionary.TryGetValue(key, out var retval)
-				? retval
-				: defaultValue;
 		}
 		#endregion
 
@@ -480,9 +291,16 @@
 		/// <returns><see langword="true"/>if the strings are identical; otherwise, <see langword="false"/>.</returns>
 		public static bool OrdinalEquals(this string? a, string? b) => string.Equals(a, b, StringComparison.Ordinal);
 
+		/// <summary>Shortcut to explicitly compare two strings ordinally, ignoring case.</summary>
+		/// <param name="a">The string to compare.</param>
+		/// <param name="b">The string to compare the first one with.</param>
+		/// <returns><see langword="true"/>if the strings are identical; otherwise, <see langword="false"/>.</returns>
+		public static bool OrdinalICEquals(this string? a, string? b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+
 		/// <summary>Takes a camel-case text and adds spaces before each block of one or more upper-case letters.</summary>
 		/// <param name="text">The text to convert.</param>
 		/// <returns>The original text with spaces inserted.</returns>
+		/// <remarks>This method is not highly optimized and may be slow when called repeatedly or with large strings.</remarks>
 		[return: NotNullIfNotNull(nameof(text))]
 		public static string? UnCamelCase(this string text)
 		{
@@ -492,8 +310,7 @@
 			}
 
 			text = text.UpperFirst(CultureInfo.CurrentUICulture);
-			var i = text.Length - 2;
-			while (i > 0)
+			for (var i = text.Length - 2; i >= 1; i--)
 			{
 				if (char.IsUpper(text[i]) &&
 						(char.IsLower(text[i - 1]) ||
@@ -501,8 +318,6 @@
 				{
 					text = text.Insert(i, " ");
 				}
-
-				i--;
 			}
 
 			return text;
@@ -522,7 +337,7 @@
 		/// <summary>Converts the first character of a string to upper-case.</summary>
 		/// <param name="text">The string to alter.</param>
 		/// <param name="culture">The culture to use for converting the first character to upper-case.</param>
-		/// <param name="findFirstLetter">If <see langword="true"/>, searches for the first letter in the string instead of assuing it's at position 0.</param>
+		/// <param name="findFirstLetter">If <see langword="true"/>, searches for the first actual letter in the string instead of trying to upper-case whatever's at position 0.</param>
 		/// <returns>A copy of the original string, with the first charcter converted to upper-case.</returns>
 		public static string UpperFirst(this string text, CultureInfo culture, bool findFirstLetter)
 		{
@@ -572,14 +387,6 @@
 		}
 
 		public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
-
-		[return: MaybeNull]
-		public static T First<T>(this IReadOnlyList<T> list) => list == null ? default : list[0];
-
-		[return: MaybeNull]
-		public static T First<T>(this IReadOnlyList<T> list, [AllowNull] T defaultValue) => list == null ? defaultValue : list[0];
-
-		public static bool IsEmpty(this ICollection? collection) => collection == null || collection.Count == 0;
 
 #pragma warning restore MA0016 // Prefer return collection abstraction instead of implementation
 #endif
