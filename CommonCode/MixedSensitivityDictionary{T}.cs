@@ -64,10 +64,10 @@
 		#region Public Methods
 
 		/// <summary>Adds the specified key and value to the dictionary using the specified case-sensitivity.</summary>
+		/// <param name="caseSensitive">The case-sensitivity of the element to add.</param>
 		/// <param name="key">The key of the element to add.</param>
 		/// <param name="value">The value of the element to add. The value can be null for reference types.</param>
-		/// <param name="caseSensitive">The case-sensitivity of the element to add.</param>
-		public void Add(string key, T value, bool caseSensitive)
+		public void Add(bool caseSensitive, string key, T value)
 		{
 			var dict = caseSensitive ? this.wordsCS : this.wordsCI;
 			dict.Add(key, value);
