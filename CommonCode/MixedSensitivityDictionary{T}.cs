@@ -91,7 +91,7 @@
 				yield return word;
 			}
 
-			foreach (var word in this.wordsCS)
+			foreach (var word in this.wordsCI)
 			{
 				yield return word;
 			}
