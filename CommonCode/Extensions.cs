@@ -376,6 +376,7 @@ public static class Extensions
 
 	#region Honeypot Methods
 #if DEBUG
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
 
 	// Calls to any of these methods should be replaced by native methods/properties.
@@ -389,6 +390,7 @@ public static class Extensions
 	public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
 
 #pragma warning restore MA0016 // Prefer return collection abstraction instead of implementation
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 #endif
 	#endregion
 }

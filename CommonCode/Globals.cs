@@ -274,7 +274,7 @@ public static class Globals
 		{
 			var msg = (names is null || names.Length == 0)
 				? Resources.UnknownNullMessage
-				: Globals.CurrentCulture(Resources.NullMessage, string.Join('.', names) + " is null.");
+				: CurrentCulture(Resources.NullMessage, string.Join('.', names) + " is null.");
 			throw new InvalidOperationException(msg);
 		}
 	}
@@ -283,6 +283,7 @@ public static class Globals
 
 	#region Private Methods
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA5350 // Do Not Use Weak Cryptographic Algorithms
 #pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
 	private static HashAlgorithm GetHashAlgorithm(HashType hashType) => hashType switch
@@ -293,6 +294,7 @@ public static class Globals
 	};
 #pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
 #pragma warning restore CA5350 // Do Not Use Weak Cryptographic Algorithms
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
 	private static string GetHashString(byte[] hash)
 	{
