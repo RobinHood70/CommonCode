@@ -40,6 +40,7 @@ public sealed partial class NaturalSort : IComparer<string>, IComparer
 	/// Zero: <paramref name="x" /> equals <paramref name="y" />.
 	/// Greater than zero: <paramref name="x" /> is greater than <paramref name="y" />.</returns>
 	[SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "False hit, culture is specified.")]
+	[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Ironically suppressing a false unnecessary suppression message.")]
 	public static int Compare(string? x, string? y, CultureInfo culture, CompareOptions options)
 	{
 		// This is not the fastest possible algorithm, since it re-parses strings every time Compare is called, but it has the advantage of being fairly straight-forward.

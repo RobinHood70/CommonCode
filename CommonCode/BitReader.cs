@@ -119,7 +119,7 @@ public class BitReader
 			}
 
 			retval = encoding.GetChars(this.rawData, this.offset, numBytes)[0];
-			this.offset += encoding.GetByteCount(new[] { retval });
+			this.offset += encoding.GetByteCount([retval]);
 		}
 
 		return retval;
