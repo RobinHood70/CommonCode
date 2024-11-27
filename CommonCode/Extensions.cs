@@ -378,6 +378,7 @@ public static class Extensions
 #if DEBUG
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable MA0016 // Prefer return collection abstraction instead of implementation
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 	// Calls to any of these methods should be replaced by native methods/properties.
 	public static void AddRange<T>(this List<T> list, params T[] values)
@@ -389,6 +390,7 @@ public static class Extensions
 
 	public static IReadOnlyList<T> AsReadOnlyList<T>(this List<T>? list) => list?.AsReadOnly() ?? Array.Empty<T>() as IReadOnlyList<T>;
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning restore MA0016 // Prefer return collection abstraction instead of implementation
 #pragma warning restore IDE0079 // Remove unnecessary suppression
 #endif
