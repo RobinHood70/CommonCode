@@ -1,13 +1,12 @@
-﻿namespace RobinHood70.CommonCodeTester.Views
-{
-	using System.Windows;
+﻿namespace RobinHood70.CommonCodeTester.Views;
 
-	/// <summary>Interaction logic for FourCC.xaml.</summary>
-	public partial class FourCCWindow : Window
+using System.Windows;
+
+/// <summary>Interaction logic for FourCC.xaml.</summary>
+public partial class FourCCWindow : Window
+{
+	public FourCCWindow()
 	{
-		public FourCCWindow()
-		{
-			this.InitializeComponent();
-		}
+		this.InitializeComponent();
 	}
 }
