@@ -288,7 +288,7 @@ public static class Globals
 	private static HashAlgorithm GetHashAlgorithm(HashType hashType) => hashType switch
 	{
 		HashType.Md5 => MD5.Create(),
-		HashType.Sha1 => SHA1.Create() as HashAlgorithm,
+		HashType.Sha1 => SHA1.Create(),
 		_ => throw new ArgumentOutOfRangeException(nameof(hashType)),
 	};
 #pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
