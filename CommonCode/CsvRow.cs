@@ -1,7 +1,8 @@
 ﻿namespace RobinHood70.CommonCode;
-
 using System.Collections;
 using System.Collections.Generic;
+
+// TODO: Implement IDataRecord on this class and IDataReader on CsvFile (with a few not supported).
 
 /// <summary>Represents a single row in a <see cref="CsvFile"/>.</summary>
 /// <remarks>Once created, the number of values in a row may not be changed.</remarks>
@@ -69,5 +70,18 @@ public class CsvRow : IReadOnlyList<string>
 	public IEnumerator<string> GetEnumerator() => this.fields.GetEnumerator();
 
 	IEnumerator IEnumerable.GetEnumerator() => this.fields.GetEnumerator();
+
+	/// <summary>Gets the field associated with the specified key.</summary>
+	/// <param name="key">The key to search for.</param>
+	/// <param name="value">The value, if the key was found.</param>
+	/// <returns><see langword="true"/> if the key was found; otherwise, <see langword="false"/>.</returns>
+	public bool TryGetValue(string key, out string? value)
+	{
+		var retval = this.nameMap.TryGetValue(key, out var index);
+		value = retval
+			? this.fields[index]
+			: default;
+		return retval;
+	}
 	#endregion
 }
