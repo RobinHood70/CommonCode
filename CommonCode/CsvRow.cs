@@ -1,6 +1,7 @@
 ﻿namespace RobinHood70.CommonCode;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // TODO: Implement IDataRecord on this class and IDataReader on CsvFile (with a few not supported).
 
@@ -75,7 +76,7 @@ public class CsvRow : IReadOnlyList<string>
 	/// <param name="key">The key to search for.</param>
 	/// <param name="value">The value, if the key was found.</param>
 	/// <returns><see langword="true"/> if the key was found; otherwise, <see langword="false"/>.</returns>
-	public bool TryGetValue(string key, out string? value)
+	public bool TryGetValue(string key, [NotNullWhen(true)] out string? value)
 	{
 		var retval = this.nameMap.TryGetValue(key, out var index);
 		value = retval
