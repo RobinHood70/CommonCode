@@ -56,6 +56,10 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 	/// <value>The field delimiter. Defaults to a double-quote (<c>"</c>).</value>
 	public char? FieldDelimiter { get; init; } = '"';
 
+	/// <summary>Gets a dictionary that maps original field names (typically from the file) to new names.</summary>
+	/// <remarks>Field names not present in the dictionary will retain their original names. Entries here will only be read when the Header property is set, so they should usually be set after opening the file but before reading from it, then left alone.</remarks>
+	public IDictionary<string, string> HeaderFieldMap { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
+
 	/// <summary>Gets the field separator.</summary>
 	/// <value>The field separator. Defaults to a comma (<c>,</c>).</value>
 	public char FieldSeparator { get; init; } = ',';
@@ -83,6 +87,11 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 					var trimmed = this.AutoTrim
 						? fieldName.Trim()
 						: fieldName;
+					if (this.HeaderFieldMap.TryGetValue(trimmed, out var field))
+					{
+						trimmed = field;
+					}
+
 					this.nameMap.Add(trimmed, this.nameMap.Count);
 				}
 			}
