@@ -36,7 +36,7 @@ public class ComparableCollection<T> : IList<T>
 	/// <param name="comparer">The comparer.</param>
 	public ComparableCollection(IEnumerable<T> collection, IEqualityComparer<T> comparer)
 	{
-		this.list = new List<T>(collection);
+		this.list = [.. collection];
 		this.Comparer = comparer;
 	}
 	#endregion

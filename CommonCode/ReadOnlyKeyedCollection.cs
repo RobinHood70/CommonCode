@@ -36,7 +36,7 @@ public class ReadOnlyKeyedCollection<TKey, TItem> : IReadOnlyDictionary<TKey, TI
 	{
 		ArgumentNullException.ThrowIfNull(keyFunc);
 		ArgumentNullException.ThrowIfNull(items);
-		this.items = new List<TItem>(items);
+		this.items = [.. items];
 		this.dictionary = new Dictionary<TKey, TItem>(comparer ?? EqualityComparer<TKey>.Default);
 
 		// We iterate over our own list in case the original is slow or a one-shot.

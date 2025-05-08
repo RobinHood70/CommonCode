@@ -17,7 +17,7 @@ public class CsvRow : IReadOnlyList<string>
 	#region Constructors
 	internal CsvRow(IEnumerable<string> fields, IReadOnlyDictionary<string, int> nameMap)
 	{
-		this.fields = fields == null ? new List<string>(nameMap.Count) : new List<string>(fields);
+		this.fields = fields == null ? new List<string>(nameMap.Count) : [.. fields];
 		this.nameMap = nameMap;
 		if (nameMap?.Count > this.fields.Count)
 		{

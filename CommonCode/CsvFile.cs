@@ -293,7 +293,7 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 	public bool RemoveByValue(IEnumerable<string> values, int removeCount)
 	{
 		var retval = false;
-		var valueList = (values as IReadOnlyList<string>) ?? new List<string>(values);
+		var valueList = (values as IReadOnlyList<string>) ?? [.. values];
 		for (var index = 0; index < this.Count; index++)
 		{
 			var row = this[index];
@@ -356,7 +356,7 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 		var specialChars = this.GetSpecialCharacters();
 		if (this.Header != null)
 		{
-			columnCount = ((this.Header as IReadOnlyCollection<string>) ?? new List<string>(this.Header)).Count;
+			columnCount = ((this.Header as IReadOnlyCollection<string>) ?? [.. this.Header]).Count;
 			this.InternalWriteRow(writer, this.Header, columnCount, specialChars);
 		}
 		else
