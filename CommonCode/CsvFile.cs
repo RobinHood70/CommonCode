@@ -454,6 +454,7 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 			{
 				case '\uFFFF':
 					endOfField = true;
+					endOfLine = true;
 					break;
 				case '\n':
 				case '\r':

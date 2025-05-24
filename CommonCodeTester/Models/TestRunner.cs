@@ -28,12 +28,11 @@ public static class TestRunner
 
 	public static void RunTests()
 	{
-		var csv = new CsvFile(@"D:\Data\HoodBot\Starfield\Quests.csv")
+		var csv = new CsvFile(@"D:\Data\HoodBot\TemperingRecipeList - Sheet 2.csv")
 		{
 			HasHeader = true
 		};
 
-		csv.Load();
 		if (csv.Header is not null)
 		{
 			foreach (var field in csv.Header)
