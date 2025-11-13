@@ -26,7 +26,7 @@ public sealed class ValueRange<T>(T min, T max) : IEquatable<ValueRange<T>>
 	/// <param name="left">The first value range to check.</param>
 	/// <param name="right">The second value range to check.</param>
 	/// <returns><see langword="true"/> if the value ranges are the same; otherwise, <see langword="false"/>.</returns>
-	public static bool operator ==(ValueRange<T> left, ValueRange<T> right) => left?.Equals(right) ?? right is null;
+	public static bool operator ==(ValueRange<T> left, ValueRange<T> right) => left?.Equals(right) ?? (right is null);
 
 	/// <summary>Checks if two value ranges are different.</summary>
 	/// <param name="left">The first value range to check.</param>

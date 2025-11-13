@@ -1,4 +1,5 @@
 ﻿namespace RobinHood70.CommonCode;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

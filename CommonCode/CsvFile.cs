@@ -16,8 +16,6 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 	#region Fields
 	private readonly Dictionary<string, int> nameMap = new(StringComparer.Ordinal);
 	private readonly List<CsvRow> rows = [];
-
-	private IEnumerable<string>? headerRow;
 	#endregion
 
 	#region Public Properties
@@ -75,25 +73,27 @@ public sealed class CsvFile(string fullPath) : IList<CsvRow>
 	/// <value>The header row. <see langword="null"/> if there is no header row (<c>HasHeader = false</c> or there are no rows in the file).</value>
 	public IEnumerable<string>? Header
 	{
-		get => this.headerRow;
+		get;
 		set
 		{
-			this.headerRow = value;
+			field = value;
 			this.nameMap.Clear();
-			if (value is not null)
+			if (value is null)
 			{
-				foreach (var fieldName in value)
-				{
-					var trimmed = this.AutoTrim
-						? fieldName.Trim()
-						: fieldName;
-					if (this.HeaderFieldMap.TryGetValue(trimmed, out var field))
-					{
-						trimmed = field;
-					}
+				return;
+			}
 
-					this.nameMap.Add(trimmed, this.nameMap.Count);
+			foreach (var fieldName in value)
+			{
+				var trimmed = this.AutoTrim
+					? fieldName.Trim()
+					: fieldName;
+				if (this.HeaderFieldMap.TryGetValue(trimmed, out var fieldValue))
+				{
+					trimmed = fieldValue;
 				}
+
+				this.nameMap.Add(trimmed, this.nameMap.Count);
 			}
 		}
 	}
