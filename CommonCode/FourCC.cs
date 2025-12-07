@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text;
 using RobinHood70.CommonCode.Properties;
 
-/// <summary>This static class provides several methods that are useful when working with <see href="https://en.wikipedia.org/wiki/FourCC"> four-character code</see> data.</summary>
+/// <summary>This static class provides several methods that are useful when working with <see href="https://en.wikipedia.org/wiki/FourCC">four-character code</see> data.</summary>
 public static class FourCC
 {
 	#region Public Static Properties
