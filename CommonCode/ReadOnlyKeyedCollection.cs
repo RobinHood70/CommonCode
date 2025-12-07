@@ -47,6 +47,15 @@ public class ReadOnlyKeyedCollection<TKey, TItem> : IReadOnlyDictionary<TKey, TI
 	}
 	#endregion
 
+	#region Public Static Properties
+
+	/// <summary>Gets an empty <see cref="ReadOnlyKeyedCollection{TKey, TItem}"/>.</summary>
+	[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Functionally the same as Array<T>.Empty")]
+	public static ReadOnlyKeyedCollection<TKey, TItem> Empty { get; } = new(
+		keyFunc: _ => throw new InvalidOperationException("The collection is empty."),
+		items: []);
+	#endregion
+
 	#region Public Properties
 
 	/// <summary>Gets the number of elements in the collection.</summary>
