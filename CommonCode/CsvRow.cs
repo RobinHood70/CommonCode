@@ -18,9 +18,11 @@ public class CsvRow : IReadOnlyList<string>
 	#region Constructors
 	internal CsvRow(IEnumerable<string> fields, IReadOnlyDictionary<string, int> nameMap)
 	{
-		this.fields = fields == null ? new List<string>(nameMap.Count) : [.. fields];
+		ArgumentNullException.ThrowIfNull(fields);
+		ArgumentNullException.ThrowIfNull(nameMap);
+		this.fields = [.. fields];
 		this.nameMap = nameMap;
-		if (nameMap?.Count > this.fields.Count)
+		if (nameMap.Count > this.fields.Count)
 		{
 			this.fields.Capacity = nameMap.Count;
 			this.fields.AddRange(new string[nameMap.Count - this.fields.Count]);
