@@ -2,7 +2,7 @@
 
 using System;
 
-/// <summary>A static class of split values used throughout all related projects. This avoids frequent re-allocations of small array values—particularly important inside loops and frequently-called methods.</summary>
+/// <summary>A static class of character and string arrays for functions like Split() and Trim(). This avoids frequent re-allocations of small array values—particularly important inside loops and frequently-called methods. For character arrays, <see cref="SpanArrays"/> will be much faster, though slightly clunkier to use.</summary>
 public static class TextArrays
 {
 	// These are all implemented as public fields due to the fact that arrays are strongly discouraged as public properties and the methods these are intended for, such as string.Split, do not allow spans currently.
