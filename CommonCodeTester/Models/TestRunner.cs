@@ -28,25 +28,25 @@ public static class TestRunner
 
 	public static void RunTests()
 	{
-		var csv = new CsvFile(@"D:\Data\HoodBot\TemperingRecipeList - Sheet 2.csv")
+		var lotsOfSplits = new string('@', 1000);
+		var sw = new Stopwatch();
+		sw.Start();
+		var at = default(SpanArrays).At;
+		for (var i = 0; i < 10000000; i++)
 		{
-			HasHeader = true
-		};
-
-		if (csv.Header is not null)
-		{
-			foreach (var field in csv.Header)
-			{
-				Debug.WriteLine(field);
-			}
+			_ = lotsOfSplits.Split(at);
 		}
 
-		foreach (var row in csv)
+		sw.Stop();
+		Debug.WriteLine($"Splitting string with default(SpanArrays).At took {sw.ElapsedMilliseconds} ms");
+		sw.Restart();
+		var at2 = TextArrays.At;
+		for (var i = 0; i < 10000000; i++)
 		{
-			foreach (var col in row)
-			{
-				Debug.WriteLine(col);
-			}
+			_ = lotsOfSplits.Split(at2);
 		}
+
+		sw.Stop();
+		Debug.WriteLine($"Splitting string with TextArrays.At took {sw.ElapsedMilliseconds} ms");
 	}
 }
