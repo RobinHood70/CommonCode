@@ -1,5 +1,6 @@
 ﻿namespace RobinHood70.CommonCode;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -74,6 +75,23 @@ public class CsvRow : IReadOnlyList<string>
 	public IEnumerator<string> GetEnumerator() => this.fields.GetEnumerator();
 
 	IEnumerator IEnumerable.GetEnumerator() => this.fields.GetEnumerator();
+
+	/// <summary>Returns a dictionary that maps field names to their corresponding values.</summary>
+	/// <returns>An <see cref="IReadOnlyDictionary{TKey, TValue}"/> containing the field names as keys and their associated values as strings.</returns>
+	/// <remarks>The dictionary is writable in order to allow the user to filter or otherwise modify it, however changes to it will not be reflected in the field values. Unnamed columns will be ignored in the resulting dictionary. In the event of a key conflict, only the first value will be included in the dictionary; other columns with the same name will be silently ignored.</remarks>
+	public IDictionary<string, string> ToDictionary()
+	{
+		var dict = new Dictionary<string, string>(this.nameMap.Count, StringComparer.Ordinal);
+		foreach (var (name, index) in this.nameMap)
+		{
+			if (name.Trim().Length != 0 && !dict.ContainsKey(name))
+			{
+				dict[name] = this.fields[index];
+			}
+		}
+
+		return dict;
+	}
 
 	/// <summary>Gets the field associated with the specified key.</summary>
 	/// <param name="key">The key to search for.</param>
